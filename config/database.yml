@@ -20,6 +20,7 @@ default: &default
 development:
   <<: *default
   database: hideout_development
+  password:  <%= ENV["HIDEOUT_DEVELOPMENT_DATABASE_PASSWORD"] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -27,6 +28,8 @@ development:
 test:
   <<: *default
   database: hideout_test
+  password:  <%= ENV["HIDEOUT_TEST_DATABASE_PASSWORD"] %>
+
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -51,5 +54,4 @@ test:
 production:
   <<: *default
   database: hideout_production
-  username: hideout
-  password: <%= ENV["HIDEOUT_DATABASE_PASSWORD"] %>
+  password: <%= ENV["HIDEOUT_PRODUCTION_DATABASE_PASSWORD"] %>
