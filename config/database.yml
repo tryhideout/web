@@ -13,13 +13,12 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
   socket: /tmp/mysql.sock
 
 development:
   <<: *default
   database: hideout_development
+  url: <%= ENV["MYSQL_DEVELOPMENT_DATABASE_URL"] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -27,6 +26,7 @@ development:
 test:
   <<: *default
   database: hideout_test
+  url: <%= ENV["MYSQL_TEST_DATABASE_URL"] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -51,5 +51,4 @@ test:
 production:
   <<: *default
   database: hideout_production
-  username: hideout
-  password: <%= ENV["HIDEOUT_DATABASE_PASSWORD"] %>
+  url: <%= ENV["MYSQL_PRODUCTION_DATABASE_URL"] %>
