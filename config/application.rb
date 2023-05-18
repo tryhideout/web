@@ -24,6 +24,6 @@ module Hideout
         ENV[key.to_s] = value
       end if File.exist?(env_file)
     end
-    
+
   end
 end
