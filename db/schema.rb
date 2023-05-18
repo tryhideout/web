@@ -35,7 +35,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_001508) do
   create_table "hideouts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "owner_id", null: false
-    t.index ["name"], name: "index_hideouts_on_name", unique: true
     t.index ["owner_id"], name: "index_hideouts_on_owner_id", unique: true
   end
 
@@ -49,7 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_001508) do
   end
 
   add_foreign_key "chores", "hideouts", on_delete: :cascade
-  add_foreign_key "chores", "users", column: "assignee_id", on_delete: :cascade
+  add_foreign_key "chores", "users", column: "assignee_id", on_delete: :nullify
   add_foreign_key "expenses", "hideouts", on_delete: :cascade
   add_foreign_key "expenses", "users", column: "debtor_id", on_delete: :cascade
   add_foreign_key "hideouts", "users", column: "owner_id", on_delete: :cascade
