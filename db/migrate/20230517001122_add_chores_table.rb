@@ -4,6 +4,7 @@ class AddChoresTable < ActiveRecord::Migration[7.0]
       t.string :title, null: false
       t.string :description, null: true
       t.datetime :due_date, null: true
+      t.
     end
   end
 end
