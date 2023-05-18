@@ -7,29 +7,40 @@ class AuthController < ApplicationController
   end
 
   def signup
+    first_name = params[:first_name]
+    last_name = params[:last_name]
     email = params[:email]
     password = params[:password]
 
-    uri = URI('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAoNHxY5d3XLJ9gp-J4FmiVgqdywDKd1H4')
+    new_user = User.new(first_name: first_name, last_name: last_name, email: email)
+    new_user.save
+
+    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_KEY']}")
 
     res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
 
     data = JSON.parse(res.body)
 
-    puts data
+    puts User.all
+
+
+    if data.member?("error")
+      render status: 404
+    else
+      render status: :created
+    end
+
 
     # if res.is_a?(Net::HTTPSuccess)
     #   redirect_to action: 'login'
     
-    render status: :created
-
   end
 
   def login
     email = params[:email]
     password = params[:password]
 
-    uri = URI('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAoNHxY5d3XLJ9gp-J4FmiVgqdywDKd1H4')
+    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_KEY']}")
 
     res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
 
@@ -38,14 +49,23 @@ class AuthController < ApplicationController
     # if res.is_a?(Net::HTTPSuccess)
     #   session[:user_id] = data['localId']
 
+
+    if data.member?("error")
+      render status: 404
+    else
+      render status: 200
+    end
+
     puts data
 
-    render status: 200
   end
   
   def logout
     session.clear
-    redirect_to action: 'index'
+
+    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signOutWithPassword?key=#{ENV['FIREBASE_KEY']}")
+
+    puts uri
   end
 
 end
