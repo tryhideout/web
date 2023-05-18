@@ -16,9 +16,12 @@ class AuthController < ApplicationController
 
     data = JSON.parse(res.body)
 
-    if res.is_a?(Net::HTTPSuccess)
-      redirect_to action: 'login'
-    end
+    puts data
+
+    # if res.is_a?(Net::HTTPSuccess)
+    #   redirect_to action: 'login'
+    
+    render status: :created
 
   end
 
@@ -32,11 +35,12 @@ class AuthController < ApplicationController
 
     data = JSON.parse(res.body)
 
-    if res.is_a?(Net::HTTPSuccess)
-      session[:user_id] = data['localId']
+    # if res.is_a?(Net::HTTPSuccess)
+    #   session[:user_id] = data['localId']
 
-      redirect_to action: 'home'
-    end
+    puts data
+
+    render status: 200
   end
   
   def logout
