@@ -47,6 +47,9 @@ lerna-debug.log*
 /client/coverage
 *.local
 /node_modules
+/.prettierrc.json
+/package.json
+/package-lock.json
 
 /client/cypress/videos/
 /client/cypress/screenshots/
