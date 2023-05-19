@@ -1,0 +1,9 @@
+{
+	"tabWidth": 4,
+	"jsxSingleQuote": true,
+	"printWidth": 130,
+	"singleQuote": true,
+	"useTabs": true,
+	"trailingComma": "all",
+	"rubySingleQuote": true
+}
