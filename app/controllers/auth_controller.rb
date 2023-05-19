@@ -3,13 +3,9 @@ require 'uri'
 require 'json'
 
 class AuthController < ApplicationController
-    def index
-    end
-
-    def uri_filler(action)
-        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:#{action}?key=#{ENV['FIREBASE_API_KEY']}")
-    end
-
+    @@firebaseSignupURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+    @@firebaseLoginURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
+    
     def signup
         first_name = params[:first_name]
         last_name = params[:last_name]
@@ -17,20 +13,17 @@ class AuthController < ApplicationController
         password = params[:password]
 
         if first_name.nil? || last_name.nil? || email.nil? || password.nil?
-            render status: 400
-            return
+            return render status: 400
         end
 
-        # new_user = User.new(first_name: first_name, last_name: last_name, email: email)
-        # new_user.save
-
-        uri = uri_filler('signUp')
-        res = Net::HTTP.post_form(uri, 'email': email, 'password': password)
+        res = Net::HTTP.post_form(@@firebaseSignupURI, 'email': email, 'password': password)
         data = JSON.parse(res.body)
 
         if data.member?('error')
-            render status: 400, body: data['error']['message']
+            render status: 400, body: 'Resource Already Exists'
         else
+            new_user = User.new(first_name: first_name, last_name: last_name, email: email)
+            new_user.save
             render status: :created, :json => {'first_name': first_name, 'last_name': last_name, 'email': email}
         end
     end
@@ -40,16 +33,14 @@ class AuthController < ApplicationController
         password = params[:password]
 
         if email.nil? || password.nil?
-            render status: 400
-            return
+            return render status: 400
         end
 
-        uri = uri_filler('signInWithPassword')
-        res = Net::HTTP.post_form(uri, 'email': email, 'password': password)
+        res = Net::HTTP.post_form(@@firebaseLoginURI, 'email': email, 'password': password)
         data = JSON.parse(res.body)
 
         if data.member?('error')
-            render status: 401, body: data['error']['message']
+            render status: 401, body: 'Unauthorized'
         else
             render status: 200
         end
