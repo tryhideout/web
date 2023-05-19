@@ -6,6 +6,10 @@ class AuthController < ApplicationController
     def index
     end
 
+    def uri_filler(action)
+        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:#{action}?key=#{ENV['FIREBASE_API_KEY']}")
+    end
+
     def signup
         first_name = params[:first_name]
         last_name = params[:last_name]
@@ -20,19 +24,15 @@ class AuthController < ApplicationController
         # new_user = User.new(first_name: first_name, last_name: last_name, email: email)
         # new_user.save
 
-        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+        uri = uri_filler('signUp')
         res = Net::HTTP.post_form(uri, 'email': email, 'password': password)
         data = JSON.parse(res.body)
-
-        puts data
 
         if data.member?('error')
             render status: 400, body: data['error']['message']
         else
-            render status: :created
+            render status: :created, :json => {'first_name': first_name, 'last_name': last_name, 'email': email}
         end
-
-        render :json {'first_name': first_name, 'last_name': last_name, 'email': email}
     end
 
     def login
@@ -44,11 +44,9 @@ class AuthController < ApplicationController
             return
         end
 
-        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
+        uri = uri_filler('signInWithPassword')
         res = Net::HTTP.post_form(uri, 'email': email, 'password': password)
         data = JSON.parse(res.body)
-
-        puts data
 
         if data.member?('error')
             render status: 401, body: data['error']['message']
