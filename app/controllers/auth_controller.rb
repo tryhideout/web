@@ -3,69 +3,46 @@ require 'uri'
 require 'json'
 
 class AuthController < ApplicationController
-  def index
-  end
-
-  def signup
-    first_name = params[:first_name]
-    last_name = params[:last_name]
-    email = params[:email]
-    password = params[:password]
-
-    new_user = User.new(first_name: first_name, last_name: last_name, email: email)
-    new_user.save
-
-    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_KEY']}")
-
-    res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
-
-    data = JSON.parse(res.body)
-
-    puts User.all
-
-
-    if data.member?("error")
-      render status: 404
-    else
-      render status: :created
+    def index
     end
 
+    def signup
+        first_name = params[:first_name]
+        last_name = params[:last_name]
+        email = params[:email]
+        password = params[:password]
 
-    # if res.is_a?(Net::HTTPSuccess)
-    #   redirect_to action: 'login'
-    
-  end
+        new_user = User.new(first_name: first_name, last_name: last_name, email: email)
+        new_user.save
 
-  def login
-    email = params[:email]
-    password = params[:password]
+        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+        res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
+        data = JSON.parse(res.body)
 
-    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_KEY']}")
+        puts User.all
 
-    res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
-
-    data = JSON.parse(res.body)
-
-    # if res.is_a?(Net::HTTPSuccess)
-    #   session[:user_id] = data['localId']
-
-
-    if data.member?("error")
-      render status: 404
-    else
-      render status: 200
+        if data.member?('error')
+            render status: 404
+        else
+            render status: :created
+        end
     end
 
-    puts data
+    def login
+        email = params[:email]
+        password = params[:password]
 
-  end
-  
-  def logout
-    session.clear
+        uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
+        res = Net::HTTP.post_form(uri, 'email' => email, 'password' => password)
+        data = JSON.parse(res.body)
 
-    uri = URI("https://identitytoolkit.googleapis.com/v1/accounts:signOutWithPassword?key=#{ENV['FIREBASE_KEY']}")
+        if data.member?('error')
+            render status: 404
+        else
+            render data.to_json, status: 200
+        end
+    end
 
-    puts uri
-  end
-
+    def logout
+    end
 end

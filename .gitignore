@@ -46,6 +46,7 @@ lerna-debug.log*
 /client/dist-ssr
 /client/coverage
 *.local
+/node_modules
 
 /client/cypress/videos/
 /client/cypress/screenshots/
