@@ -39,7 +39,7 @@ class AuthController < ApplicationController
         if data.member?('error')
             render status: 404
         else
-            render data.to_json, status: 200
+            render status: 200
         end
     end
 
