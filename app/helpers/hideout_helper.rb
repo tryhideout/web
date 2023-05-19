@@ -1,0 +1,2 @@
+module HideoutHelper
+end
