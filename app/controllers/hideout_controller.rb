@@ -19,12 +19,13 @@ class HideoutController < ApplicationController
       user = User.find_by(email: owner_email)
       new_hideout = Hideout.new(name: name, owner_id: user.id)
       new_hideout.save
-      hideout_code = code(name, user.id)
+      hideout_code = generate__hideout_code(name, user.id)
       render status: :created, :json => {name: name, owner_email: owner_email, hideout_code: hideout_code}
     end
   end
 
   def destroy
+
   end
 
   def rename
@@ -32,7 +33,7 @@ class HideoutController < ApplicationController
 
   private
 
-  def code(name, id)
+  def generate_hideout_code(name, id)
     # return a unique hideout code representing the hideout with the specified name and id
     return name + "#" + id.to_s(16)
   end
