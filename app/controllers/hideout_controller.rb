@@ -22,6 +22,19 @@ class HideoutController < ApplicationController
   end
 
   def destroy
+    hideout_id = params[:hideout_id]
+    issued_by_email = params[:user_email]
+
+    if !Hideout.exists?(id: hideout_id)
+      render status: :not_found, body: "Hideout does not exist"
+    elsif !User.exists?(email: issued_by_email)
+      render status: :not_found, body: "User does not exist"
+    elsif Hideout.find_by(id: hideout_id).owner_id != User.find_by(email: issued_by_email).id
+    render status: :forbidden, body: "User is not the Hideout owner"
+    else 
+      Hideout.destroy(hideout_id)
+      render status: :ok
+    end
   end
 
   def rename
