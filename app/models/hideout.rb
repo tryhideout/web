@@ -20,6 +20,11 @@ class Hideout < ActiveRecord::Base
         user.hideout_id = hideout_id
         user.save
     end
-    
+
+    def self.remove_user(email)
+        user = User.find_by(email: email)
+        user.hideout_id = nil
+        user.save
+    end
 
 end

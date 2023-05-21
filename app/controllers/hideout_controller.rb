@@ -22,8 +22,6 @@ class HideoutController < ApplicationController
   end
 
   def destroy
-
-    
   end
 
   def rename
@@ -48,6 +46,21 @@ class HideoutController < ApplicationController
       render status: :precondition_failed, body: "Mismatch between name and id"      
     else
       Hideout.add_user(email)
+      render status: :ok
+    end
+  end
+
+  def leave
+    # make the user leave the hideout
+    # user must be in a hideout
+    email = params[:email]
+
+    if !User.exists?(email: email)
+      render status: :not_found, body: "User does not exist"
+    elsif User.find_by(email: email).hideout_id.nil?
+      render status: :precondition_failed, body: "User is not in a hideout"
+    else
+      Hideout.remove_user(email)
       render status: :ok
     end
   end
