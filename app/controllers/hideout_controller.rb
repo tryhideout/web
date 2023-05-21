@@ -10,7 +10,7 @@ class HideoutController < ApplicationController
     if !User.exists?(email: owner_email)
       render status: :not_found, body: "User does not exist"
     elsif name.length > 20
-      render status :precondition_failed, body: "Hideout name greater than 20 characters"
+      render status: :precondition_failed, body: "Hideout name greater than 20 characters"
     elsif name.length < 3
       render status: :precondition_failed, body: "Hideout name lesser than 3 characters"
     elsif !User.find_by(email: owner_email).hideout_id.nil?
@@ -38,6 +38,21 @@ class HideoutController < ApplicationController
   end
 
   def rename
+    hideout_id = params[:hideout_id]
+    issued_by_email = params[:user_email]
+    new_name = params[:new_name]
+
+    if !Hideout.exists?(id: hideout_id)
+      render status: :not_found, body: "Hideout does not exist"
+    elsif !User.exists?(email: issued_by_email)
+      render status: :not_found, body: "User does not exist"
+    elsif Hideout.find_by(id: hideout_id).owner_id != User.find_by(email: issued_by_email).id
+    render status: :forbidden, body: "User is not the Hideout owner"
+    else 
+      Hideout.rename(hideout_id, new_name)
+      render status: :ok
+    end
+
   end
 
   def add

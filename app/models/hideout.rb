@@ -27,4 +27,16 @@ class Hideout < ActiveRecord::Base
         user.save
     end
 
+    def self.destroy(id)
+        user.find_by(id: id).destroy
+    end
+
+    def self.rename(id, new_name)
+        hideout = Hideout.find_by(id: id)
+        hideout.name = new_name
+        hideout.save
+    end
+        
+        
+
 end
