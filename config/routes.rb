@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   post "/hideout/leave", to: "hideout#leave"
   delete "/hideout/destroy", to: "hideout#destroy"
 
+end
+
 
 
 
