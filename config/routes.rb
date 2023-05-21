@@ -5,10 +5,11 @@ Rails.application.routes.draw do
 
   post 'hideout/create'
   delete 'hideout/destroy'
-  put 'hideout/rename'
+  put 'hideout/rename', to: "hideout#rename"
   post "/hideout/add", to: "hideout#add"
   post "/hideout/leave", to: "hideout#leave"
+  delete "/hideout/destroy", to: "hideout#destroy"
 
 
 
-end
+
