@@ -16,8 +16,8 @@ class HideoutController < ApplicationController
     elsif !User.find_by(email: owner_email).hideout_id.nil?
       render status: :precondition_failed, body: "Owner already in hideout"
     else
-      hideout_code = Hideout.create(owner_email, name)
-      render status: :created, :json => {name: name, owner_email: owner_email, hideout_code: hideout_code}
+      hideout_id = Hideout.create(owner_email, name)
+      render status: :created, :json => {name: name, owner_email: owner_email, hideout_id: hideout_id}
     end
   end
 
@@ -52,7 +52,6 @@ class HideoutController < ApplicationController
       Hideout.rename(hideout_id, new_name)
       render status: :ok
     end
-
   end
 
   def add
@@ -62,7 +61,6 @@ class HideoutController < ApplicationController
     name = params[:name]
     hideout_id = params[:id]
     email = params[:email]
-
     
     if !User.exists?(email: email)
       render status: :not_found, body: "User does not exist"

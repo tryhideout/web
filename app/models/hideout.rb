@@ -7,12 +7,7 @@ class Hideout < ActiveRecord::Base
         user = User.find_by(email: owner_email)
         new_hideout = Hideout.new(name: name, owner_id: user.id)
         new_hideout.save
-        return Hideout.generate_code(name, user.id)  
-    end
-
-    def self.generate_code(name, id)
-        # return a unique hideout code representing the hideout with the specified name and id
-        return name + id.to_s(16)
+        return new_hideout.id
     end
 
     def self.add_user(email)
@@ -36,7 +31,4 @@ class Hideout < ActiveRecord::Base
         hideout.name = new_name
         hideout.save
     end
-        
-        
-
 end
