@@ -3,11 +3,11 @@ Rails.application.routes.draw do
   post "/users", to: "auth#signup"
   delete "/sessions", to: "auth#logout"
 
-  post 'hideout/create'
-  delete 'hideout/destroy'
+  post '/hideout', to: "hideout#create"
+  delete 'hideout', to: "hideout#destroy"
   put 'hideout/rename', to: "hideout#rename"
-  post "/hideout/add", to: "hideout#add"
-  post "/hideout/leave", to: "hideout#leave"
+  put "/hideout/users", to: "hideout#add"
+  delete "/hideout/users", to: "hideout#leave"
   delete "/hideout/destroy", to: "hideout#destroy"
 
 end
