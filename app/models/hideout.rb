@@ -7,7 +7,7 @@ class Hideout < ActiveRecord::Base
         user = User.find_by(email: owner_email)
         new_hideout = Hideout.new(name: name, owner_id: user.id)
         new_hideout.save
-        return new_hideout.id
+        return Hideout.generate_join_code(new_hideout.id)
     end
 
     def self.add_user(email)
@@ -30,5 +30,18 @@ class Hideout < ActiveRecord::Base
         hideout = Hideout.find_by(id: id)
         hideout.name = new_name
         hideout.save
+    end
+
+    def self.generate_join_code(id)
+        # return an 8 or more digit hideout code,
+        # which can be used to join the hideout with the specified id
+        id_length = id.to_s(16).length
+        if id_length >= 8
+            return id.to_s
+        end
+        
+        time_now = Time.now.nsec.to_s(16)
+        time_prefix = time_now[..(8 - id_length - 1)]
+        return time_prefix + id.to_s(16)
     end
 end

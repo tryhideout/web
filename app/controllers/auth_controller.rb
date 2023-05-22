@@ -19,6 +19,8 @@ class AuthController < ApplicationController
         res = Net::HTTP.post_form(@@firebaseSignupURI, 'email': email, 'password': password)
         data = JSON.parse(res.body)
 
+        puts data
+
         if data.member?('error')
             render status: 400, body: 'Resource Already Exists'
         else

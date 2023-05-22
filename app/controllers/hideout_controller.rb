@@ -16,8 +16,8 @@ class HideoutController < ApplicationController
     elsif !User.find_by(email: owner_email).hideout_id.nil?
       render status: :precondition_failed, body: "Owner already in hideout"
     else
-      hideout_id = Hideout.create(owner_email, name)
-      render status: :created, :json => {name: name, owner_email: owner_email, hideout_id: hideout_id}
+      join_code = Hideout.create(owner_email, name)
+      render status: :created, :json => {name: name, owner_email: owner_email, join_code: join_code}
     end
   end
 
