@@ -7,7 +7,9 @@ class Hideout < ActiveRecord::Base
         user = User.find_by(email: owner_email)
         new_hideout = Hideout.new(name: name, owner_id: user.id)
         new_hideout.save
-        return Hideout.generate_join_code(new_hideout.id)
+        join_code = Hideout.generate_join_code(new_hideout.id)
+        new_hideout.join_code = join_code
+        new_hideout.save
     end
 
     def self.add_user(email)
