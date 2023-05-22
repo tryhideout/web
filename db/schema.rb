@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_18_001508) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_044036) do
   create_table "chores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.string "description"
@@ -35,6 +35,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_001508) do
   create_table "hideouts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "owner_id", null: false
+    t.string "join_code"
+    t.index ["join_code"], name: "index_hideouts_on_join_code", unique: true
     t.index ["owner_id"], name: "index_hideouts_on_owner_id", unique: true
   end
 
