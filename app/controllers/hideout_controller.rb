@@ -24,9 +24,9 @@ class HideoutController < ApplicationController
     issued_by_email = params[:user_email]
 
     if !Hideout.exists?(id: hideout_id)
-      render status: :not_found, body: "Hideout does not exist"
+      render status: :not_found, body: "Resource not found"
     elsif !User.exists?(email: issued_by_email)
-      render status: :not_found, body: "User does not exist"
+      render status: :not_found, body: "Resource not found"
     elsif Hideout.find_by(id: hideout_id).owner_id != User.find_by(email: issued_by_email).id
     render status: :forbidden, body: "Forbidden"
     else 
