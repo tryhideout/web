@@ -9,10 +9,8 @@ class HideoutController < ApplicationController
 
     if !User.exists?(email: owner_email)
       render status: :not_found, body: "User does not exist"
-    elsif name.length > 20
-      render status: :precondition_failed, body: "Bad Request"
-    elsif name.length < 3
-      render status: :precondition_failed, body: "Bad Request"
+    elsif name.length > 20 or name.length < 3
+      render status: 400, body: "Bad Request"
     elsif !User.find_by(email: owner_email).hideout_id.nil?
       render status: :precondition_failed, body: "Owner already in hideout"
     else
