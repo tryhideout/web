@@ -10,9 +10,9 @@ class HideoutController < ApplicationController
     if !User.exists?(email: owner_email)
       render status: :not_found, body: "User does not exist"
     elsif name.length > 20
-      render status: :precondition_failed, body: "Hideout name greater than 20 characters"
+      render status: :precondition_failed, body: "Bad Request"
     elsif name.length < 3
-      render status: :precondition_failed, body: "Hideout name lesser than 3 characters"
+      render status: :precondition_failed, body: "Bad Request"
     elsif !User.find_by(email: owner_email).hideout_id.nil?
       render status: :precondition_failed, body: "Owner already in hideout"
     else
@@ -30,7 +30,7 @@ class HideoutController < ApplicationController
     elsif !User.exists?(email: issued_by_email)
       render status: :not_found, body: "User does not exist"
     elsif Hideout.find_by(id: hideout_id).owner_id != User.find_by(email: issued_by_email).id
-    render status: :forbidden, body: "User is not the Hideout owner"
+    render status: :forbidden, body: "Forbidden"
     else 
       Hideout.destroy(hideout_id)
       render status: :ok
@@ -89,6 +89,6 @@ class HideoutController < ApplicationController
       Hideout.remove_user(email)
       render status: :ok
     end
-  end
+  end 
 
 end
