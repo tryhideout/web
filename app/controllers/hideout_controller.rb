@@ -53,23 +53,21 @@ class HideoutController < ApplicationController
   end
 
   def add
-    # add user with the given email to the Hideout using the hideout id and name
+    # add user with the given email to the Hideout using the hideout code
     # user must not already be in a hideout
     # hideout name must be the correct
-    name = params[:name]
-    hideout_id = params[:id]
+    join_code = params[:join_code]
     email = params[:email]
     
     if !User.exists?(email: email)
       render status: :not_found, body: "User does not exist"
-    elsif !Hideout.exists?(id: hideout_id)
+    elsif !Hideout.exists?(join_code: join_code)
       render status: :not_found, body: "Hideout does not exist"
     elsif !User.find_by(email: email).hideout_id.nil?
       render status: :precondition_failed, body: "User already in hideout"
-    elsif Hideout.find_by(id: hideout_id).name != name
-      render status: :precondition_failed, body: "Mismatch between name and id"      
     else
-      Hideout.add_user(email)
+      hideout_id = Hideout.find_by(join_code: join_code).id
+      Hideout.add_user(email, id)
       render status: :ok
     end
   end

@@ -12,7 +12,7 @@ class Hideout < ActiveRecord::Base
         new_hideout.save
     end
 
-    def self.add_user(email)
+    def self.add_user(email, hideout_id)
         user = User.find_by(email: email)
         user.hideout_id = hideout_id
         user.save
