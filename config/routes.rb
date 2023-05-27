@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'expenses/create'
+  get 'expenses/destroy'
   post "/sessions", to: "auth#login"
   post "/users", to: "auth#signup"
   delete "/sessions", to: "auth#logout"
