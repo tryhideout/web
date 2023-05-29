@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
     name = params[:name]
     amount = params[:amount]
     due_date = params[:due_date]  # format: DD-MM-YYYY
-    debtor_id = params[:debtor_id]
+    debtor_email = params[:debtor_email]
     hideout_id = params[:hideout_id]
     comments = params[:comments]
 
@@ -12,6 +12,7 @@ class ExpensesController < ApplicationController
     if name.nil? || amount.nil? || debtor_id.nil? || hideout_id.nil?
       render status: 400
     else
+      debtor_id = User.find_by(email: debtor_email).id
       expense = Expense.new(name: name, amount: amount, due_date: due_date.to_date, debtor_id: debtor_id, hideout_id: hideout_id, comments: comments)
       expense.save
       render status: :created, :json => {name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, hideout_id: hideout_id, comments: comments}
