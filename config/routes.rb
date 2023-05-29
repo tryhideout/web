@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'expenses/create'
-  get 'expenses/destroy'
   post "/sessions", to: "auth#login"
   post "/users", to: "auth#signup"
   delete "/sessions", to: "auth#logout"
@@ -11,6 +9,9 @@ Rails.application.routes.draw do
   put "/hideouts/users", to: "hideout#add"
   delete "/hideouts/users", to: "hideout#leave"
   delete "/hideouts/destroy", to: "hideout#destroy"
+
+  post '/expenses', to: "expenses#create"
+  get 'expenses/destroy'
 
 end
 
