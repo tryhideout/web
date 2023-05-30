@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   post '/expenses', to: "expenses#create"
   get 'expenses/destroy'
+  put "/expenses", to: "expenses#update"
 
 end
 

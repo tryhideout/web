@@ -22,4 +22,31 @@ class ExpensesController < ApplicationController
 
   def destroy
   end
+
+  def update()
+    params.require(:id)
+    id = params[:id]  
+
+    # TODO: add middleware for checking if user exists and expense exists 
+
+    expense = Expense.find_by(id: id)    
+    if params.has_key?(:name)
+      expense.update(name: params[:name])
+    end
+    if params.has_key?(:amount)
+      expense.update(amount: params[:amount])
+    end
+    if params.has_key?(:due_date)  # format: DD-MM-YYYY
+      expense.update(due_date: params[:due_date].to_date)
+    end
+    if params.has_key?(:debtor_email)
+      debtor_id = User.find_by(debtor_email).id
+      expense.update(debtor_id: debtor_id)
+    end
+    if params.has_key?(:comments)
+      expense.update(comments: params[:comments])
+    end
+
+    render status: :ok
+  end
 end
