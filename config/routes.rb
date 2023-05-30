@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   post '/expenses', to: "expenses#create"
   delete '/expenses/:id', to: "expenses#destroy"
-  put "/expenses", to: "expenses#update"
+  put "/expenses/:id", to: "expenses#update"
 
 end
 
