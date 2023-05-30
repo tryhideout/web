@@ -7,11 +7,6 @@ module Middleware
     def call(env)
       request = ActionDispatch::Request.new(env)
       request_identifier = "#{request.method} #{request.path}"
-      if !ENV['PUBLIC_ROUTES'].include?(request_identifier)
-
-      else
-
-      end
 
       @app.call(env)
     end
