@@ -11,6 +11,6 @@ Rails.application.routes.draw do
     delete '/hideouts/destroy', to: 'hideout#destroy'
 
     post '/chores', to: 'chores#create'
-    put '/chores', to: 'chores#update'
-    delete '/chores', to: 'chores#destroy'
+    put '/chores/:id', to: 'chores#update'
+    delete '/chores/:id', to: 'chores#destroy'
 end

@@ -24,27 +24,33 @@ class ChoresController < ApplicationController
     params.require(:id)
     id = params[:id]
 
+    # TODO: add middleware for checking if user exists and chores exists 
+
     chore = Chore.find_by(id: id)
 
     if params.has_key?(:title)
-      chore.title = params[:title]
+      chore.update(title: params[:title])
     end
     if params.has_key?(:description)
-      chore.description = params[:description]
+      chore.update(description: params[:description])
     end
     if params.has_key?(:due_date)
-      chore.due_date = params[:due_date]
+      chore.update(due_date: params[:due_date])
     end
     if params.has_key?(:assignee_email)
-      chore.assignee_id = User.find_by(email: params[:assignee_email]).id
+      chore.update(assignee_id: User.find_by(email: params[:assignee_email]).id)
     end
-
-    chore.save
 
     render status: :ok
 
   end
 
   def destroy
+    params.require(:id)
+    id = params[:id]
+
+    Chore.find_by(id: id).destroy
+
+    render status: :ok
   end
 end
