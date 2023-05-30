@@ -21,10 +21,13 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
+    # TODO: add middleware to check if expense exists
+    id = params[:id] 
+    Expense.destroy_by(id: id)
+    render status: :ok
   end
 
-  def update()
-    params.require(:id)
+  def update
     id = params[:id]  
 
     # TODO: add middleware for checking if user exists and expense exists 
@@ -49,4 +52,5 @@ class ExpensesController < ApplicationController
 
     render status: :ok
   end
+
 end

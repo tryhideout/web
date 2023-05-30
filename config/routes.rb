@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   delete "/hideouts/destroy", to: "hideout#destroy"
 
   post '/expenses', to: "expenses#create"
-  get 'expenses/destroy'
+  delete '/expenses/:id', to: "expenses#destroy"
   put "/expenses", to: "expenses#update"
 
 end
