@@ -2,6 +2,11 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+require_relative '../helpers/auth_helper.rb'
+require_relative '../../lib/exceptions.rb'
+
+include ActionController::Cookies
+
 class UsersController < ApplicationController
   @@firebaseSignupURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
 
@@ -13,15 +18,19 @@ class UsersController < ApplicationController
 
     return render status: 400 if first_name.nil? || last_name.nil? || email.nil? || password.nil?
 
-    res = Net::HTTP.post_form(@@firebaseSignupURI, email: email, password: password)
-    data = JSON.parse(res.body)
-
-    if data.member?(:error)
-      render status: 400, body: :'Resource Already Exists'
-    else
+    begin
       new_user = User.new(first_name: first_name, last_name: last_name, email: email)
       new_user.save
-      render status: :created, json: { first_name: first_name, last_name: last_name, email: email }
+
+      response = Net::HTTP.post_form(@@firebaseSignupURI, email: email, password: password)
+      raise Exceptions::FirebaseNotUniqueError if response.code == '400'
+
+      render status: :created, json: new_user.as_json
+    rescue ActiveRecord::RecordNotUnique
+      render status: 400, body: 'Resource Already Exists'
+    rescue Exceptions::FirebaseNotUniqueError
+      new_user.destroy
+      render status: 400, body: 'Resource Already Exists'
     end
   end
 end

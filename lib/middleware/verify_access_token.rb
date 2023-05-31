@@ -1,5 +1,5 @@
 module Middleware
-  class VerifyUserAuth
+  class VerifyAccessToken
     def initialize(app)
       @app = app
     end
