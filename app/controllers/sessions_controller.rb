@@ -13,9 +13,8 @@ class SessionsController < ApplicationController
   def create
     email = params[:email]
     password = params[:password]
-    refresh_token = cookies[:refresh_token]
 
-    return render status: 400 if email.nil? || password.nil? || refresh_token.nil?
+    return render status: 400 if email.nil? || password.nil?
 
     begin
       response = Net::HTTP.post_form(@@firebaseLoginURI, email: email, password: password)
@@ -57,7 +56,7 @@ class SessionsController < ApplicationController
     refresh_token = cookies[:refresh_token]
     return render status: 400 if refresh_token.nil?
 
-    cookies.delete :refresh_token, domain: 'localhost'
+    cookies.delete :refresh_token
     render status: 204
   end
 end

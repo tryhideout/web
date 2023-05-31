@@ -1,5 +1,5 @@
 require_relative 'boot'
-require_relative '../lib/middleware/verify_user_auth.rb'
+require_relative '../lib/middleware/verify_access_token.rb'
 
 require 'rails/all'
 require 'set'
