@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
   def create
+    params.require(:name, :amount, :debtor_id, :hideout_id)
     name = params[:name]
     amount = params[:amount]
     due_date = params[:due_date]  # format: DD-MM-YYYY
@@ -7,7 +8,7 @@ class ExpensesController < ApplicationController
     hideout_id = params[:hideout_id]
     comments = params[:comments]
 
-    # TODO: add middleware for hideout must exist, user must exist, and user must be in the hideout
+    # TODO: add middleware to check if request is valid
 
     if name.nil? || amount.nil? || debtor_id.nil? || hideout_id.nil?
       render status: 400
@@ -21,7 +22,7 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
-    # TODO: add middleware to check if expense exists
+    # TODO: add middleware to check if request is valid
     id = params[:id] 
     Expense.destroy_by(id: id)
     render status: :ok
@@ -30,7 +31,7 @@ class ExpensesController < ApplicationController
   def update
     id = params[:id]  
 
-    # TODO: add middleware for checking if user exists and expense exists 
+    # TODO: add middleware for checking if request is valid 
 
     expense = Expense.find_by(id: id)    
     if params.has_key?(:name)
