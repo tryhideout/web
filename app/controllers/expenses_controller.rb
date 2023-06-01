@@ -23,12 +23,14 @@ class ExpensesController < ApplicationController
 
   def destroy
     # TODO: add middleware to check if request is valid
-    id = params[:id] 
-    Expense.destroy_by(id: id)
+    params.require(:id)
+    Expense.destroy_by(id: params[:id])
     render status: :ok
   end
 
   def update
+    params.require(:id)
+    params.permit([:name, :amount, :due_date, :debtor_id, :hideout_id, :comments])
     id = params[:id]  
 
     # TODO: add middleware for checking if request is valid 
