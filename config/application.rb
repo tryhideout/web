@@ -23,7 +23,7 @@ module HideoutWeb
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
       YAML.load(File.open(env_file)).each { |key, value| ENV[key.to_s] = value } if File.exist?(env_file)
-      ENV['PUBLIC_ROUTES'] = 'GET /health, POST /users'
+      ENV['PUBLIC_ROUTES'] = 'GET /api/health, POST /api/users, POST /api/sessions, PUT /api/sessions, DELETE /api/sessions'
     end
 
     config.middleware.use Middleware::VerifyAccessToken
