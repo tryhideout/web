@@ -11,12 +11,11 @@ class SessionsController < ApplicationController
   @@firebaseLoginURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
 
   def create
-    email = params[:email]
-    password = params[:password]
-
-    return render status: 400 if email.nil? || password.nil?
-
     begin
+      params.require(%i[email password])
+      email = params[:email]
+      password = params[:password]
+
       response = Net::HTTP.post_form(@@firebaseLoginURI, email: email, password: password)
       raise StandardError if response.code == '400'
 
@@ -36,6 +35,8 @@ class SessionsController < ApplicationController
       response_json[:access_token] = access_token
 
       render status: 201, json: response_json
+    rescue ActionController::ParameterMissing
+      render status: 400
     rescue StandardError
       render status: 401
     end
