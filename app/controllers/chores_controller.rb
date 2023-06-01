@@ -1,6 +1,9 @@
 class ChoresController < ApplicationController
   def create
-    params.require(:chore).permit(:title, :hideout_id)
+    begin
+      params.require(:chore).permit(:title, :hideout_id)
+    rescue ActionController::ParameterMissing
+      render status: 400
 
     title = params[:title]
     description = params[:description]
