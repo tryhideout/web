@@ -1,7 +1,7 @@
 class ChoresController < ApplicationController
   def create
     begin
-      params.require([:chore, :title, :hideout_id])
+      params.require([:title, :hideout_id])
       title = params[:title]
       description = params[:description]
       due_date = params[:due_date]
