@@ -1,16 +1,16 @@
 Rails.application.routes.draw do
-    post '/sessions', to: 'auth#login'
-    post '/users', to: 'auth#signup'
-    delete '/sessions', to: 'auth#logout'
+  get '/api/health', to: 'application#health'
 
-    post '/hideouts', to: 'hideout#create'
-    delete '/hideouts', to: 'hideout#destroy'
-    put '/hideouts/rename', to: 'hideout#rename'
-    put '/hideouts/users', to: 'hideout#add'
-    delete '/hideouts/users', to: 'hideout#leave'
-    delete '/hideouts/destroy', to: 'hideout#destroy'
+  post '/api/sessions', to: 'sessions#create'
+  put '/api/sessions', to: 'sessions#update'
+  delete '/api/sessions', to: 'sessions#destroy'
 
-    post '/chores', to: 'chores#create'
-    put '/chores/:id', to: 'chores#update'
-    delete '/chores/:id', to: 'chores#destroy'
+  post '/api/users', to: 'users#create'
+
+  post '/api/hideouts', to: 'hideout#create'
+  delete '/api/hideouts', to: 'hideout#destroy'
+  put '/api/hideouts/api/rename', to: 'hideout#rename'
+  put '/api/hideouts/api/users', to: 'hideout#add'
+  delete '/api/hideouts/api/users', to: 'hideout#leave'
+  delete '/api/hideouts/api/destroy', to: 'hideout#destroy'
 end
