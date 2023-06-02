@@ -50,6 +50,9 @@ lerna-debug.log*
 /package.json
 /.prettierrc.json
 /package-lock.json
+/.prettierrc.json
+/package.json
+/package-lock.json
 
 /client/cypress/videos/
 /client/cypress/screenshots/
