@@ -1,59 +1,38 @@
 class ExpensesController < ApplicationController
+  
   def create
-    params.require(:name, :amount, :debtor_id, :hideout_id)
-    name = params[:name]
-    amount = params[:amount]
-    due_date = params[:due_date]  # format: DD-MM-YYYY
-    debtor_email = params[:debtor_email]
-    hideout_id = params[:hideout_id]
-    comments = params[:comments]
-
-    # TODO: add middleware to check if request is valid
-
-    if name.nil? || amount.nil? || debtor_id.nil? || hideout_id.nil?
-      render status: 400
-    else
-      debtor_id = User.find_by(email: debtor_email).id
-      expense = Expense.new(name: name, amount: amount, due_date: due_date.to_date, debtor_id: debtor_id, hideout_id: hideout_id, comments: comments)
-      expense.save
-      render status: :created, :json => {name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, hideout_id: hideout_id, comments: comments}
+    begin
+      expense = Expense.create(expense_params)
+      render status: :created, json: expense.to_json
+    rescue
+      render status: :bad_request
     end
-
   end
 
   def destroy
-    # TODO: add middleware to check if request is valid
-    params.require(:id)
-    Expense.destroy_by(id: params[:id])
-    render status: :ok
+    begin
+      params.require(:id)
+      Expense.destroy_by(id: params[:id])
+      render status: :ok
+    rescue
+      render status: :bad_request
+    end
   end
 
   def update
-    params.require(:id)
-    params.permit([:name, :amount, :due_date, :debtor_id, :hideout_id, :comments])
-    id = params[:id]  
+    begin
+      id = params[:id]  
+      expense = Expense.find_by(id: id)    
+      expense.update(expense_params)
+    rescue
+      render status: :bad_request
+    end
+  end
 
-    # TODO: add middleware for checking if request is valid 
+  private
 
-    expense = Expense.find_by(id: id)    
-    if params.has_key?(:name)
-      expense.update(name: params[:name])
-    end
-    if params.has_key?(:amount)
-      expense.update(amount: params[:amount])
-    end
-    if params.has_key?(:due_date)  # format: DD-MM-YYYY
-      expense.update(due_date: params[:due_date].to_date)
-    end
-    if params.has_key?(:debtor_email)
-      debtor_id = User.find_by(debtor_email).id
-      expense.update(debtor_id: debtor_id)
-    end
-    if params.has_key?(:comments)
-      expense.update(comments: params[:comments])
-    end
-
-    render status: :ok
+  def expense_params
+    params.require(:expense).permit(:name, :amount, :due_date, :debtor_id, :hideout_id, :comments)
   end
 
 end
