@@ -1,5 +1,6 @@
 class ChoresController < ApplicationController
   def show
+    params.require(:id)
     id = params[:id]
     chore = Chore.find_by(id: id)
     render status: 200, json: chore.to_json
