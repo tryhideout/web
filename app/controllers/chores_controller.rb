@@ -1,9 +1,14 @@
 class ChoresController < ApplicationController
   def show
-    params.require(:id)
-    id = params[:id]
-    chore = Chore.find_by(id: id)
-    render status: 200, json: chore.to_json
+    # check that chore exists and user has adequate permissions
+    begin
+      params.require(:id)
+      id = params[:id]
+      chore = Chore.find_by(id: id)
+      return render status: 200, json: chore.to_json
+    rescue ActionController::ParameterMissing
+      return render status: 400
+    end
   end
 
   def create
@@ -20,16 +25,15 @@ class ChoresController < ApplicationController
       due_date = params[:due_date]
 
       chore = Chore.create(title: title, description: description, hideout_id: hideout_id, assignee_id: assignee_id, due_date: due_date)
-      render status: 201,  json: chore.to_json
+      return render status: 201,  json: chore.to_json
     rescue ActionController::ParameterMissing 
-      render status: 400
+      return render status: 400
     end
   end
 
   
   def update
-    #Assume that user, chore and hideout exist
-
+    # check that chore exists and user has adequate permissions
     begin
       params.require(%i[id title description assignee_email due_date]) 
       id = params[:id] 
@@ -42,20 +46,20 @@ class ChoresController < ApplicationController
 
       chore = Chore.find_by(id: id)    
       chore.update(title: title, description: description, assignee_id: assignee_id, due_date: due_date)
-      render status: 200
-    rescue
-      render status: 400
+      return render status: 200
+    rescue ActionController::ParameterMissing
+      return render status: 400
     end
   end
 
-def destroy
-  #Assume that user, chore and hideout exist
-  begin
-    params.require(:id)
-    Chore.destroy_by(id: params[:id])
-    render status: 200
-  rescue
-    render status: 400
+  def destroy
+    # check that chore exists and user has adequate permissions
+    begin
+      params.require(:id)
+      Chore.destroy_by(id: params[:id])
+      return render status: 200
+    rescue ActionController::ParameterMissing
+      return render status: 400
+    end
   end
-end
 end
