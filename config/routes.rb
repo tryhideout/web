@@ -13,4 +13,9 @@ Rails.application.routes.draw do
   put '/api/hideouts/api/users', to: 'hideout#add'
   delete '/api/hideouts/api/users', to: 'hideout#leave'
   delete '/api/hideouts/api/destroy', to: 'hideout#destroy'
+
+  post '/api/chores', to: 'chores#create'
+  put '/api/chores/:id', to: 'chores#update'
+  delete '/api/chores/:id', to: 'chores#destroy'
+  
 end
