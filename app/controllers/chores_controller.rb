@@ -23,6 +23,7 @@ class ChoresController < ApplicationController
       id = params[:id]  
       chore = Chore.find_by(id: id)    
       chore.update(chore_params)
+      render status: 200
     rescue
       render status: 400
     end
