@@ -1,13 +1,26 @@
 class ChoresController < ApplicationController
+  def index
+    id = params[:id]
+    chore = Chore.find_by(id: id)
+    render status: 200, json: chore.to_json
+  end
+
   def create
     begin
-      #hideout_id = params[:payload]
+      payload = params[:payload]
+      hideout_id = params[:hideout_id]
       params.require(%i[title description hideout_id assignee_email due_date])
+
+      title = params[:title]
+      description = params[:description]
+      hideout_id = params[:hideout_id]
+      assignee_email = params[:assignee_email]
       assignee_id = User.find_by(id: params[:assignee_email])
-      chore = Chore.create(title: params[:title], description: params[:description], hideout_id: params[:hideout_id], assignee_id: params[:assignee_id], due_date: params[:due_date])
+      due_date = params[:due_date]
+
+      chore = Chore.create(title: title, description: description, hideout_id: hideout_id, assignee_id: assignee_id, due_date: due_date)
       render status: 201,  json: chore.to_json
-    rescue ActionController::ParameterMissing => e
-      puts e
+    rescue ActionController::ParameterMissing 
       render status: 400
     end
   end
@@ -17,12 +30,17 @@ class ChoresController < ApplicationController
     #Assume that user, chore and hideout exist
 
     begin
-      #hideout_id = params[:payload]
+      params.require(%i[id title description assignee_email due_date]) 
       id = params[:id] 
-      params.require(%i[title description hideout_id assignee_email due_date]) 
+
+      title = params[:title]
+      description = params[:description]
+      assignee_email = params[:assignee_email]
       assignee_id = User.find_by(id: params[:assignee_email])
+      due_date = params[:due_date]
+
       chore = Chore.find_by(id: id)    
-      chore.update(title: params[:title], description: params[:description], hideout_id: params[:hideout_id], assignee_id: params[:assignee_id], due_date: params[:due_date])
+      chore.update(title: title, description: description, assignee_id: assignee_id, due_date: due_date)
       render status: 200
     rescue
       render status: 400
