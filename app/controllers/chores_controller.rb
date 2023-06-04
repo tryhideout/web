@@ -24,7 +24,7 @@ class ChoresController < ApplicationController
       chore = Chore.find_by(id: id)    
       chore.update(chore_params)
     rescue
-      render status: :bad_request
+      render status: 400
     end
   end
 
