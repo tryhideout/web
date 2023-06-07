@@ -23,7 +23,7 @@ module Middleware
           payload = result[:payload]
           payload.transform_keys!(&:to_sym)
           current_hideout = Hideout.find_by(id: payload[:hideout_id])
-          return [400, {}, []] unless current_hideout == request.params[:hideout_id].to_i
+          return 400, {}, [] unless current_hideout == request.params[:hideout_id].to_i
 
           request.update_param(:payload, result[:payload])
 
