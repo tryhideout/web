@@ -3,7 +3,7 @@ require 'json'
 require_relative '../../app/helpers/auth_helper.rb'
 
 module Middleware
-  class VerifyAccessToken
+  class VerifyHideoutId
     def initialize(app)
       @app = app
     end
@@ -13,20 +13,22 @@ module Middleware
       request_identifier = "#{request.method} #{request.path}"
       if not ENV['PUBLIC_ROUTES'].include?(request_identifier)
         authoriation_header = request.headers[:Authorization]
-        return 401, {}, [] if authoriation_header.nil?
+        return [401, {}, []] if authoriation_header.nil?
 
         access_token = authoriation_header.split[1]
         result = AuthHelper.validate_token_by_type(:ACCESS, access_token)
-        return 401, {}, [] if not result[:success]
+        return [401, {}, []] unless result[:success]
 
         begin
           payload = result[:payload]
           payload.transform_keys!(&:to_sym)
-          current_user = User.find_by!(email: payload[:email])
-          payload[:hideout_id] = current_user[:hideout_id]
+          current_hideout = Hideout.find_by(id: payload[:hideout_id])
+          return [400, {}, []] unless current_hideout == request.params[:hideout_id].to_i
+
           request.update_param(:payload, result[:payload])
+
         rescue ActiveRecord::RecordNotFound
-          return 400, {}, []
+          return [400, {}, []]
         end
       end
 
