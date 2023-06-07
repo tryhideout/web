@@ -5,7 +5,7 @@ class ExpensesController < ApplicationController
       expense = Expense.create(expense_params)
       render status: :created, json: expense.to_json
     rescue
-      render status: :bad_request
+      render status: 400
     end
   end
 
@@ -15,7 +15,7 @@ class ExpensesController < ApplicationController
       Expense.destroy_by(id: params[:id])
       render status: :ok
     rescue
-      render status: :bad_request
+      render status: 400
     end
   end
 
@@ -25,7 +25,7 @@ class ExpensesController < ApplicationController
       expense = Expense.find_by(id: id)    
       expense.update(expense_params)
     rescue
-      render status: :bad_request
+      render status: 400
     end
   end
 
