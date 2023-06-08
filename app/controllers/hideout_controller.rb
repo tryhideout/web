@@ -1,11 +1,5 @@
 class HideoutController < ApplicationController
   def create
-    # Needs owner_email and name as params.
-    # name must be lesser than 20 characters and greater than 3 characters
-    # owner must not already be in a hideout
-    # return the hideout as an object
-    params.require([:owner_email, name])
-
     owner_email = params[:owner_email]
     name = params[:name]
 
@@ -22,7 +16,6 @@ class HideoutController < ApplicationController
   end
 
   def destroy
-    params.require[:user_email, :hideout_id, :issued_by_email]
     hideout_id = params[:hideout_id]
     issued_by_email = params[:user_email]
 
@@ -39,7 +32,6 @@ class HideoutController < ApplicationController
   end
 
   def rename
-    params.require([:hideout_id, :user_email, :new_name])
     hideout_id = params[:hideout_id]
     issued_by_email = params[:user_email]
     new_name = params[:new_name]
