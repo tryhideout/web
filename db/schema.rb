@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_044036) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_08_025157) do
   create_table "chores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.string "description"
@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_044036) do
     t.string "name", null: false
     t.bigint "amount", null: false
     t.datetime "due_date"
-    t.bigint "debtor_id", null: false
+    t.bigint "debtor_id"
     t.bigint "hideout_id", null: false
     t.string "comments", limit: 100
     t.index ["debtor_id"], name: "index_expenses_on_debtor_id"
