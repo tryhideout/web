@@ -1,17 +1,27 @@
+require_relative '../helpers/hideout_helper.rb'
+
 class HideoutController < ApplicationController
   def create
-    owner_email = params[:owner_email]
-    name = params[:name]
+    begin
+      params.require(:name)
 
-    if !User.exists?(email: owner_email)
-      render status: :not_found, body: 'User does not exist'
-    elsif name.length > 20 or name.length < 3
-      render status: 400, body: 'Bad Request'
-    elsif !User.find_by(email: owner_email).hideout_id.nil?
-      render status: :precondition_failed, body: 'Owner already in hideout'
-    else
-      join_code = Hideout.create(owner_email, name)
-      render status: :created, json: { name: name, owner_email: owner_email, join_code: join_code }
+      payload = params[:payload]
+      name = params[:name]
+      owner_id = payload[:id]
+
+      return render status: 400 if name.length > 20 or name.length < 3
+      return render status: 400, body: 'User Already In Hideout' if !payload[:hideout_id].nil?
+
+      hideout = Hideout.create(owner_id: owner_id, name: name)
+      join_code = HideoutHelper.generate_join_code(hideout.id)
+      hideout.update(join_code: join_code)
+
+      owner = User.find_by(id: owner_id)
+      owner.update(hideout_id: hideout.id)
+
+      render status: :created, json: hideout.as_json
+    rescue ActionController::ParameterMissing
+      render status: 400
     end
   end
 
@@ -44,36 +54,6 @@ class HideoutController < ApplicationController
       render status: :forbidden, body: 'User is not the Hideout owner'
     else
       Hideout.rename(hideout_id, new_name)
-      render status: :ok
-    end
-  end
-
-  def add
-    join_code = params[:join_code]
-    email = params[:email]
-
-    if !User.exists?(email: email)
-      render status: :not_found, body: 'User does not exist'
-    elsif !Hideout.exists?(join_code: join_code)
-      render status: :not_found, body: 'Hideout does not exist'
-    elsif !User.find_by(email: email).hideout_id.nil?
-      render status: :precondition_failed, body: 'User already in hideout'
-    else
-      hideout_id = Hideout.find_by(join_code: join_code).id
-      Hideout.add_user(email, id)
-      render status: :ok
-    end
-  end
-
-  def leave
-    email = params[:email]
-
-    if !User.exists?(email: email)
-      render status: :not_found, body: 'User does not exist'
-    elsif User.find_by(email: email).hideout_id.nil?
-      render status: :precondition_failed, body: 'User is not in a hideout'
-    else
-      Hideout.remove_user(email)
       render status: :ok
     end
   end
