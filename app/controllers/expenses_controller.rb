@@ -11,7 +11,6 @@ class ExpensesController < ApplicationController
 
   def destroy
     begin
-      params.require(:id)
       Expense.destroy_by(id: params[:id])
       render status: 200
     rescue
