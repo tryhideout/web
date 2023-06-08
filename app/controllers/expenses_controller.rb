@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
   def create
     begin
       expense = Expense.create(expense_params)
-      render status: :created, json: expense.to_json
+      render status: 201, json: expense.to_json
     rescue
       render status: 400
     end
@@ -13,7 +13,7 @@ class ExpensesController < ApplicationController
     begin
       params.require(:id)
       Expense.destroy_by(id: params[:id])
-      render status: :ok
+      render status: 200
     rescue
       render status: 400
     end
@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
   private
 
   def expense_params
-    params.require(:expense).require(:name, :amount, :due_date, :debtor_id, :hideout_id, :comments)
+    params.require(:expense).require(:name, :amount, :due_date, :debtor_id, :hiedeout_id, :comments)
   end
 
 end
