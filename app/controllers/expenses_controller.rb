@@ -12,10 +12,11 @@ class ExpensesController < ApplicationController
 
   def destroy
     begin
-      Expense.destroy_by(id: params[:id])
+      expense = Expense.find!(params[:id])
+      expense.destroy
       render status: 200
-    rescue
-      render status: 400
+    rescue ActiveRecord::RecordNotFound
+      render status: 404
     end
   end
 
