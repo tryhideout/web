@@ -2,10 +2,16 @@ class ExpensesController < ApplicationController
   
   def create
     begin
-      create_params = params.require(:expense).permit([:name, :amount, :due_date, :debtor_id, :hideout_id, :comments])
-      expense = Expense.create!(create_params)
+      params.require(:expense).require(%i[name amount due_date debtor_id comments])
+      name = params[:name]
+      amount = params[:amount]
+      due_date = params[:due_date]
+      debtor_id = params[:debtor_id]
+      comments = params[:comments]
+
+      expense = Expense.create!(name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, comments: comments)
       render status: 201, json: expense.to_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
+    rescue ActionController::ParameterMissing
       render status: 400
     end
   end
