@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_08_025157) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_000033) do
   create_table "chores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.string "description"
@@ -28,6 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_025157) do
     t.bigint "debtor_id"
     t.bigint "hideout_id", null: false
     t.string "comments", limit: 100
+    t.bigint "creditor_id"
+    t.index ["creditor_id"], name: "index_expenses_on_creditor_id"
     t.index ["debtor_id"], name: "index_expenses_on_debtor_id"
     t.index ["hideout_id"], name: "index_expenses_on_hideout_id"
   end
@@ -37,7 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_025157) do
     t.bigint "owner_id", null: false
     t.string "join_code"
     t.index ["join_code"], name: "index_hideouts_on_join_code", unique: true
-    t.index ["name"], name: "index_hideouts_on_name", unique: true
     t.index ["owner_id"], name: "index_hideouts_on_owner_id", unique: true
   end
 
@@ -51,9 +52,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_025157) do
   end
 
   add_foreign_key "chores", "hideouts", on_delete: :cascade
-  add_foreign_key "chores", "users", column: "assignee_id", on_delete: :cascade
+  add_foreign_key "chores", "users", column: "assignee_id", on_delete: :nullify
   add_foreign_key "expenses", "hideouts", on_delete: :cascade
-  add_foreign_key "expenses", "users", column: "debtor_id", on_delete: :cascade
+  add_foreign_key "expenses", "users", column: "creditor_id", on_delete: :nullify
+  add_foreign_key "expenses", "users", column: "debtor_id", on_delete: :nullify
   add_foreign_key "hideouts", "users", column: "owner_id", on_delete: :cascade
   add_foreign_key "users", "hideouts", on_delete: :nullify
 end

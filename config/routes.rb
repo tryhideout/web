@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   post '/api/users', to: 'users#create'
   put '/api/users/:id/hideouts', to: 'users#join'
-  put '/api/users/:id/hideouts', to: 'users#leave'
+  delete '/api/users/:id/hideouts', to: 'users#leave'
 
   post '/api/hideouts', to: 'hideout#create'
   put '/api/hideouts/:id', to: 'hideout#update'

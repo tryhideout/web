@@ -1,5 +1,6 @@
 require_relative 'boot'
 require_relative '../lib/middleware/verify_access_token.rb'
+require_relative '../lib/middleware/verify_user_permissions.rb'
 
 require 'rails/all'
 require 'set'
@@ -27,6 +28,7 @@ module HideoutWeb
     end
 
     config.middleware.use Middleware::VerifyAccessToken
+    config.middleware.use Middleware::VerifyUserPermissions
     config.middleware.use ActionDispatch::Cookies
   end
 end
