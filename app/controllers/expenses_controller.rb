@@ -8,8 +8,9 @@ class ExpensesController < ApplicationController
       due_date = params[:due_date]
       debtor_id = params[:debtor_id]
       comments = params[:comments]
+      hideout_id = params[:payload][:hideout_id]
 
-      expense = Expense.create!(name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, comments: comments)
+      expense = Expense.create!(name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, comments: comments, hideout_id: hideout_id)
       render status: 201, json: expense.to_json
     rescue ActionController::ParameterMissing
       render status: 400
