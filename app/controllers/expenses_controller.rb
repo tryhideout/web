@@ -22,7 +22,7 @@ class ExpensesController < ApplicationController
 
   def update
     begin
-      update_params = params.require(:expense).permit([:name, :amount, :due_date, :debtor_id, :hideout_id, :comments])
+      update_params = params.require(:expense).permit([:name, :amount, :due_date, :debtor_id, :comments])
       expense = Expense.find!(params[:id])    
       expense.update!(expense_params)
       render status: 200  
