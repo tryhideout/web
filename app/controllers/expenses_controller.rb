@@ -22,13 +22,15 @@ class ExpensesController < ApplicationController
 
   def update
     begin
-      update_params = params.require(:expense).permit([:name, :amount, :due_date, :debtor_id, :comments])
+      params.require(:expense).require(%i[name amount])
+      name = params[:name]
+      amount = params[:amount]
       expense = Expense.find!(params[:id])    
-      expense.update!(expense_params)
+      expense.update!(name: name, amount: amount)
       render status: 200  
     rescue ActiveRecord::RecordNotFound
       render status: 404
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed 
+    rescue ActionController::ParameterMissing 
       render status: 400
     end
   end
