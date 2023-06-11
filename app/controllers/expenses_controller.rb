@@ -12,7 +12,7 @@ class ExpensesController < ApplicationController
 
       expense = Expense.create!(name: name, amount: amount, due_date: due_date, debtor_id: debtor_id, comments: comments, hideout_id: hideout_id)
       render status: 201, json: expense.to_json
-    rescue ActionController::ParameterMissing, ActiveRecord::RecordInvalid
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       render status: 400
     end
   end
@@ -37,7 +37,7 @@ class ExpensesController < ApplicationController
       render status: 200  
     rescue ActiveRecord::RecordNotFound
       render status: 404
-    rescue ActionController::ParameterMissing, ActiveRecord::RecordInvalid
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       render status: 400
     end
   end
