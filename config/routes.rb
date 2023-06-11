@@ -19,4 +19,8 @@ Rails.application.routes.draw do
   put '/api/chores/:id', to: 'chores#update'
   delete '/api/chores/:id', to: 'chores#destroy'
   
+  post '/api/expenses', to: "expenses#create"
+  delete '/api/expenses/:id', to: "expenses#destroy"
+  put "/api/expenses/:id", to: "expenses#update"
+  
 end
