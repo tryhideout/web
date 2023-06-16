@@ -1,5 +1,3 @@
-require 'json'
-
 require_relative '../../app/helpers/auth_helper.rb'
 
 module Middleware

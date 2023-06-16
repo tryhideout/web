@@ -1,65 +1,59 @@
 class ChoresController < ApplicationController
-  def show
-    # check that chore exists and user has adequate permissions
-    begin
-      params.require(:id)
-      id = params[:id]
-      chore = Chore.find_by(id: id)
-      return render status: 200, json: chore.to_json
-    rescue ActionController::ParameterMissing
-      return render status: 400
-    end
-  end
-
   def create
     begin
-      payload = params[:payload]
-      hideout_id = params[:hideout_id]
-      params.require(%i[title description hideout_id assignee_email due_date])
+      params.require(%i[name description hideout_id])
 
-      title = params[:title]
+      name = params[:name]
       description = params[:description]
+      assignee_id = params[:assignee_id]
       hideout_id = params[:hideout_id]
-      assignee_email = params[:assignee_email]
-      assignee_id = User.find_by(id: params[:assignee_email])
       due_date = params[:due_date]
 
-      chore = Chore.create(title: title, description: description, hideout_id: hideout_id, assignee_id: assignee_id, due_date: due_date)
-      return render status: 201,  json: chore.to_json
-    rescue ActionController::ParameterMissing 
+      if !assignee_id.nil?
+        assignee = User.find_by!(id: params[:assignee_id])
+        return render status: 400, body: 'Assignee Not In Hideout' if assignee.hideout_id != hideout_id
+      end
+
+      chore =
+        Chore.create(name: name, description: description, hideout_id: hideout_id, assignee_id: assignee_id, due_date: due_date)
+      return render status: 201, json: chore.to_json
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
+    rescue ActiveRecord::RecordNotFound
+      return render status: 404, body: 'Assignee Not Found'
     end
   end
 
-  
   def update
-    # check that chore exists and user has adequate permissions
     begin
-      params.require(%i[id title description assignee_email due_date]) 
-      id = params[:id] 
+      params.require(%i[name description hideout_id])
 
-      title = params[:title]
+      id = params[:id]
+      name = params[:name]
+      hideout_id = params[:hideout_id]
       description = params[:description]
-      assignee_email = params[:assignee_email]
-      assignee_id = User.find_by(id: params[:assignee_email])
+      assignee_id = params[:assignee_id]
       due_date = params[:due_date]
 
-      chore = Chore.find_by(id: id)    
-      chore.update(title: title, description: description, assignee_id: assignee_id, due_date: due_date)
-      return render status: 200
-    rescue ActionController::ParameterMissing
+      if !assignee_id.nil?
+        assignee = User.find_by!(id: assignee_id)
+        return render status: 400, body: 'Assignee Not In Hideout' if assignee.hideout_id != hideout_id
+      end
+
+      chore = Chore.find_by(id: id)
+      chore.update(name: name, description: description, assignee_id: assignee_id, due_date: due_date)
+      return render status: 200, json: chore.as_json
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
+    rescue ActiveRecord::RecordNotFound
+      return render status: 404, body: 'Assignee Not Found'
     end
   end
 
   def destroy
-    # check that chore exists and user has adequate permissions
-    begin
-      params.require(:id)
-      Chore.destroy_by(id: params[:id])
-      return render status: 200
-    rescue ActionController::ParameterMissing
-      return render status: 400
-    end
+    id = params[:id]
+    chore = Chore.find_by(id: params[:id])
+    chore.destroy
+    return render status: 200
   end
 end
