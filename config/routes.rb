@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   put '/api/sessions', to: 'sessions#update'
   delete '/api/sessions', to: 'sessions#destroy'
 
+  get '/api/users/:id', to: 'users#show'
   post '/api/users', to: 'users#create'
   put '/api/users/:id/hideouts', to: 'users#join'
   delete '/api/users/:id/hideouts', to: 'users#leave'

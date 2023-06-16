@@ -1,21 +1,10 @@
 class Hideout < ActiveRecord::Base
   self.table_name = 'hideouts'
+  has_many :chores, foreign_key: 'hideout_id'
+  has_many :expenses, foreign_key: 'hideout_id'
+  has_many :users, foreign_key: 'hideout_id'
 
-  def self.add_user(email, hideout_id)
-    user = User.find_by(email: email)
-    user.hideout_id = hideout_id
-    user.save
-  end
-
-  def self.remove_user(email)
-    user = User.find_by(email: email)
-    user.hideout_id = nil
-    user.save
-  end
-
-  def self.rename(id, new_name)
-    hideout = Hideout.find_by(id: id)
-    hideout.name = new_name
-    hideout.save
-  end
+  validates :name, presence: true, strict: true
+  validates :owner_id, presence: true, strict: true
+  validates :assignee_id, presence: true, unless: -> { assignee_id.blank? }, strict: true
 end

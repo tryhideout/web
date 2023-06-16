@@ -10,6 +10,12 @@ include ActionController::Cookies
 class UsersController < ApplicationController
   @@firebaseSignupURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
 
+  def show
+    id = params[:id]
+    user = User.find_by!(id: id)
+    return render status: 200, json: user.as_json
+  end
+
   def create
     begin
       params.require(%i[first_name last_name email password])
@@ -24,18 +30,17 @@ class UsersController < ApplicationController
       raise Exceptions::FirebaseNotUniqueError if response.code == '400'
 
       render status: :created, json: new_user.as_json
-    rescue ActionController::ParameterMissing
-      render status: 400
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
+      return render status: 400
     rescue ActiveRecord::RecordNotUnique
-      render status: 400, body: 'Resource Already Exists'
+      return render status: 400, body: 'Resource Already Exists'
     rescue Exceptions::FirebaseNotUniqueError
       new_user.destroy
-      render status: 400, body: 'Resource Already Exists'
+      return render status: 400, body: 'Resource Already Exists'
     end
   end
 
   def join
-    # check that user has adequate permissions (user is user)
     begin
       params.require(:join_code)
       id = params[:id]
@@ -48,16 +53,15 @@ class UsersController < ApplicationController
       user = User.find_by(id: id)
       hideout = Hideout.find_by!(join_code: join_code)
       user.update(hideout_id: hideout.id)
-      render status: :ok
-    rescue ActionController::ParameterMissing
-      render status: 400
+      return render status: :ok
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
+      return render status: 400
     rescue ActiveRecord::RecordNotFound
       return render status: 400, body: 'Invalid Join Code'
     end
   end
 
   def leave
-    # check that user has adequate permissions (user is user)
     begin
       id = params[:id]
       payload = params[:payload]
@@ -70,6 +74,7 @@ class UsersController < ApplicationController
       Chore.where(assignee_id: id).update_all(assignee_id: nil)
       Expense.where(debtor_id: id).update_all(debtor_id: nil)
       Expense.where(creditor_id: id).update_all(creditor_id: nil)
+      return render status: 200
     rescue ActiveRecord::RecordNotFound
       return render status: 400
     end

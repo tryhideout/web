@@ -20,13 +20,12 @@ class HideoutController < ApplicationController
       owner.update(hideout_id: hideout.id)
 
       return render status: 201, json: hideout.as_json
-    rescue ActionController::ParameterMissing
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     end
   end
 
   def update
-    # check that user is owner
     begin
       params.require(%i[name owner_id])
       id = params[:id]
@@ -37,7 +36,7 @@ class HideoutController < ApplicationController
       hideout.update(name: name, owner_id: owner_id)
 
       return render status: 200, json: hideout.as_json
-    rescue ActionController::ParameterMissing
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
       return render status: 404, body: 'Owner Not Found'
@@ -47,7 +46,6 @@ class HideoutController < ApplicationController
   end
 
   def destroy
-    # check that user is owner
     id = params[:id]
     hideout = Hideout.find_by(id: id)
     hideout.destroy

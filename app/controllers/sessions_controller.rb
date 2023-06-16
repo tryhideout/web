@@ -34,11 +34,11 @@ class SessionsController < ApplicationController
       response_json = current_user.as_json
       response_json[:access_token] = access_token
 
-      render status: 201, json: response_json
+      return render status: 201, json: response_json
     rescue ActionController::ParameterMissing
-      render status: 400
+      return render status: 400
     rescue StandardError
-      render status: 401
+      return render status: 401
     end
   end
 
@@ -50,7 +50,7 @@ class SessionsController < ApplicationController
     return render status: 401 if not result[:success]
 
     access_token = AuthHelper.generate_token_by_type(:ACCESS, result[:payload])
-    render status: 200, json: { access_token: access_token }
+    return render status: 200, json: { access_token: access_token }
   end
 
   def destroy
@@ -58,6 +58,6 @@ class SessionsController < ApplicationController
     return render status: 400 if refresh_token.nil?
 
     cookies.delete :refresh_token
-    render status: 204
+    return render status: 204
   end
 end
