@@ -46,7 +46,7 @@ class ChoresController < ApplicationController
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Assignee Not Found' if assignee.nil?
+      return render status: 404, body: 'Assignee Not Found'
     end
   end
 
