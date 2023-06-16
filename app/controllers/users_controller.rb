@@ -10,12 +10,6 @@ include ActionController::Cookies
 class UsersController < ApplicationController
   @@firebaseSignupURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
 
-  def show
-    id = params[:id]
-    user = User.find_by!(id: id)
-    return render status: 200, json: user.as_json
-  end
-
   def create
     begin
       params.require(%i[first_name last_name email password])

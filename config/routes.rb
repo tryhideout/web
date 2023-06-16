@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   put '/api/users/:id/hideouts', to: 'users#join'
   delete '/api/users/:id/hideouts', to: 'users#leave'
 
+  get '/api/hideouts/:id', to: 'hideouts#show'
   post '/api/hideouts', to: 'hideout#create'
   put '/api/hideouts/:id', to: 'hideout#update'
   delete '/api/hideouts/:id', to: 'hideout#destroy'
@@ -18,4 +19,9 @@ Rails.application.routes.draw do
   post '/api/chores', to: 'chores#create'
   put '/api/chores/:id', to: 'chores#update'
   delete '/api/chores/:id', to: 'chores#destroy'
+
+  get '/api/expenses/:id', to: 'expenses#show'
+  post '/api/expenses', to: 'expenses#create'
+  delete '/api/expenses/:id', to: 'expenses#destroy'
+  put '/api/expenses/:id', to: 'expenses#update'
 end
