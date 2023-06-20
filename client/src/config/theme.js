@@ -52,6 +52,61 @@ const theme = extendTheme({
 				variant: 'gradient',
 			},
 		},
+		Input: {
+			sizes: {
+				xl: {
+					field: {
+						height: '60px',
+						padding: '14px 26px',
+						borderRadius: '14px',
+						fontSize: '20px',
+					},
+				},
+				lg: {
+					field: {
+						borderRadius: '12px',
+						fontSize: '16px',
+					},
+				},
+				md: {
+					field: {
+						borderRadius: '10px',
+						fontSize: '14px',
+					},
+				},
+				sm: {
+					field: {
+						borderRadius: '8px',
+						fontSize: '12px',
+					},
+				},
+			},
+			variants: {
+				filled: {
+					field: {
+						background: 'rgba(212, 213, 219, 0.4)',
+						fontFamily: 'Hellix',
+						color: 'gray.600',
+						fontWeight: '500',
+						border: 'none',
+						_hover: {
+							background: 'rgba(212, 213, 219, 0.4)',
+						},
+						_disabled: {
+							opacity: '90%',
+						},
+						_focus: {
+							background: 'rgba(212, 213, 219, 0.4)',
+							border: 'none',
+						},
+						_placeholder: {
+							color: 'gray.500',
+							fontWeight: '500',
+						},
+					},
+				},
+			},
+		},
 	},
 });
 

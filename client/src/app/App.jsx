@@ -1,4 +1,4 @@
-import { ChakraProvider, Box, Input } from '@chakra-ui/react';
+import { ChakraProvider, Box, Input, Button } from '@chakra-ui/react';
 import theme from 'config/theme';
 import fonts from 'config/fonts';
 
