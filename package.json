@@ -1,6 +1,18 @@
 {
-  "devDependencies": {
-    "@prettier/plugin-ruby": "^3.2.2",
-    "prettier": "^2.8.8"
-  }
+	"name": "hideout",
+	"version": "1.0.0",
+	"description": "This README would normally document whatever steps are necessary to get the application up and running.",
+	"main": "index.js",
+	"directories": {
+		"lib": "lib",
+		"test": "test"
+	},
+	"scripts": {
+		"client": "cd client && npm start",
+		"server": "rails server",
+		"build": "cd client && npm run build",
+		"console": "rails console"
+	},
+	"author": "",
+	"license": "ISC"
 }
