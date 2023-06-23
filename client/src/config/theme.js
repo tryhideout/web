@@ -106,6 +106,11 @@ const theme = extendTheme({
 					},
 				},
 			},
+			defaultProps: {
+                size: 'xl',
+                variant: 'filled',
+            },
+
 		},
 	},
 });
