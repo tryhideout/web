@@ -1,13 +1,12 @@
 import { extendTheme } from '@chakra-ui/react';
 
-// 2. Call `extendTheme` and pass your custom values
 const theme = extendTheme({
 	colors: {
 		gradient: 'linear-gradient(180deg, #F8A11E 0%, #F8861E 100%)',
 	},
 	fonts: {
-		heading: `'Hellix', sans-serif`,
-		body: `'Hubot', sans-serif`,
+		heading: `'Hellix'`,
+		body: `'Hellix'`,
 	},
 	components: {
 		Button: {
@@ -104,6 +103,17 @@ const theme = extendTheme({
 							fontWeight: '500',
 						},
 					},
+				},
+			},
+			defaultProps: {
+				size: 'xl',
+				variant: 'filled',
+			},
+		},
+		Link: {
+			baseStyle: {
+				_hover: {
+					textDecoration: 'none',
 				},
 			},
 		},
