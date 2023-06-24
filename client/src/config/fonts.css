@@ -1,0 +1,76 @@
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-Thin.woff') format('woff'), url('../../public/fonts/Hellix-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-Light.woff') format('woff'), url('../../public/fonts/Hellix-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-Regular.woff') format('woff'),
+		url('../../public/fonts/Hellix-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-Medium.woff') format('woff'), url('../../public/fonts/Hellix-Medium.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-SemiBold.woff') format('woff'),
+		url('../../public/fonts/Hellix-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-Bold.woff') format('woff'), url('../../public/fonts/Hellix-Bold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hellix';
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+	src: url('../../public/fonts/Hellix-ExtraBold.woff') format('woff'),
+		url('../../public/fonts/Hellix-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hubot';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../../public/fonts/Hubot-Sans-Regular.woff') format('woff'),
+		url('../../public/fonts/Hubot-Sans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Hubot';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url('../../public/fonts/Hubot-Sans-Bold.woff') format('woff'),
+		url('../../public/fonts/Hubot-Sans-Bold.woff') format('woff2');
+}
