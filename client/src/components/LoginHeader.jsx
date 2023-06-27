@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Center, Heading, Image, Text } from '@chakra-ui/react';
-import logo from '../assets/images/Logo.svg';
+import logo from '../assets/images/logo.svg';
 
 function LoginHeader() {
 	return (

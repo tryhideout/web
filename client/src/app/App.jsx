@@ -5,7 +5,6 @@ import { LandingPage } from 'pages';
 import { LoginPage } from 'pages';
 import theme from 'config/theme';
 import fonts from 'config/fonts.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from 'pages/Signup';
 
 const App = () => {

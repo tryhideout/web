@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@chakra-ui/react';
 import { Box, Link, Divider, Text, Center, Heading, Image } from '@chakra-ui/react';
-import logo from '../assets/images/Logo.svg';
+import logo from '../assets/images/logo.svg';
 import { Button } from '@chakra-ui/react';
 
 // import { LoginContent } from 'components';
