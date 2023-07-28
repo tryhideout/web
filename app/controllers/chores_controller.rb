@@ -1,13 +1,14 @@
 class ChoresController < ApplicationController
   def create
     begin
-      params.require(%i[name description hideout_id])
+      params.require(%i[name description hideout_id status])
 
       name = params[:name]
       description = params[:description]
       assignee_id = params[:assignee_id]
       hideout_id = params[:hideout_id]
       due_date = params[:due_date]
+      status = params[:status]
 
       if !assignee_id.nil?
         assignee = User.find_by!(id: params[:assignee_id])
@@ -15,7 +16,14 @@ class ChoresController < ApplicationController
       end
 
       chore =
-        Chore.create(name: name, description: description, hideout_id: hideout_id, assignee_id: assignee_id, due_date: due_date)
+        Chore.create(
+          name: name,
+          description: description,
+          hideout_id: hideout_id,
+          assignee_id: assignee_id,
+          due_date: due_date,
+          status: status,
+        )
       return render status: 201, json: chore.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
@@ -26,7 +34,7 @@ class ChoresController < ApplicationController
 
   def update
     begin
-      params.require(%i[name description hideout_id])
+      params.require(%i[name description hideout_id status])
 
       id = params[:id]
       name = params[:name]
@@ -34,6 +42,7 @@ class ChoresController < ApplicationController
       description = params[:description]
       assignee_id = params[:assignee_id]
       due_date = params[:due_date]
+      status = params[:status]
 
       if !assignee_id.nil?
         assignee = User.find_by!(id: assignee_id)
@@ -41,7 +50,7 @@ class ChoresController < ApplicationController
       end
 
       chore = Chore.find_by(id: id)
-      chore.update(name: name, description: description, assignee_id: assignee_id, due_date: due_date)
+      chore.update(name: name, description: description, assignee_id: assignee_id, due_date: due_date, status: status)
       return render status: 200, json: chore.as_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
