@@ -12,7 +12,6 @@ class UsersController < ApplicationController
 
   def create
     begin
-      puts params
       params.require(%i[first_name last_name email password])
       first_name = params[:first_name]
       last_name = params[:last_name]
@@ -22,7 +21,6 @@ class UsersController < ApplicationController
       new_user = User.create!(first_name: first_name, last_name: last_name, email: email)
 
       response = Net::HTTP.post_form(@@firebaseSignupURI, email: email, password: password)
-      puts response.body
       raise Exceptions::FirebaseNotUniqueError if response.code == '400'
 
       render status: :created, json: new_user.as_json
