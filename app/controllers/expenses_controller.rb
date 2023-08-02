@@ -1,13 +1,14 @@
 class ExpensesController < ApplicationController
   def create
     begin
-      params.require(%i[name amount hideout_id])
+      params.require(%i[name amount hideout_id active])
       name = params[:name]
       amount = params[:amount]
       due_date = params[:due_date]
       debtor_id = params[:debtor_id]
       creditor_id = params[:creditor_id]
       comments = params[:comments]
+      active = params[:active]
       hideout_id = params[:payload][:hideout_id]
 
       if !debtor_id.nil?
@@ -28,6 +29,7 @@ class ExpensesController < ApplicationController
           debtor_id: debtor_id,
           creditor_id: creditor_id,
           comments: comments,
+          active: active,
           hideout_id: hideout_id,
         )
       return render status: 201, json: expense.to_json
@@ -40,13 +42,14 @@ class ExpensesController < ApplicationController
 
   def update
     begin
-      params.require(%i[name amount hideout_id])
+      params.require(%i[name amount hideout_id active])
       name = params[:name]
       amount = params[:amount]
       due_date = params[:due_date]
       debtor_id = params[:debtor_id]
       creditor_id = params[:creditor_id]
       comments = params[:comments]
+      active = params[:active]
 
       if !debtor_id.nil?
         debtor = User.find_by!(id: debtor_id)
@@ -66,6 +69,7 @@ class ExpensesController < ApplicationController
         debtor_id: debtor_id,
         creditor_id: creditor_id,
         comments: comments,
+        active: active,
       )
       return render status: 200
     rescue ActiveRecord::RecordNotFound
