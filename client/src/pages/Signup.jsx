@@ -37,6 +37,7 @@ function Signup() {
 				setErrorMessage('Email already exists. Please use a different email.');
 				setShowError(true);
 			} else {
+				console.log(response);
 				// successful signup
 				dispatch(updateUser(response.payload));
 				navigate(`/onboarding/login`);
@@ -108,10 +109,10 @@ function Signup() {
 								isRequired
 							/>
 						</Box>
-						<Divider mt='1.25rem' mb='0.5rem' w='100%' borderWidth='1px' borderStyle='solid' borderRadius='5' />
 						<Button mt='1rem' width='100%' type='submit'>
 							Sign Up
 						</Button>
+						<Divider mt='1.25rem' mb='0.5rem' w='100%' borderWidth='1px' borderStyle='solid' borderRadius='5' />
 						{showError && (
 							<Box w='100%' mt='1rem' mb='0.5rem' bg='red.100' color='red.500' p='1rem' borderRadius='md' textAlign='center'>
 								{errorMessage}
@@ -120,9 +121,9 @@ function Signup() {
 					</form>
 				</Box>
 
-				<Text>
+				<Text fontFamily='Hubot'>
 					Already have an account?{' '}
-					<Link href='/auth/login' color='#4299E1'>
+					<Link href='/auth/login' color='#4299E1' fontWeight='bold'>
 						Log in here
 					</Link>
 				</Text>
