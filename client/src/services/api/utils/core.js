@@ -2,9 +2,8 @@ import axios from 'axios';
 import { handleResponse, handleError } from 'services/api/utils/response';
 
 const BASE_URL = process.env.REACT_APP_BASE_API_URL || 'http://localhost:4000/api';
-axios.defaults.withCredentials = true;
 
-class APICore {
+class APICore {	
 	constructor(options) {
 		if (options.get) {
 			this.get = async (id = '', headers = {}, params = {}) => {

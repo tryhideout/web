@@ -18,15 +18,15 @@ class UsersController < ApplicationController
       email = params[:email]
       password = params[:password]
 
-      new_user = User.create(first_name: first_name, last_name: last_name, email: email)
+      new_user = User.create!(first_name: first_name, last_name: last_name, email: email)
 
       response = Net::HTTP.post_form(@@firebaseSignupURI, email: email, password: password)
       raise Exceptions::FirebaseNotUniqueError if response.code == '400'
 
       render status: :created, json: new_user.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed 
       return render status: 400
-    rescue ActiveRecord::RecordNotUnique
+    rescue ActiveRecord::RecordNotUnique 
       return render status: 400, body: 'Resource Already Exists'
     rescue Exceptions::FirebaseNotUniqueError
       new_user.destroy

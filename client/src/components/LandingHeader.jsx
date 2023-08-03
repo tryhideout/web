@@ -1,5 +1,5 @@
 import { Box, Button, Text, Link, Input } from '@chakra-ui/react';
-import LogoImage from 'assets/images/Logo.svg';
+import LogoImage from 'assets/images/logo.svg';
 
 const LandingHeader = () => {
 	return (

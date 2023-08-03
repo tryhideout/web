@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_235826) do
     t.string "name", null: false
     t.bigint "amount", null: false
     t.datetime "due_date"
-    t.bigint "debtor_id"
+    t.bigint "debtor_id", null: false
     t.bigint "hideout_id", null: false
     t.string "comments", limit: 100
     t.bigint "creditor_id"
@@ -58,7 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_235826) do
   add_foreign_key "chores", "users", column: "assignee_id", on_delete: :nullify
   add_foreign_key "expenses", "hideouts", on_delete: :cascade
   add_foreign_key "expenses", "users", column: "creditor_id", on_delete: :nullify
-  add_foreign_key "expenses", "users", column: "debtor_id", on_delete: :nullify
+  add_foreign_key "expenses", "users", column: "debtor_id", on_delete: :cascade
   add_foreign_key "hideouts", "users", column: "owner_id", on_delete: :cascade
   add_foreign_key "users", "hideouts", on_delete: :nullify
 end
