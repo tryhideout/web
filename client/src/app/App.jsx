@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { LandingPage } from 'pages';
+import { Dashboard, LandingPage } from 'pages';
 import { LoginPage } from 'pages';
 import theme from 'config/theme';
 import fonts from 'config/fonts.css';
@@ -15,6 +15,7 @@ const App = () => {
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/auth/login' element={<LoginPage />} />
                     <Route path="/auth/signup" element={<Signup />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
 				</Routes>
 			</Router>
 		</ChakraProvider>
