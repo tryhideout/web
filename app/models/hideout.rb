@@ -6,5 +6,4 @@ class Hideout < ActiveRecord::Base
 
   validates :name, presence: true, strict: true
   validates :owner_id, presence: true, strict: true
-  validates :assignee_id, presence: true, unless: -> { assignee_id.blank? }, strict: true
 end

@@ -1,6 +1,8 @@
 require_relative '../helpers/hideout_helper.rb'
 
 class HideoutController < ApplicationController
+  @@hideout_colors = %w[red blue purple yellow green orange]
+
   def create
     begin
       params.require(%i[name owner_id])
@@ -18,6 +20,7 @@ class HideoutController < ApplicationController
 
       owner = User.find_by(id: owner_id)
       owner.update(hideout_id: hideout.id)
+      owner.update(color: @@hideout_colors.sample)
 
       return render status: 201, json: hideout.as_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed

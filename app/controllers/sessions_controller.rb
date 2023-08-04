@@ -8,7 +8,8 @@ require_relative '../../lib/exceptions.rb'
 include ActionController::Cookies
 
 class SessionsController < ApplicationController
-  @@firebaseLoginURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
+  @@firebase_login_URI =
+    URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
 
   def create
     begin
@@ -16,7 +17,7 @@ class SessionsController < ApplicationController
       email = params[:email]
       password = params[:password]
 
-      response = Net::HTTP.post_form(@@firebaseLoginURI, email: email, password: password)
+      response = Net::HTTP.post_form(@@firebase_login_URI, email: email, password: password)
       raise StandardError if response.code == '400'
 
       current_user = User.find_by!(email: email)

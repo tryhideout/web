@@ -26,6 +26,9 @@ module Middleware
         elsif request.method == 'POST' and (request.path.include?('/api/expenses') or request.path.include?('/api/chores'))
           resource_hideout_id = request.params['hideout_id']
           return 401, {}, [] if resource_hideout_id != payload['hideout_id']
+        elsif request.method == 'POST' and request.path.include?('/api/hideouts')
+          owner_id = request.params['owner_id']
+          return 401, {}, [] if owner_id != payload['id']
         end
       rescue ActiveRecord::RecordNotFound
         return 404, {}, []
