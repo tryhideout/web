@@ -72,7 +72,7 @@ class UsersController < ApplicationController
       hideout = Hideout.find_by!(id: hideout_id)
       user = User.find_by(id: id)
 
-      user.update(hideout_id: nil)
+      user.update(hideout_id: nil, color: nil)
       Chore.where(assignee_id: id).update_all(assignee_id: nil)
       Expense.where(debtor_id: id).update_all(debtor_id: nil)
       Expense.where(creditor_id: id).update_all(creditor_id: nil)
