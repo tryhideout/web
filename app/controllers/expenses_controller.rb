@@ -1,4 +1,10 @@
 class ExpensesController < ApplicationController
+  def show
+    id = params[:id]
+    expense = Expense.find_by(id: id)
+    return render status: 200, json: expense.as_json
+  end
+
   def create
     begin
       params.require(%i[name amount hideout_id active])
