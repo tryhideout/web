@@ -11,6 +11,17 @@ class SessionsController < ApplicationController
   @@firebase_login_URI =
     URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
 
+  def verify
+    begin
+      refresh_token = cookies[:refresh_token]
+      result = AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
+      return render status: 401 if not result[:success]
+      return render status: 200, json: result[:payload]
+    rescue ActionController::ParameterMissing
+      return render status: 401
+    end
+  end
+
   def create
     begin
       params.require(%i[email password])
