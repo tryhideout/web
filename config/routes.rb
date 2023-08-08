@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get '/api/health', to: 'application#health'
 
+  get '/api/sessions', to: 'sessions#verify'
   post '/api/sessions', to: 'sessions#create'
   put '/api/sessions', to: 'sessions#update'
   delete '/api/sessions', to: 'sessions#destroy'
