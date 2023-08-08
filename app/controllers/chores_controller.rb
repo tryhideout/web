@@ -1,4 +1,10 @@
 class ChoresController < ApplicationController
+  def show
+    id = params[:id]
+    chore = Chore.find_by(id: id)
+    return render status: 200, json: chore.as_json
+  end
+
   def create
     begin
       params.require(%i[name description hideout_id status])

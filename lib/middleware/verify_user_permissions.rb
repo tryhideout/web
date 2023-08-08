@@ -14,9 +14,8 @@ module Middleware
           User.find_by!(id: path_id)
           return 400, {}, [] if path_id != payload['id']
         elsif request.method != 'POST' and request.path.include?('/api/hideouts')
-          return 400, {}, [] if path_id != payload['hideout_id']
           hideout = Hideout.find_by!(id: path_id)
-          return 401, {}, [] if hideout.owner_id != payload['id']
+          return 401, {}, [] if hideout.id != payload['hideout_id']
         elsif request.method != 'POST' and request.path.include?('/api/chores')
           chore = Chore.find_by!(id: path_id)
           return 401, {}, [] if chore.hideout_id != payload['hideout_id']

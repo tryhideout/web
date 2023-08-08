@@ -1,7 +1,31 @@
 require_relative '../helpers/hideout_helper.rb'
 
-class HideoutController < ApplicationController
+class HideoutsController < ApplicationController
   @@hideout_colors = %w[red blue purple yellow green orange]
+
+  def show
+    id = params[:id]
+    hideout = Hideout.find_by(id: id)
+    return render status: 200, json: hideout.as_json
+  end
+
+  def users
+    id = params[:id]
+    users = User.where(hideout_id: id)
+    return render status: 200, json: users.to_json
+  end
+
+  def chores
+    id = params[:id]
+    chores = Chore.where(hideout_id: id)
+    return render status: 200, json: chores.to_json
+  end
+
+  def expenses
+    id = params[:id]
+    expenses = Expense.where(hideout_id: id)
+    return render status: 200, json: expenses.to_json
+  end
 
   def create
     begin
