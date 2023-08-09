@@ -2,7 +2,7 @@ import APICore from 'services/api/utils/core';
 
 const url = 'users';
 
-const userAPI = new APICore({
+const usersAPI = new APICore({
 	get: true,
 	post: true,
 	put: true,
@@ -10,4 +10,4 @@ const userAPI = new APICore({
 	url: url,
 });
 
-export default userAPI;
+export default usersAPI;

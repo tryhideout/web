@@ -2,12 +2,12 @@ import APICore from 'services/api/utils/core';
 
 const url = 'sessions';
 
-const authAPI = new APICore({
-	get: false,
+const sessionsAPI = new APICore({
+	get: true,
 	post: true,
 	put: true,
 	remove: true,
 	url: url,
 });
 
-export default authAPI;
+export default sessionsAPI;
