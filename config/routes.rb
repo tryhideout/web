@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/api/health', to: 'application#health'
+  get '/api/health/', to: 'application#health'
 
   get '/api/sessions', to: 'sessions#verify'
   post '/api/sessions', to: 'sessions#create'
