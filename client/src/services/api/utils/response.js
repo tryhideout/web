@@ -9,7 +9,7 @@ export const handleResponse = (response) => {
 
 export const handleError = ({ response }) => {
 	const errorResponse = {
-		success: response?.data ? response?.data.success : false,
+		success: false,
 		payload: response?.data,
 		code: response?.status,
 	};

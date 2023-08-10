@@ -1,4 +1,4 @@
-import { LOG_IN_WITH_CREDENTIALS, SIGN_UP_WITH_CREDENTIALS, REFRESH_SESSION } from 'redux/actions/types';
+import { LOG_IN_WITH_CREDENTIALS, SIGN_UP_WITH_CREDENTIALS, REFRESH_SESSION, LOG_OUT } from 'redux/actions/types';
 import { usersAPI, sessionsAPI } from 'services/api';
 import { showToast, HTTPError } from 'services/helpers';
 
@@ -11,14 +11,14 @@ export const signUpWithCredentials = (email, password, firstName, lastName) => a
 			last_name: lastName,
 		});
 
-		if (response.success === false) throw new HTTPError(response);
+		if (!response.success) throw new HTTPError(response);
 
 		const loginResponse = await sessionsAPI.post({
 			email: email,
 			password: password,
 		});
 
-		response.payload.access_token = dispatch({ type: SIGN_UP_WITH_CREDENTIALS, ...loginResponse });
+		dispatch({ type: SIGN_UP_WITH_CREDENTIALS, ...loginResponse });
 		showToast.success('Account created.', 'Welcome to Hideout! Your account has been created.');
 	} catch (error) {
 		showToast.error('Email already in use.', 'Please try again with a different email.');
@@ -33,9 +33,10 @@ export const logInWithCredentials = (email, password) => async (dispatch) => {
 			password: password,
 		});
 
-		dispatch({ type: LOG_IN_WITH_CREDENTIALS, ...response });
+		if (!response.success) throw new HTTPError(response);
 
-		if (response.code === false) throw new HTTPError(response);
+		dispatch({ type: LOG_IN_WITH_CREDENTIALS, ...response });
+		showToast.success('Successfully logged in!', 'Welcome back to Hideout.');
 	} catch (error) {
 		showToast.error('Invalid email or password.', 'Please try again with correct credentials');
 		dispatch({ type: LOG_IN_WITH_CREDENTIALS, success: false, payload: null });
@@ -43,6 +44,13 @@ export const logInWithCredentials = (email, password) => async (dispatch) => {
 };
 
 export const refreshSession = () => async (dispatch) => {
-	const response = sessionsAPI.put();
+	const response = await sessionsAPI.put();
 	dispatch({ type: REFRESH_SESSION, ...response });
+};
+
+export const logOut = () => async (dispatch) => {
+	const response = await sessionsAPI.remove();
+
+	dispatch({ type: LOG_OUT, ...response });
+	window.location.href = '/';
 };

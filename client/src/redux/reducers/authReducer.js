@@ -1,7 +1,7 @@
-import { LOG_IN_WITH_CREDENTIALS, SIGN_UP_WITH_CREDENTIALS, REFRESH_SESSION } from 'redux/actions/types';
+import { LOG_IN_WITH_CREDENTIALS, SIGN_UP_WITH_CREDENTIALS, REFRESH_SESSION, LOG_OUT } from 'redux/actions/types';
 
 const INITIAL_STATE = {
-	isLoggedIn: null,
+	isLoggedIn: false,
 	userID: null,
 	email: null,
 	firstName: null,
@@ -12,10 +12,11 @@ const INITIAL_STATE = {
 };
 
 const authReducer = (state = INITIAL_STATE, { type, success, payload }) => {
-	if (success === false) return state;
+	if (!success) return state;
 	switch (type) {
 		case LOG_IN_WITH_CREDENTIALS:
 		case SIGN_UP_WITH_CREDENTIALS:
+		case REFRESH_SESSION:
 			return {
 				...state,
 				isLoggedIn: true,
@@ -27,11 +28,8 @@ const authReducer = (state = INITIAL_STATE, { type, success, payload }) => {
 				color: payload.color,
 				accessToken: payload.access_token,
 			};
-		case REFRESH_SESSION:
-			return {
-				...state,
-				accessToken: payload.accessToken,
-			};
+		case LOG_OUT:
+			return INITIAL_STATE;
 		default:
 			return state;
 	}
