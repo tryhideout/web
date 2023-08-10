@@ -4,10 +4,6 @@ import { Box, Link, Divider, Text, Center, Heading, Image } from '@chakra-ui/rea
 import logo from '../assets/images/logo.svg';
 import { Button } from '@chakra-ui/react';
 
-// import { LoginContent } from 'components';
-// import { LoginHeader } from 'components';
-// import { LoginFooter } from 'components';
-
 function LoginPage() {
 	return (
 		<Center>

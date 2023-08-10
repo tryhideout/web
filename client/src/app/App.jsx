@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from 'pages';
 import { LoginPage } from 'pages';
 import theme from 'config/theme';
-import fonts from 'config/fonts.css';
-import Signup from 'pages/Signup';
+import { SignupPage } from 'pages';
 
 const App = () => {
 	return (
@@ -14,7 +13,7 @@ const App = () => {
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/auth/login' element={<LoginPage />} />
-                    <Route path="/auth/signup" element={<Signup />} />
+					<Route path='/auth/signup' element={<SignupPage />} />
 				</Routes>
 			</Router>
 		</ChakraProvider>
