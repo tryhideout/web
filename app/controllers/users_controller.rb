@@ -8,7 +8,14 @@ require_relative '../../lib/exceptions.rb'
 include ActionController::Cookies
 
 class UsersController < ApplicationController
-  @@firebaseSignupURI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+  @@firebase_signup_URI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+  @@hideout_colors = %w[red blue purple yellow green orange]
+
+  def show
+    id = params[:id]
+    user = User.find_by(id: id)
+    return render status: 200, json: user.as_json
+  end
 
   def create
     begin
@@ -20,13 +27,13 @@ class UsersController < ApplicationController
 
       new_user = User.create!(first_name: first_name, last_name: last_name, email: email)
 
-      response = Net::HTTP.post_form(@@firebaseSignupURI, email: email, password: password)
+      response = Net::HTTP.post_form(@@firebase_signup_URI, email: email, password: password)
       raise Exceptions::FirebaseNotUniqueError if response.code == '400'
 
       render status: :created, json: new_user.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed 
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
-    rescue ActiveRecord::RecordNotUnique 
+    rescue ActiveRecord::RecordNotUnique
       return render status: 400, body: 'Resource Already Exists'
     rescue Exceptions::FirebaseNotUniqueError
       new_user.destroy
@@ -46,8 +53,15 @@ class UsersController < ApplicationController
 
       user = User.find_by(id: id)
       hideout = Hideout.find_by!(join_code: join_code)
+
+      roommates = User.select(:color).where(['hideout_id = :hideout_id', { hideout_id: hideout.id }])
+      return render status: 400, body: 'Hideout Full' if roommates.length() == 6
+
       user.update(hideout_id: hideout.id)
-      return render status: :ok
+      used_colors = roommates.collect { |user| user.color }
+      usable_colors = @@hideout_colors - used_colors
+      user.update(color: usable_colors.sample)
+      return render status: 200
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
@@ -64,7 +78,7 @@ class UsersController < ApplicationController
       hideout = Hideout.find_by!(id: hideout_id)
       user = User.find_by(id: id)
 
-      user.update(hideout_id: nil)
+      user.update(hideout_id: nil, color: nil)
       Chore.where(assignee_id: id).update_all(assignee_id: nil)
       Expense.where(debtor_id: id).update_all(debtor_id: nil)
       Expense.where(creditor_id: id).update_all(creditor_id: nil)

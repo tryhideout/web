@@ -1,4 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
+import fonts from 'config/fonts.css';
 
 const theme = extendTheme({
 	colors: {

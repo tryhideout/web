@@ -63,3 +63,6 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+/client/ssl
+/client/.env

@@ -1,9 +1,9 @@
 export { default as LandingPage } from 'pages/LandingPage';
 export { default as LoginPage } from 'pages/LoginPage';
-export { default as Dashboard } from 'pages/Dashboard';
-export { default as Chores } from 'pages/Chores';
-export { default as Expenses } from 'pages/Expenses';
-// add for signup page as well
+export { default as SignupPage } from 'pages/SignupPage';
+export { default as DashboardPage } from 'pages/DashboardPage';
+export { default as ChoresPage } from 'pages/ChoresPage';
+export { default as ExpensesPage } from 'pages/ExpensesPage';
 
 const defaultImportError = () => {
 	console.error('API imported as default instead of using destructuring. Import with this import { X } from ...');
