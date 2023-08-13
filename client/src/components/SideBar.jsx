@@ -1,9 +1,6 @@
-import { Box, Heading, Image, Text } from '@chakra-ui/react';
+import { Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 import logo from '../assets/images/logo.svg';
-import dashboardIcon from '../assets/images/dashboard-icon.svg';
-import expensesIcon from '../assets/images/expenses-icon.svg';
-import choreIcon from '../assets/images/chores-icon.svg';
 import threeDotsIcon from '../assets/images/three-dots.svg';
 import SideBarTile from './SideBarTile';
 
@@ -24,18 +21,18 @@ function SideBar() {
 				borderColor='rgba(45, 55, 72, 0.50)'
 				borderBottomWidth='0.1rem'
 				borderTopWidth='0.1rem'
-				display="flex"
-				flexDirection="column"
-				gap="0.4rem"
+				display='flex'
+				flexDirection='column'
+				gap='0.4rem'
 			>
 				<Text fontFamily='Hellix' fontSize='0.5rem' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem'>
 					GENERAL
 				</Text>
-				<SideBarTile title="dashboard"></SideBarTile>
-				<SideBarTile title="expenses"></SideBarTile>
-				<SideBarTile title="chores"></SideBarTile>
+				<SideBarTile title='dashboard'></SideBarTile>
+				<SideBarTile title='expenses'></SideBarTile>
+				<SideBarTile title='chores'></SideBarTile>
 			</Box>
-			<Box display='flex' alignItems='center' pl='1rem' justifyContent='space-evenly' pb='1.5rem' pt="1rem" flex='0.05'>
+			<Box display='flex' alignItems='center' pl='1rem' justifyContent='space-evenly' pb='1.5rem' pt='1rem' flex='0.05'>
 				<Box>
 					<Text color='white' fontSize='0.875rem' fontWeight='600' lineHeight='1.25rem'>
 						Muhammad Ibrahim

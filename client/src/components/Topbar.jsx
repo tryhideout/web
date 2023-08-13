@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Box, Heading, Image, Text } from '@chakra-ui/react';
-import logoNoBg from '../assets/images/logo-no-bg.svg';
+import { Box, Image, Text } from '@chakra-ui/react';
+import treeIcon from '../assets/images/tree-icon.svg';
 import userImage from '../assets/images/user-image.svg';
 import { useLocation } from 'react-router-dom';
 
-function Topbar() {
+function TopBar() {
 	const currentTab = useLocation().pathname.charAt(1).toUpperCase() + useLocation().pathname.slice(2);
 
 	return (
@@ -34,7 +34,7 @@ function Topbar() {
 					borderRadius='0.5rem'
 					gap='0.31rem'
 				>
-					<Image src={logoNoBg} alt='Logo' />
+					<Image src={treeIcon} alt='Logo' />
 					<Text fontSize='0.75rem' fontWeight='600' lineHeight='1rem'>
 						347 Grace Street
 					</Text>
@@ -58,4 +58,4 @@ function Topbar() {
 	);
 }
 
-export default Topbar;
+export default TopBar;
