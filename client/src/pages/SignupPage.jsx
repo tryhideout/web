@@ -7,7 +7,7 @@ import { showToast } from 'services/helpers';
 import logo from 'assets/images/logo.svg';
 
 const SignupPage = (props) => {
-	const { auth, signUpWithCredentials } = props;
+	const { signUpWithCredentials } = props;
 	const [inputState, setInputState] = useState({
 		firstName: '',
 		lastName: '',
@@ -116,6 +116,4 @@ const SignupPage = (props) => {
 	);
 };
 
-const mapStateToProps = ({ auth }) => ({ auth });
-
-export default connect(mapStateToProps, { signUpWithCredentials })(SignupPage);
+export default connect(null, { signUpWithCredentials })(SignupPage);

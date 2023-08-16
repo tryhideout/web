@@ -1,12 +1,24 @@
-import React from 'react';
-
+import { useEffect } from 'react';
 import { Box, Image, Text } from '@chakra-ui/react';
-import treeIcon from '../assets/images/tree-icon.svg';
-import userImage from '../assets/images/user-image.svg';
+import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
-function TopBar() {
-	const currentTab = useLocation().pathname.charAt(1).toUpperCase() + useLocation().pathname.slice(2);
+import { loadHideoutData } from 'redux/actions/hideoutActions';
+import treeIcon from 'assets/images/tree-icon.svg';
+import userImage from 'assets/images/user-image.svg';
+
+const TopBar = (props) => {
+	const { user, hideout, loadHideoutData } = props;
+	const pathnameArray = useLocation().pathname.split('/');
+	const currentTab =
+		pathnameArray[pathnameArray.length - 1].charAt(0).toUpperCase() + pathnameArray[pathnameArray.length - 1].slice(1);
+
+	useEffect(() => {
+		const loadData = async () => {
+			if (user.hideoutID !== null) await loadHideoutData(user.hideoutID);
+		};
+		loadData().catch(console.error);
+	}, [user.hideoutID, loadHideoutData]);
 
 	return (
 		<Box
@@ -28,21 +40,21 @@ function TopBar() {
 					backgroundColor='#171923'
 					display='flex'
 					color='white'
-					boxSize='fit-content'
 					py='0.3125rem'
 					px='0.625rem'
-					borderRadius='0.5rem'
+					borderRadius='10px'
 					gap='0.31rem'
+					mb='2px'
 				>
 					<Image src={treeIcon} alt='Logo' />
 					<Text fontSize='0.75rem' fontWeight='600' lineHeight='1rem'>
-						347 Grace Street
+						{hideout.name || ''}
 					</Text>
 				</Box>
 			</Box>
 			<Box flex='1'></Box>
 			<Box
-				backgroundColor='red.500'
+				backgroundColor={`${user.color}.500`}
 				width='2.5rem'
 				height='2.5rem'
 				padding='0.625rem'
@@ -56,6 +68,8 @@ function TopBar() {
 			</Box>
 		</Box>
 	);
-}
+};
 
-export default TopBar;
+const mapStateToProps = ({ user, hideout }) => ({ user, hideout });
+
+export default connect(mapStateToProps, { loadHideoutData })(TopBar);

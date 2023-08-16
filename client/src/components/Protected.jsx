@@ -1,12 +1,12 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const Protected = ({ children, auth }) => {
+const Protected = ({ children, user }) => {
 	const { pathname } = useLocation();
 
-	return auth.isLoggedIn ? children : <Navigate to={'/auth/login?redirect=' + pathname} />;
+	return user.isLoggedIn ? children : <Navigate to={'/auth/login?redirect=' + pathname} />;
 };
 
-const mapStateToProps = ({ auth }) => ({ auth });
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps)(Protected);

@@ -1,15 +1,18 @@
 import { Box, Image, Text } from '@chakra-ui/react';
-import React from 'react';
-import logo from '../assets/images/logo.svg';
-import threeDotsIcon from '../assets/images/three-dots.svg';
-import SideBarTile from './SideBarTile';
+import { connect } from 'react-redux';
 
-function SideBar() {
+import { SideBarTile } from 'components';
+import logo from 'assets/images/logo.svg';
+import userImage from 'assets/images/user-image.svg';
+
+const SideBar = (props) => {
+	const { user } = props;
+
 	return (
-		<Box backgroundColor='#171923' height='100vh' width='15%' minWidth='12.5rem' display='flex' flexDirection='column'>
-			<Box display='flex' justifyContent='center' py='1.2rem' paddingRight='1.3rem' flex='0.05'>
-				<Image src={logo} alt='Logo' height='2rem' marginRight='0.6rem' />
-				<Text fontFamily='Hellix' fontSize='1.5rem' fontWeight='500' lineHeight='2rem' color='#ffffff'>
+		<Box backgroundColor='#171923' height='100vh' width='260px' display='flex' flexDirection='column'>
+			<Box display='flex' alignItems='center' justifyContent='center' py='1.2rem' paddingRight='1.3rem' flex='0.05'>
+				<Image src={logo} alt='Logo' height='35px' marginRight='0.6rem' />
+				<Text fontFamily='Hellix' fontSize='26px' fontWeight='500' lineHeight='2rem' color='#ffffff'>
 					Hideout
 				</Text>
 			</Box>
@@ -18,33 +21,62 @@ function SideBar() {
 				pt='1.2rem'
 				pl='1rem'
 				flex='0.9'
-				borderColor='rgba(45, 55, 72, 0.50)'
-				borderBottomWidth='0.1rem'
+				borderColor='whiteAlpha.200'
 				borderTopWidth='0.1rem'
 				display='flex'
 				flexDirection='column'
 				gap='0.4rem'
 			>
-				<Text fontFamily='Hellix' fontSize='0.5rem' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem'>
+				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem'>
 					GENERAL
 				</Text>
-				<SideBarTile title='dashboard'></SideBarTile>
 				<SideBarTile title='expenses'></SideBarTile>
 				<SideBarTile title='chores'></SideBarTile>
+				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem' mt='19px'>
+					SUPPORT
+				</Text>
+				<SideBarTile title='settings'></SideBarTile>
+				<SideBarTile title='feedback'></SideBarTile>
 			</Box>
-			<Box display='flex' alignItems='center' pl='1rem' justifyContent='space-evenly' pb='1.5rem' pt='1rem' flex='0.05'>
-				<Box>
-					<Text color='white' fontSize='0.875rem' fontWeight='600' lineHeight='1.25rem'>
-						Muhammad Ibrahim
-					</Text>
-					<Text color='gray.500' fontSize='0.5625rem' fontWeight='500'>
-						ibrahim.balutch@gmail.com
-					</Text>
+			<Box
+				display='flex'
+				alignItems='center'
+				justifyContent='center'
+				width='260px'
+				mt='auto'
+				mb='24px'
+				borderColor='whiteAlpha.200'
+				borderTopWidth='0.1rem'
+				pt='24px'
+			>
+				<Box display='flex' gap='15px' flexDirection='row' alignItems='center' ml='15px' mr='auto'>
+					<Box
+						backgroundColor={`${user.color}.500`}
+						width='2.5rem'
+						height='2.5rem'
+						padding='0.625rem'
+						display='flex'
+						justifyContent='center'
+						alignItems='center'
+						borderRadius='0.875rem'
+						mt='0.15rem'
+					>
+						<Image src={userImage} />
+					</Box>
+					<Box display='flex' flexDirection='column' pt='4px'>
+						<Text color='white' fontSize='16px' fontWeight='600' lineHeight='1.25rem'>
+							{`${user.firstName} ${user.lastName}`}
+						</Text>
+						<Text color='gray.500' fontSize='11px' fontWeight='500'>
+							{user.email}
+						</Text>
+					</Box>
 				</Box>
-				<Image src={threeDotsIcon} alt='Logo' boxSize='1.5rem' flex='1' />
 			</Box>
 		</Box>
 	);
-}
+};
 
-export default SideBar;
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(SideBar);

@@ -1,16 +1,19 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
-import { ChoresPage, DashboardPage, ExpensesPage, LandingPage, LoginPage, SignupPage } from 'pages';
-import { SideBar } from 'components';
+import { ChoresPage, ExpensesPage, LandingPage, LoginPage, SignupPage } from 'pages';
+import { SideBar, TopBar } from 'components';
 import { Gateway, Protected } from 'components';
 import theme from 'config/theme';
 
 const InteriorLayout = () => (
-	<>
+	<Box display='flex' flexDirection='row'>
 		<SideBar />
-		<Outlet />
-	</>
+		<Box display='flex' flexDirection='column' width='100%'>
+			<TopBar />
+			<Outlet />
+		</Box>
+	</Box>
 );
 
 const App = () => {
@@ -35,25 +38,9 @@ const App = () => {
 							</Gateway>
 						}
 					/>
-					<Route
-						path='/app/dashboard'
-						element={
-							<Protected>
-								<DashboardPage />
-							</Protected>
-						}
-					/>
-					<Route path='/app' element={InteriorLayout}>
+					<Route path='/' element={InteriorLayout()}>
 						<Route
-							path='/dashboard'
-							element={
-								<Protected>
-									<DashboardPage />
-								</Protected>
-							}
-						/>
-						<Route
-							path='/expenses'
+							path='/app/expenses'
 							element={
 								<Protected>
 									<ExpensesPage />
@@ -61,10 +48,26 @@ const App = () => {
 							}
 						/>
 						<Route
-							path='/chores'
+							path='/app/chores'
 							element={
 								<Protected>
 									<ChoresPage />
+								</Protected>
+							}
+						/>
+						<Route
+							path='/app/settings'
+							element={
+								<Protected>
+									<h1>Settings Modal</h1>
+								</Protected>
+							}
+						/>
+						<Route
+							path='/app/feedback'
+							element={
+								<Protected>
+									<h1>Feedback Modal</h1>
 								</Protected>
 							}
 						/>
