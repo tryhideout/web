@@ -6,6 +6,9 @@ import { LoginPage } from 'pages';
 import theme from 'config/theme';
 import fonts from 'config/fonts.css';
 import Signup from 'pages/Signup';
+import JoinPage from 'pages/JoinPage';
+import CreatePage from 'pages/CreatePage';
+import InvitePage from 'pages/InvitePage';
 
 const App = () => {
 	return (
@@ -15,6 +18,10 @@ const App = () => {
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/auth/login' element={<LoginPage />} />
                     <Route path="/auth/signup" element={<Signup />} />
+					<Route path="/onboard/join" element={<JoinPage />} />
+					<Route path="/onboard/create" element={<CreatePage />} />
+					<Route path="/onboard/invite" element={<InvitePage />} />
+
 				</Routes>
 			</Router>
 		</ChakraProvider>
