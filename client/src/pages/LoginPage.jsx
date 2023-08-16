@@ -73,6 +73,4 @@ const LoginPage = (props) => {
 	);
 };
 
-const mapStateToProps = ({ auth }) => ({ auth });
-
-export default connect(mapStateToProps, { logInWithCredentials })(LoginPage);
+export default connect(null, { logInWithCredentials })(LoginPage);

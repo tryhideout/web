@@ -8,8 +8,8 @@ import { refreshSession } from 'redux/actions/authActions';
 import { useQuery } from 'services/hooks';
 
 const Gateway = (props) => {
-	const { children, auth, refreshSession } = props;
-	const redirectURL = useQuery('redirect') || '/app/dashboard';
+	const { children, user, refreshSession } = props;
+	const redirectURL = useQuery('redirect') || '/app/expenses';
 	const [checkCompleted, setCheckCompleted] = useState(false);
 
 	useEffect(() => {
@@ -25,20 +25,20 @@ const Gateway = (props) => {
 	}, [refreshSession]);
 
 	const getRenderContent = () => {
-		if (!checkCompleted && auth.isLoggedIn === false) {
+		if (!checkCompleted && user.isLoggedIn === false) {
 			return (
 				<Box width='100vw' height='100vh' display='flex' alignItems='center' justifyContent='center' backgroundColor='navy.600'>
 					<Spinner size='xl' thickness='4px' color='orange.300' />
 				</Box>
 			);
-		} else if (auth.isLoggedIn === false && checkCompleted) {
+		} else if (user.isLoggedIn === false && checkCompleted) {
 			return children;
 		}
 	};
 
-	return auth.isLoggedIn ? <Navigate to={redirectURL} /> : getRenderContent();
+	return user.isLoggedIn ? <Navigate to={redirectURL} /> : getRenderContent();
 };
 
-const mapStateToProps = ({ auth }) => ({ auth });
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps, { refreshSession })(Gateway);

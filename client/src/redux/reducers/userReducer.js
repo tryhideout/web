@@ -11,7 +11,7 @@ const INITIAL_STATE = {
 	accessToken: null,
 };
 
-const authReducer = (state = INITIAL_STATE, { type, success, payload }) => {
+const userReducer = (state = INITIAL_STATE, { type, success, payload }) => {
 	if (!success) return state;
 	switch (type) {
 		case LOG_IN_WITH_CREDENTIALS:
@@ -35,4 +35,4 @@ const authReducer = (state = INITIAL_STATE, { type, success, payload }) => {
 	}
 };
 
-export default authReducer;
+export default userReducer;

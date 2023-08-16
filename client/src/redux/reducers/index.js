@@ -1,7 +1,9 @@
-import authReducer from 'redux/reducers/authReducer';
+import userReducer from 'redux/reducers/userReducer';
+import hideoutReducer from 'redux/reducers/hideoutReducer';
 
 const rootReducer = {
-	auth: authReducer,
+	user: userReducer,
+	hideout: hideoutReducer,
 };
 
 export default rootReducer;
