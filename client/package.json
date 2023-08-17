@@ -19,7 +19,8 @@
 		"react-scripts": "5.0.1",
 		"redux-devtools-extension": "^2.13.9",
 		"redux-thunk": "^2.4.2",
-		"web-vitals": "^2.1.4"
+		"web-vitals": "^2.1.4",
+		"jwt-decode": "^3.1.2"
 	},
 	"scripts": {
 		"start": "HTTPS=true SSL_CRT_FILE=./ssl/localhost.pem SSL_KEY_FILE=./ssl/localhost-key.pem react-scripts start",
