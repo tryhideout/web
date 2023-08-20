@@ -1,14 +1,20 @@
-import { ChakraProvider } from '@chakra-ui/react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Box, ChakraProvider } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
-import { LandingPage } from 'pages';
-import { LoginPage } from 'pages';
+import { ChoresPage, ExpensesPage, LandingPage, LoginPage, SignupPage } from 'pages';
+import { SideBar, TopBar } from 'components';
+import { Gateway, Protected } from 'components';
 import theme from 'config/theme';
-import fonts from 'config/fonts.css';
-import Signup from 'pages/Signup';
-import JoinPage from 'pages/JoinPage';
-import CreatePage from 'pages/CreatePage';
-import InvitePage from 'pages/InvitePage';
+
+const InteriorLayout = () => (
+	<Box display='flex' flexDirection='row'>
+		<SideBar />
+		<Box display='flex' flexDirection='column' width='100%'>
+			<TopBar />
+			<Outlet />
+		</Box>
+	</Box>
+);
 
 const App = () => {
 	return (
@@ -16,12 +22,56 @@ const App = () => {
 			<Router>
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
-					<Route path='/auth/login' element={<LoginPage />} />
-                    <Route path="/auth/signup" element={<Signup />} />
-					<Route path="/onboard/join" element={<JoinPage />} />
-					<Route path="/onboard/create" element={<CreatePage />} />
-					<Route path="/onboard/invite" element={<InvitePage />} />
-
+					<Route
+						path='/auth/login'
+						element={
+							<Gateway>
+								<LoginPage />
+							</Gateway>
+						}
+					/>
+					<Route
+						path='/auth/signup'
+						element={
+							<Gateway>
+								<SignupPage />
+							</Gateway>
+						}
+					/>
+					<Route path='/' element={InteriorLayout()}>
+						<Route
+							path='/app/expenses'
+							element={
+								<Protected>
+									<ExpensesPage />
+								</Protected>
+							}
+						/>
+						<Route
+							path='/app/chores'
+							element={
+								<Protected>
+									<ChoresPage />
+								</Protected>
+							}
+						/>
+						<Route
+							path='/app/settings'
+							element={
+								<Protected>
+									<h1>Settings Modal</h1>
+								</Protected>
+							}
+						/>
+						<Route
+							path='/app/feedback'
+							element={
+								<Protected>
+									<h1>Feedback Modal</h1>
+								</Protected>
+							}
+						/>
+					</Route>
 				</Routes>
 			</Router>
 		</ChakraProvider>

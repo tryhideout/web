@@ -3,7 +3,7 @@ import APICore from 'services/api/utils/core';
 const url = 'hideouts';
 
 const hideoutAPI = new APICore({
-	get: false,
+	get: true,
 	post: true,
 	put: true,
 	remove: true,

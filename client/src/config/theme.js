@@ -1,8 +1,12 @@
 import { extendTheme } from '@chakra-ui/react';
+import fonts from 'config/fonts.css';
 
 const theme = extendTheme({
 	colors: {
-		gradient: 'linear-gradient(180deg, #F8A11E 0%, #F8861E 100%)',
+		gradient: {
+			400: 'linear-gradient(180deg, #F8A11E 0%, #F8861E 100%)',
+			500: 'linear-gradient(180deg, #1E82F8 0%, #1E68F8 100%)',
+		},
 	},
 	fonts: {
 		heading: `'Hellix'`,
@@ -32,7 +36,7 @@ const theme = extendTheme({
 			},
 			variants: {
 				gradient: {
-					background: 'gradient',
+					background: 'gradient.400',
 					color: 'white',
 					_hover: {
 						filter: 'brightness(102%)',
