@@ -47,7 +47,7 @@ const SignupPage = (props) => {
 				<Box textAlign='center' mt='38px'>
 					<Heading size='2xl' flex='0.15'>
 						Get started with{' '}
-						<Text display='inline-block' bgGradient='var(--chakra-colors-gradient)' bgClip='text'>
+						<Text display='inline-block' bgGradient='var(--chakra-colors-gradient-400)' bgClip='text'>
 							Hideout
 						</Text>
 					</Heading>
