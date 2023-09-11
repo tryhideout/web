@@ -30,6 +30,7 @@ const SideBar = (props) => {
 				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem'>
 					GENERAL
 				</Text>
+				<SideBarTile title='dashboard'></SideBarTile>
 				<SideBarTile title='expenses'></SideBarTile>
 				<SideBarTile title='chores'></SideBarTile>
 				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem' mt='19px'>

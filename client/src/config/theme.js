@@ -35,8 +35,15 @@ const theme = extendTheme({
 				},
 			},
 			variants: {
-				gradient: {
+				gradient400: {
 					background: 'gradient.400',
+					color: 'white',
+					_hover: {
+						filter: 'brightness(102%)',
+					},
+				},
+				gradient500: {
+					background: 'gradient.500',
 					color: 'white',
 					_hover: {
 						filter: 'brightness(102%)',

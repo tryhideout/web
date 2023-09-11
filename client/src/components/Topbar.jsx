@@ -15,10 +15,10 @@ const TopBar = (props) => {
 
 	useEffect(() => {
 		const loadData = async () => {
-			if (user.hideoutID !== null) await loadHideoutData(user.hideoutID);
+			if (user.hideoutID !== null && hideout.name === null) await loadHideoutData(user.hideoutID);
 		};
 		loadData().catch(console.error);
-	}, [user.hideoutID, loadHideoutData]);
+	}, [hideout.name, user.hideoutID, loadHideoutData]);
 
 	return (
 		<Box

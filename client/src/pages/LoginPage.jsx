@@ -48,14 +48,7 @@ const LoginPage = (props) => {
 								placeholder='Password'
 								isRequired
 							/>
-							<Button
-								width='100%'
-								bgGradient='linear(to-u, #F8A11E, #F8861E)'
-								color='white'
-								mt='25px'
-								isLoading={formLoading}
-								type='submit'
-							>
+							<Button width='100%' variant='gradient400' mt='25px' isLoading={formLoading} type='submit'>
 								Log In
 							</Button>
 						</FormControl>

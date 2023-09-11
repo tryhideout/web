@@ -1,9 +1,18 @@
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
-import { ChoresPage, ExpensesPage, LandingPage, LoginPage, SignupPage } from 'pages';
-import { SideBar, TopBar } from 'components';
-import { Gateway, Protected } from 'components';
+import {
+	ChoresPage,
+	ExpensesPage,
+	LandingPage,
+	LoginPage,
+	SignupPage,
+	OnboardingCreatePage,
+	OnboardingInvitePage,
+	OnboardingJoinPage,
+	DashboardPage,
+} from 'pages';
+import { SideBar, TopBar, Gateway, Protected } from 'components';
 import theme from 'config/theme';
 
 const InteriorLayout = () => (
@@ -38,7 +47,39 @@ const App = () => {
 							</Gateway>
 						}
 					/>
+					<Route
+						path='/onboarding/join'
+						element={
+							<Protected>
+								<OnboardingJoinPage />
+							</Protected>
+						}
+					/>
+					<Route
+						path='/onboarding/create'
+						element={
+							<Protected>
+								<OnboardingCreatePage />
+							</Protected>
+						}
+					/>
+					<Route
+						path='/invite'
+						element={
+							<Protected>
+								<OnboardingInvitePage />
+							</Protected>
+						}
+					/>
 					<Route path='/' element={InteriorLayout()}>
+						<Route
+							path='/app/dashboard'
+							element={
+								<Protected>
+									<DashboardPage />
+								</Protected>
+							}
+						/>
 						<Route
 							path='/app/expenses'
 							element={
