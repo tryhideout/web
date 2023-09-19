@@ -25,10 +25,10 @@ axios.interceptors.request.use(async (config) => {
 class APICore {
 	constructor(options) {
 		if (options.get) {
-			this.get = async (id = '', headers = {}, params = {}) => {
+			this.get = async (suffix = '', headers = {}, params = {}) => {
 				try {
-					const suffix = id === '' ? '' : `/${id}`;
-					const response = await axios.get(`${BASE_URL}/${options.url + suffix}`, {
+					const urlSuffix = suffix === '' ? '' : `/${suffix}`;
+					const response = await axios.get(`${BASE_URL}/${options.url + urlSuffix}`, {
 						params,
 						headers,
 					});
@@ -40,9 +40,10 @@ class APICore {
 		}
 
 		if (options.post) {
-			this.post = async (body = {}, headers = {}) => {
+			this.post = async (body = {}, headers = {}, suffix = '') => {
+				const urlSuffix = suffix === '' ? '' : `/${suffix}`;
 				try {
-					const response = await axios.post(`${BASE_URL}/${options.url}`, body, { headers });
+					const response = await axios.post(`${BASE_URL}/${options.url + urlSuffix}`, body, { headers });
 					return handleResponse(response);
 				} catch (error) {
 					return handleError(error);
@@ -51,10 +52,10 @@ class APICore {
 		}
 
 		if (options.put) {
-			this.put = async (id = '', body = {}, headers = {}) => {
+			this.put = async (body = {}, headers = {}, suffix = '') => {
 				try {
-					const suffix = id === '' ? '' : `/${id}`;
-					const response = await axios.put(`${BASE_URL}/${options.url + suffix}`, body, { headers });
+					const urlSuffix = suffix === '' ? '' : `/${suffix}`;
+					const response = await axios.put(`${BASE_URL}/${options.url + urlSuffix}`, body, { headers });
 					return handleResponse(response);
 				} catch (error) {
 					return handleError(error);
@@ -63,10 +64,10 @@ class APICore {
 		}
 
 		if (options.patch) {
-			this.patch = async (id = '', body = {}, headers = {}) => {
+			this.patch = async (body = {}, headers = {}, suffix = '') => {
 				try {
-					const suffix = id === '' ? '' : `/${id}`;
-					const response = await axios.patch(`${BASE_URL}/${options.url + suffix}`, body, { headers });
+					const urlSuffix = suffix === '' ? '' : `/${suffix}`;
+					const response = await axios.patch(`${BASE_URL}/${options.url + urlSuffix}`, body, { headers });
 					return handleResponse(response);
 				} catch (error) {
 					return handleError(error);
@@ -75,10 +76,10 @@ class APICore {
 		}
 
 		if (options.remove) {
-			this.remove = async (id = '', headers = {}) => {
+			this.remove = async (suffix = '', headers = {}) => {
 				try {
-					const suffix = id === '' ? '' : `/${id}`;
-					const response = await axios.delete(`${BASE_URL}/${options.url + suffix}`, { headers });
+					const urlSuffix = suffix === '' ? '' : `/${suffix}`;
+					const response = await axios.delete(`${BASE_URL}/${options.url + urlSuffix}`, { headers });
 					return handleResponse(response);
 				} catch (error) {
 					return handleError(error);

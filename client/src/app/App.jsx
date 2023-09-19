@@ -10,7 +10,6 @@ import {
 	OnboardingCreatePage,
 	OnboardingInvitePage,
 	OnboardingJoinPage,
-	DashboardPage,
 } from 'pages';
 import { SideBar, TopBar, Gateway, Protected } from 'components';
 import theme from 'config/theme';
@@ -72,14 +71,6 @@ const App = () => {
 						}
 					/>
 					<Route path='/' element={InteriorLayout()}>
-						<Route
-							path='/app/dashboard'
-							element={
-								<Protected>
-									<DashboardPage />
-								</Protected>
-							}
-						/>
 						<Route
 							path='/app/expenses'
 							element={

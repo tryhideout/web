@@ -72,11 +72,11 @@ class HideoutsController < ApplicationController
       used_colors = roommates.collect { |user| user.color }
       usable_colors = @@hideout_colors - used_colors
       user.update(color: usable_colors.sample)
-      return render status: 200
+      return render status: 200, json: hideout.as_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 400, body: 'Invalid Join Code'
+      return render status: 404, body: 'Invalid Join Code'
     end
   end
 

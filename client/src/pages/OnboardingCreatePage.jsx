@@ -8,7 +8,7 @@ import { refreshSession } from 'redux/actions/authActions';
 import single from 'assets/images/singleline.svg';
 
 const OnboardingCreatePage = (props) => {
-	const { user, createHideout } = props;
+	const { createHideout } = props;
 	const [hideoutName, setHideoutName] = useState('');
 	const [formLoading, setFormLoading] = useState(false);
 	const navigate = useNavigate();
@@ -16,7 +16,7 @@ const OnboardingCreatePage = (props) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setFormLoading(true);
-		await createHideout(hideoutName, user.userID);
+		await createHideout(hideoutName);
 		await refreshSession();
 		setFormLoading(false);
 		navigate('/app/expenses');
@@ -62,6 +62,4 @@ const OnboardingCreatePage = (props) => {
 	);
 };
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps, { createHideout })(OnboardingCreatePage);
+export default connect(null, { createHideout })(OnboardingCreatePage);

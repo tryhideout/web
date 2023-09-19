@@ -8,7 +8,6 @@ import { showToast } from 'services/helpers';
 
 const OnboardingInvitePage = (props) => {
 	const { user, hideout, loadHideoutData } = props;
-	console.log(hideout);
 
 	useEffect(() => {
 		const loadData = async () => {
