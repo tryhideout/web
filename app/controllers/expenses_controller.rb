@@ -7,7 +7,7 @@ class ExpensesController < ApplicationController
 
   def create
     begin
-      params.require(%i[name amount hideout_id active])
+      params.require(%i[name amount active])
       name = params[:name]
       amount = params[:amount]
       due_date = params[:due_date]

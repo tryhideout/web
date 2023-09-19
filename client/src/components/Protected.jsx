@@ -4,7 +4,14 @@ import { connect } from 'react-redux';
 const Protected = ({ children, user }) => {
 	const { pathname } = useLocation();
 
-	return user.isLoggedIn ? children : <Navigate to={'/auth/login?redirect=' + pathname} />;
+	const getRenderContent = () => {
+		if (user.hideoutID === null && !pathname.includes('onboarding')) return <Navigate to={'/onboarding/join'} />;
+		else if (user.hideoutID === null && pathname.includes('invite')) return <Navigate to={'/onboarding/join'} />;
+		else if (user.hideoutID !== null && pathname.includes('onboarding')) return <Navigate to={'/app/expenses'} />;
+		return children;
+	};
+
+	return user.isLoggedIn ? getRenderContent() : <Navigate to={'/auth/login?redirect=' + pathname} />;
 };
 
 const mapStateToProps = ({ user }) => ({ user });
