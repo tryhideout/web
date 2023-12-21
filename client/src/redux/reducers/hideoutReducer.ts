@@ -1,12 +1,19 @@
 import { JOIN_HIDEOUT, LOAD_HIDEOUT_DATA } from 'redux/actions/types';
+import { ReducerInput } from 'utils/types';
 
-const INITIAL_STATE = {
+interface HideoutState {
+	name: string | null;
+	ownerID: string | null;
+	joinCode: string | null;
+}
+
+const INITIAL_STATE: HideoutState = {
 	name: null,
 	ownerID: null,
 	joinCode: null,
 };
 
-const hideoutReducer = (state = INITIAL_STATE, { type, payload, success }) => {
+const hideoutReducer = (state: HideoutState = INITIAL_STATE, { type, payload, success }: ReducerInput): HideoutState => {
 	if (!success) return state;
 	switch (type) {
 		case LOAD_HIDEOUT_DATA:

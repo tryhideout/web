@@ -1,6 +1,18 @@
 import { LOG_IN_WITH_CREDENTIALS, SIGN_UP_WITH_CREDENTIALS, REFRESH_SESSION, LOG_OUT } from 'redux/actions/types';
+import { ReducerInput } from 'utils/types';
 
-const INITIAL_STATE = {
+interface UserState {
+	isLoggedIn: boolean | null;
+	userID: string | null;
+	email: string | null;
+	firstName: string | null;
+	lastName: string | null;
+	hideoutID: string | null;
+	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
+	accessToken: string | null;
+}
+
+const INITIAL_STATE: UserState = {
 	isLoggedIn: false,
 	userID: null,
 	email: null,
@@ -11,7 +23,7 @@ const INITIAL_STATE = {
 	accessToken: null,
 };
 
-const userReducer = (state = INITIAL_STATE, { type, success, payload }) => {
+const userReducer = (state: UserState = INITIAL_STATE, { type, success, payload }: ReducerInput): UserState => {
 	if (!success) return state;
 	switch (type) {
 		case LOG_IN_WITH_CREDENTIALS:
