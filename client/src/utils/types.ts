@@ -12,7 +12,7 @@ export interface User {
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 }
 
-export interface UserAPIResponse {
+export interface UsersAPIResponse {
 	id: string | null;
 	email: string | null;
 	first_name: string | null;
@@ -28,18 +28,28 @@ export interface Hideout {
 	joinCode: string | null;
 }
 
-export interface HideoutAPIResponse {
+export interface HideoutsAPIResponse {
 	id: string;
 	name: string;
 	owner_id: string;
 	join_code: string;
 }
 
-export interface Auth {
+export interface Session {
 	isLoggedIn: boolean | null;
 	accessToken: string | null;
 }
 
-export interface AuthAPIResponse {
+export interface SessionsAPIResponse {
 	access_token: string;
+}
+
+export interface SessionsAPIEmailLoginRequest {
+	email: string;
+	password: string;
+}
+
+export interface SessionsAPISocialLoginRequest {
+	email: string;
+	password: string;
 }

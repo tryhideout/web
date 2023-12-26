@@ -8,7 +8,8 @@ require_relative '../../lib/exceptions.rb'
 include ActionController::Cookies
 
 class UsersController < ApplicationController
-  @@firebase_signup_URI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
+  @@firebase_signup_URI =
+    URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
   @@hideout_colors = %w[red blue purple yellow green orange]
 
   def show
@@ -34,10 +35,10 @@ class UsersController < ApplicationController
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotUnique
-      return render status: 400, body: 'Resource Already Exists'
+      return render status: 400, body: 'Resource already exists'
     rescue Exceptions::FirebaseNotUniqueError
       new_user.destroy
-      return render status: 400, body: 'Resource Already Exists'
+      return render status: 400, body: 'Resource already exists'
     end
   end
 end

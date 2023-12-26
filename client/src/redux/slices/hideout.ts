@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { HideoutAPIResponse, Hideout, RootState } from 'utils/types';
+import { ReduxSliceNames } from 'utils/constants';
+import type { HideoutsAPIResponse, Hideout, RootState } from 'utils/types';
 
 const INITIAL_STATE: Hideout = {
 	id: null,
@@ -9,10 +10,10 @@ const INITIAL_STATE: Hideout = {
 };
 
 const hideoutSlice = createSlice({
-	name: 'hideout',
+	name: ReduxSliceNames.HIDEOUT,
 	initialState: INITIAL_STATE,
 	reducers: {
-		loadHideout(state: Hideout, action: PayloadAction<HideoutAPIResponse>): Hideout {
+		loadHideout(state: Hideout, action: PayloadAction<HideoutsAPIResponse>): Hideout {
 			return {
 				...state,
 				id: action.payload.id,

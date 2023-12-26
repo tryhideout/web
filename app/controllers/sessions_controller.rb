@@ -39,10 +39,9 @@ class SessionsController < ApplicationController
         same_site: Rails.env == 'development' ? :None : :Strict,
       }
 
-      response_json = current_user.as_json
-      response_json[:access_token] = access_token
+      response_json = { access_token: access_token }
 
-      return render status: 201, json: response_json
+      return render status: 201, json: response_json.to_json
     rescue ActionController::ParameterMissing
       return render status: 400
     rescue StandardError
@@ -50,7 +49,7 @@ class SessionsController < ApplicationController
     end
   end
 
-  def update
+  def refresh
     begin
       refresh_token = cookies[:refresh_token]
       return render status: 400 if refresh_token.nil?
@@ -63,10 +62,9 @@ class SessionsController < ApplicationController
 
       access_token = AuthHelper.generate_token_by_type(:ACCESS, current_user.as_json)
 
-      response_json = current_user.as_json
-      response_json[:access_token] = access_token
+      response_json = { access_token: access_token }
 
-      return render status: 200, json: response_json
+      return render status: 200, json: response_json.to_json
     rescue ActiveRecord::RecordNotFound
       return render status: 404, body: 'User not found'
     end

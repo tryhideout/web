@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState, User, UserAPIResponse } from 'utils/types';
+import { ReduxSliceNames } from 'utils/constants';
+import type { RootState, User, UsersAPIResponse } from 'utils/types';
 
 const INITIAL_STATE: User = {
 	id: null,
@@ -10,7 +11,7 @@ const INITIAL_STATE: User = {
 	color: null,
 };
 
-const loadUserAPIResponse = (state: User, action: PayloadAction<UserAPIResponse>): User => {
+const loadUserAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
 	return {
 		...state,
 		id: action.payload.id,
@@ -23,7 +24,7 @@ const loadUserAPIResponse = (state: User, action: PayloadAction<UserAPIResponse>
 };
 
 const userSlice = createSlice({
-	name: 'user',
+	name: ReduxSliceNames.USER,
 	initialState: INITIAL_STATE,
 	reducers: {
 		loadUser: loadUserAPIResponse,
