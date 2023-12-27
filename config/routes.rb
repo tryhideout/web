@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get '/api/sessions', to: 'sessions#verify'
   post '/api/sessions', to: 'sessions#create'
-  get '/api/sessions', to: 'sessions#refresh'
+  get '/api/sessions/token', to: 'sessions#refresh'
   delete '/api/sessions', to: 'sessions#destroy'
 
   get '/api/users/:id', to: 'users#show'

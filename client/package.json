@@ -3,7 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@emotion/react": "^11.11.1",
+		"@chakra-ui/react": "^2.8.2",
+		"@emotion/react": "^11.11.3",
 		"@emotion/styled": "^11.11.0",
 		"@reduxjs/toolkit": "^2.0.0",
 		"@testing-library/jest-dom": "^5.17.0",
@@ -15,7 +16,7 @@
 		"@types/react-dom": "^18.2.18",
 		"@types/redux-logger": "^3.0.12",
 		"axios": "^1.4.0",
-		"framer-motion": "^10.12.16",
+		"framer-motion": "^10.16.16",
 		"jwt-decode": "^3.1.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
@@ -29,7 +30,7 @@
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"start": "HTTPS=true SSL_CRT_FILE=./ssl/localhost.pem SSL_KEY_FILE=./ssl/localhost-key.pe react-scripts start",
+		"start": "HTTPS=true SSL_CRT_FILE=./ssl/localhost.pem SSL_KEY_FILE=./ssl/localhost-key.pem react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"

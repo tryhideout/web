@@ -1,3 +1,4 @@
+require_relative '../helpers/response_helper.rb'
 require_relative '../helpers/hideout_helper.rb'
 
 class HideoutsController < ApplicationController
@@ -6,7 +7,7 @@ class HideoutsController < ApplicationController
   def show
     id = params[:id]
     hideout = Hideout.find_by(id: id)
-    return render status: 200, json: hideout.as_json
+    return render status: 200, json: hideout.to_json
   end
 
   def users
@@ -36,7 +37,9 @@ class HideoutsController < ApplicationController
       owner_id = payload[:id]
 
       return render status: 400 if name.length > 20 or name.length < 3
-      return render status: 400, body: 'User Already In Hideout' if !payload[:hideout_id].nil?
+      if !payload[:hideout_id].nil?
+        return render status: 400, json: ResponseHelper.generate_error_response('User already in a hideout')
+      end
 
       hideout = Hideout.create(owner_id: owner_id, name: name)
       join_code = HideoutHelper.generate_join_code(hideout.id)
@@ -46,7 +49,10 @@ class HideoutsController < ApplicationController
       owner.update(hideout_id: hideout.id)
       owner.update(color: @@hideout_colors.sample)
 
-      return render status: 201, json: hideout.as_json
+      hideout_resource_location = ResponseHelper.generate_resource_location_url('hideouts', hideout.id)
+      response.set_header('Location', hideout_resource_location)
+
+      return render status: 201, json: hideout.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     end
@@ -60,23 +66,27 @@ class HideoutsController < ApplicationController
       join_code = params[:join_code]
       email = params[:email]
 
-      return render status: 400, body: 'User Already In Hideout' if !payload[:hideout_id].nil?
+      if !payload[:hideout_id].nil?
+        return render status: 400, json: ResponseHelper.generate_error_response('User already in a hideout')
+      end
 
       user = User.find_by(id: user_id)
       hideout = Hideout.find_by!(join_code: join_code)
 
       roommates = User.select(:color).where(['hideout_id = :hideout_id', { hideout_id: hideout.id }])
-      return render status: 400, body: 'Hideout Full' if roommates.length() == 6
+      if roommates.length() == 6
+        return render status: 400, json: ResponseHelper.generate_error_response('Hideout member limit reached')
+      end
 
       user.update(hideout_id: hideout.id)
       used_colors = roommates.collect { |user| user.color }
       usable_colors = @@hideout_colors - used_colors
       user.update(color: usable_colors.sample)
-      return render status: 200, json: hideout.as_json
+      return render status: 200, json: hideout.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Invalid Join Code'
+      return render status: 404, json: ResponseHelper.generate_error_response('Invalid join code')
     end
   end
 
@@ -90,13 +100,13 @@ class HideoutsController < ApplicationController
       hideout = Hideout.find_by(id: id)
       hideout.update(name: name, owner_id: owner_id)
 
-      return render status: 200, json: hideout.as_json
+      return render status: 200, json: hideout.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Owner Not Found'
+      return render status: 404, json: ResponseHelper.generate_error_response('Owner not found')
     rescue ActiveRecord::RecordNotUnique
-      return render status: 400, body: 'Owner Already Exists'
+      return render status: 400, json: ResponseHelper.generate_error_response('Owner already exists')
     end
   end
 

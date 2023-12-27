@@ -26,6 +26,7 @@ export enum HTTPRequestMethods {
 export enum APIPaths {
 	BASE_PATH = '/api',
 	SESSIONS_PATH = '/sessions',
+	TOKEN_PATH = '/token',
 	USERS_PATH = '/users',
 	HIDEOUTS_PATH = '/hideouts',
 }

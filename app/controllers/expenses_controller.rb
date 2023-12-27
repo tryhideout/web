@@ -1,8 +1,9 @@
+require_relative '../helpers/hideout_helper.rb'
 class ExpensesController < ApplicationController
   def show
     id = params[:id]
     expense = Expense.find_by(id: id)
-    return render status: 200, json: expense.as_json
+    return render status: 200, json: expense.to_json
   end
 
   def create
@@ -19,12 +20,16 @@ class ExpensesController < ApplicationController
 
       if !debtor_id.nil?
         debtor = User.find_by!(id: debtor_id)
-        return render status: 400, body: 'Debtor Not In Hideout' if debtor.hideout_id != hideout_id
+        if debtor.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Debtor not found')
+        end
       end
 
       if !creditor_id.nil?
         creditor = User.find_by!(id: creditor_id)
-        return render status: 400, body: 'Creditor Not In Hideout' if creditor.hideout_id != hideout_id
+        if creditor.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Creditor not found')
+        end
       end
 
       expense =
@@ -38,6 +43,10 @@ class ExpensesController < ApplicationController
           active: active,
           hideout_id: hideout_id,
         )
+
+      expense_resource_location = ResponseHelper.generate_resource_location_url('expenses', expense.id)
+      response.set_header('Location', expense_resource_location)
+
       return render status: 201, json: expense.to_json
     rescue ActiveRecord::RecordNotFound
       return render status: 404
@@ -59,12 +68,16 @@ class ExpensesController < ApplicationController
 
       if !debtor_id.nil?
         debtor = User.find_by!(id: debtor_id)
-        return render status: 400, body: 'Debtor Not In Hideout' if debtor.hideout_id != hideout_id
+        if debtor.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Debtor not in hideout')
+        end
       end
 
       if !creditor_id.nil?
         creditor = User.find_by!(id: creditor_id)
-        return render status: 400, body: 'Creditor Not In Hideout' if creditor.hideout_id != hideout_id
+        if creditor.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Creditor not in hideout')
+        end
       end
 
       expense = Expense.find_by(id: id)

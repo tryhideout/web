@@ -3,6 +3,7 @@ require 'uri'
 require 'json'
 
 require_relative '../helpers/auth_helper.rb'
+require_relative '../helpers/response_helper.rb'
 require_relative '../../lib/exceptions.rb'
 
 include ActionController::Cookies
@@ -66,7 +67,7 @@ class SessionsController < ApplicationController
 
       return render status: 200, json: response_json.to_json
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'User not found'
+      return render status: 404, json: ResponseHelper.generate_error_response('User not found')
     end
   end
 

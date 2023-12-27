@@ -2,7 +2,7 @@ class ChoresController < ApplicationController
   def show
     id = params[:id]
     chore = Chore.find_by(id: id)
-    return render status: 200, json: chore.as_json
+    return render status: 200, json: chore.to_json
   end
 
   def create
@@ -18,7 +18,9 @@ class ChoresController < ApplicationController
 
       if !assignee_id.nil?
         assignee = User.find_by!(id: params[:assignee_id])
-        return render status: 400, body: 'Assignee Not In Hideout' if assignee.hideout_id != hideout_id
+        if assignee.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Assignee not in hideout')
+        end
       end
 
       chore =
@@ -30,11 +32,15 @@ class ChoresController < ApplicationController
           due_date: due_date,
           status: status,
         )
+
+      chore_resource_location = ResponseHelper.generate_resource_location_url('chores', chore.id)
+      response.set_header('Location', chore_resource_location)
+
       return render status: 201, json: chore.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Assignee Not Found'
+      return render status: 404, json: ResponseHelper.generate_error_response('Assignee not found')
     end
   end
 
@@ -52,16 +58,18 @@ class ChoresController < ApplicationController
 
       if !assignee_id.nil?
         assignee = User.find_by!(id: assignee_id)
-        return render status: 400, body: 'Assignee Not In Hideout' if assignee.hideout_id != hideout_id
+        if assignee.hideout_id != hideout_id
+          return render status: 400, json: ResponseHelper.generate_error_response('Assignee not in hideout')
+        end
       end
 
       chore = Chore.find_by(id: id)
       chore.update(name: name, description: description, assignee_id: assignee_id, due_date: due_date, status: status)
-      return render status: 200, json: chore.as_json
+      return render status: 200, json: chore.to_json
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Assignee Not Found'
+      return render status: 404, json: ResponseHelper.generate_error_response('Assignee not found')
     end
   end
 

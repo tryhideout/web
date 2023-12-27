@@ -30,7 +30,8 @@ export const joinHideout = (joinCode) => async (dispatch) => {
 		showToast.success('Joined Hideout!', `You have joined ${response.payload.name} as a new member!`);
 		dispatch({ type: JOIN_HIDEOUT, ...response });
 	} catch (error) {
-		if (error.statusCode === 400) showToast.error('Hideout Full!', `This hideout is already full. Why not create one instead?`);
+		if (error.statusCode === 400)
+			showToast.error('Hideout Full!', `This hideout is already full. Why not create one instead?`);
 		else showToast.error('Invalid Join Code!', `The join code you provided is invalid. Please try another.`);
 	}
 };

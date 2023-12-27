@@ -28,6 +28,11 @@ export interface Hideout {
 	joinCode: string | null;
 }
 
+export interface HideoutsAPIRequest {
+	name: string;
+	owner_id: number;
+}
+
 export interface HideoutsAPIResponse {
 	id: string;
 	name: string;
@@ -40,10 +45,6 @@ export interface Session {
 	accessToken: string | null;
 }
 
-export interface SessionsAPIResponse {
-	access_token: string;
-}
-
 export interface SessionsAPIEmailLoginRequest {
 	email: string;
 	password: string;
@@ -52,4 +53,8 @@ export interface SessionsAPIEmailLoginRequest {
 export interface SessionsAPISocialLoginRequest {
 	email: string;
 	password: string;
+}
+
+export interface SessionsAPIResponse {
+	access_token: string;
 }

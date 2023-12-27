@@ -2,7 +2,7 @@ import { createStandaloneToast } from '@chakra-ui/react';
 import theme from 'config/theme';
 const { toast } = createStandaloneToast({ theme });
 
-const error = (title, description = null) => {
+const error = (title: string, description: string | null = null): void => {
 	toast({
 		title: title,
 		description: description,
@@ -13,7 +13,7 @@ const error = (title, description = null) => {
 	});
 };
 
-const success = (title, description = null) => {
+const success = (title: string, description: string | null = null): void => {
 	toast({
 		title: title,
 		description: description,
@@ -24,7 +24,7 @@ const success = (title, description = null) => {
 	});
 };
 
-const info = (title, description = null) => {
+const info = (title: string, description: string | null = null): void => {
 	toast({
 		title: title,
 		description: description,
@@ -35,7 +35,7 @@ const info = (title, description = null) => {
 	});
 };
 
-const warning = (title, description = null) => {
+const warning = (title: string, description: string | null = null): void => {
 	toast({
 		title: title,
 		description: description,

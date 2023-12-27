@@ -26,7 +26,11 @@ module HideoutWeb
       YAML.load(File.open(env_file)).each { |key, value| ENV[key.to_s] = value } if File.exist?(env_file)
       ENV[
         'PUBLIC_ROUTES'
-      ] = 'GET /api/health, POST /api/users, POST /api/sessions, PUT /api/sessions, DELETE /api/sessions, GET /api/sessions'
+      ] = 'GET /api/health, POST /api/users, POST /api/sessions, GET /api/sessions/token, DELETE /api/sessions, GET /api/sessions'
+
+      if Rails.env == 'development'
+        ENV['API_BASE_URL'] = 'http://localhost:4000/api'
+      end
     end
 
     config.middleware.use Middleware::VerifyAccessToken
