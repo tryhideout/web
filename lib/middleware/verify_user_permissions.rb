@@ -40,7 +40,7 @@ module Middleware
           return 400, {}, [] if hideout.id != user.hideout_id
         end
       rescue ActiveRecord::RecordNotFound
-        error = { error: "Some specified resource not found" }
+        error = { error: "Some resource not found" }
         return 404, {}, [error.to_json]
       end
 
