@@ -4,8 +4,6 @@ import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery 
 import { endSession, refreshSession } from 'redux/slices/session';
 import { APIPaths, HTTPStatusCodes, ReduxTagTypes } from 'utils/constants';
 import { RootState } from 'utils/types';
-import { formatAPIPath } from 'utils/helpers/common';
-
 type baseQueryReturnType = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
 
 const baseQuery = fetchBaseQuery({

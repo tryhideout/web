@@ -12,6 +12,13 @@ export interface User {
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 }
 
+export interface UsersAPIRequest {
+	email: string | null;
+	password: string | null;
+	first_name: string | null;
+	last_name: string | null;
+}
+
 export interface UsersAPIResponse {
 	id: string | null;
 	email: string | null;
@@ -26,6 +33,7 @@ export interface Hideout {
 	name: string | null;
 	ownerID: string | null;
 	joinCode: string | null;
+	users: User[];
 }
 
 export interface HideoutsAPIRequest {
@@ -38,6 +46,7 @@ export interface HideoutsAPIResponse {
 	name: string;
 	owner_id: string;
 	join_code: string;
+	users: UsersAPIResponse[];
 }
 
 export interface Session {

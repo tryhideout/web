@@ -15,7 +15,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 
 		refreshSession: builder.query<SessionsAPIResponse, void>({
 			query: () => ({
-				url: APIPaths.SESSIONS_PATH + APIPaths.TOKEN_PATH,
+				url: formatAPIPath([APIPaths.SESSIONS_PATH, APIPaths.TOKEN_PATH]),
 				credentials: FETCH_CREDENTIALS_INCLUDE,
 			}),
 			providesTags: [ReduxTagTypes.SESSION],

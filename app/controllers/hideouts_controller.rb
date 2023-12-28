@@ -7,7 +7,10 @@ class HideoutsController < ApplicationController
   def show
     id = params[:id]
     hideout = Hideout.find_by(id: id)
-    return render status: 200, json: hideout.to_json
+    users = User.where(hideout_id: id)
+    response_json = hideout.as_json
+    response_json[:users] = users.as_json
+    return render status: 200, json: response_json.to_json
   end
 
   def users
@@ -82,7 +85,8 @@ class HideoutsController < ApplicationController
       used_colors = roommates.collect { |user| user.color }
       usable_colors = @@hideout_colors - used_colors
       user.update(color: usable_colors.sample)
-      return render status: 200, json: hideout.to_json
+
+      return render status: 200
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
       return render status: 400
     rescue ActiveRecord::RecordNotFound
