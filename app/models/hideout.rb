@@ -3,7 +3,7 @@ class Hideout < ActiveRecord::Base
   has_many :chores, foreign_key: 'hideout_id'
   has_many :expenses, foreign_key: 'hideout_id'
   has_many :users, foreign_key: 'hideout_id'
+  has_one :owner, foreign_key: 'hideout_id'
 
   validates :name, presence: true, strict: true
-  validates :owner_id, presence: true, strict: true
 end

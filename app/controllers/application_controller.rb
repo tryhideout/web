@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
   def health
-    render status: 200
+    render status: :ok
   end
 end

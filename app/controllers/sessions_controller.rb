@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'bcrypt'
 
 require_relative '../helpers/auth_helper.rb'
 require_relative '../helpers/response_helper.rb'
@@ -9,29 +10,38 @@ require_relative '../../lib/exceptions.rb'
 include ActionController::Cookies
 
 class SessionsController < ApplicationController
-  @@firebase_login_URI =
-    URI("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=#{ENV['FIREBASE_API_KEY']}")
 
   def verify
     refresh_token = cookies[:refresh_token]
     result = AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
-    return render status: 401 if not result[:success]
-    return render status: 200
+    return render status: :unauthorized if not result[:success]
+    return render status: :ok
   end
 
   def create
     begin
-      params.require(%i[email password])
+      params.require(%i[email])
       email = params[:email]
       password = params[:password]
+      social_token = params[:social_token]
 
-      response = Net::HTTP.post_form(@@firebase_login_URI, email: email, password: password)
-      raise StandardError if response.code == '400'
+      user = User.find_by!(email: email)
+      return render status: :bad_request if password.nil? == social_token.nil?
 
-      current_user = User.find_by!(email: email)
+      hashed_password = nil
+      if !social_token.nil?
+        result = AuthHelper.validate_firebase_social_token(social_token)
+        return render status: :unauthorized if !result[:success]
+      else
+        hashed_password = BCrypt::Password.create(password)
+        return render status: :unauthorized if hashed_password != password
+      end
 
-      refresh_token = AuthHelper.generate_token_by_type(:REFRESH, current_user.as_json)
-      access_token = AuthHelper.generate_token_by_type(:ACCESS, current_user.as_json)
+      user_hash = user.as_json
+      user_hash.delete('password')
+
+      refresh_token = AuthHelper.generate_token_by_type(:REFRESH, user_hash)
+      access_token = AuthHelper.generate_token_by_type(:ACCESS, user_hash)
       cookies[:refresh_token] = {
         value: refresh_token,
         expires: 1.month,
@@ -44,36 +54,39 @@ class SessionsController < ApplicationController
 
       return render status: 201, json: response_json.to_json
     rescue ActionController::ParameterMissing
-      return render status: 400
-    rescue StandardError
-      return render status: 401
+      return render status: :bad_request
+    rescue ActiveRecord::RecordNotFound
+      return render status: :unauthorized
     end
   end
 
   def refresh
     begin
       refresh_token = cookies[:refresh_token]
-      return render status: 400 if refresh_token.nil?
+      return render status: :bad_request if refresh_token.nil?
 
       result = AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
-      return render status: 401 if not result[:success]
+      return render status: :unauthorized if not result[:success]
 
       user_id = result[:payload]['id']
-      current_user = User.find_by!(id: user_id)
+      user = User.find_by!(id: user_id)
 
-      access_token = AuthHelper.generate_token_by_type(:ACCESS, current_user.as_json)
+      user_hash = user.as_json
+      user_hash.delete('password')
+
+      access_token = AuthHelper.generate_token_by_type(:ACCESS, user_hash)
 
       response_json = { access_token: access_token }
 
-      return render status: 200, json: response_json.to_json
+      return render status: :ok, json: response_json.to_json
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, json: ResponseHelper.generate_error_response('User not found')
+      return render status: :not_found, json: ResponseHelper.generate_error_response('User not found')
     end
   end
 
   def destroy
     refresh_token = cookies[:refresh_token]
-    return render status: 400 if refresh_token.nil?
+    return render status: :bad_request if refresh_token.nil?
 
     cookies[:refresh_token] = {
       value: nil,
@@ -82,6 +95,6 @@ class SessionsController < ApplicationController
       httponly: true,
       same_site: Rails.env == 'development' ? :None : :Strict,
     }
-    return render status: 204
+    return render status: :no_content
   end
 end

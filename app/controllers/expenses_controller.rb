@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
   def show
     id = params[:id]
     expense = Expense.find_by(id: id)
-    return render status: 200, json: expense.to_json
+    return render status: :ok, json: expense.to_json
   end
 
   def create
@@ -21,14 +21,14 @@ class ExpensesController < ApplicationController
       if !debtor_id.nil?
         debtor = User.find_by!(id: debtor_id)
         if debtor.hideout_id != hideout_id
-          return render status: 400, json: ResponseHelper.generate_error_response('Debtor not found')
+          return render status: :bad_request, json: ResponseHelper.generate_error_response('Debtor not found')
         end
       end
 
       if !creditor_id.nil?
         creditor = User.find_by!(id: creditor_id)
         if creditor.hideout_id != hideout_id
-          return render status: 400, json: ResponseHelper.generate_error_response('Creditor not found')
+          return render status: :bad_request, json: ResponseHelper.generate_error_response('Creditor not found')
         end
       end
 
@@ -49,9 +49,9 @@ class ExpensesController < ApplicationController
 
       return render status: 201, json: expense.to_json
     rescue ActiveRecord::RecordNotFound
-      return render status: 404
+      return render status: :not_found
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
+      return render status: :bad_request
     end
   end
 
@@ -69,14 +69,14 @@ class ExpensesController < ApplicationController
       if !debtor_id.nil?
         debtor = User.find_by!(id: debtor_id)
         if debtor.hideout_id != hideout_id
-          return render status: 400, json: ResponseHelper.generate_error_response('Debtor not in hideout')
+          return render status: :bad_request, json: ResponseHelper.generate_error_response('Debtor not in hideout')
         end
       end
 
       if !creditor_id.nil?
         creditor = User.find_by!(id: creditor_id)
         if creditor.hideout_id != hideout_id
-          return render status: 400, json: ResponseHelper.generate_error_response('Creditor not in hideout')
+          return render status: :bad_request, json: ResponseHelper.generate_error_response('Creditor not in hideout')
         end
       end
 
@@ -90,11 +90,11 @@ class ExpensesController < ApplicationController
         comments: comments,
         active: active,
       )
-      return render status: 200
+      return render status: :ok
     rescue ActiveRecord::RecordNotFound
-      return render status: 404
+      return render status: :not_found
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
+      return render status: :bad_request
     end
   end
 
@@ -102,6 +102,6 @@ class ExpensesController < ApplicationController
     id = params[:id]
     expense = Expense.find_by(id: id)
     expense.destroy
-    return render status: 200
+    return render status: :ok
   end
 end

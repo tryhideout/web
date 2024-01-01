@@ -7,7 +7,6 @@ const INITIAL_STATE: User = {
 	email: null,
 	firstName: null,
 	lastName: null,
-	hideoutID: null,
 	color: null,
 };
 
@@ -18,7 +17,6 @@ const loadUserAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse
 		email: action.payload.email,
 		firstName: action.payload.first_name,
 		lastName: action.payload.last_name,
-		hideoutID: action.payload.hideout_id,
 		color: action.payload.color,
 	};
 };

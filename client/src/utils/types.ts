@@ -8,7 +8,6 @@ export interface User {
 	email: string | null;
 	firstName: string | null;
 	lastName: string | null;
-	hideoutID: string | null;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 }
 
@@ -33,7 +32,6 @@ export interface Hideout {
 	name: string | null;
 	ownerID: string | null;
 	joinCode: string | null;
-	users: User[];
 }
 
 export interface HideoutsAPIRequest {

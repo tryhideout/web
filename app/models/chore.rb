@@ -5,6 +5,4 @@ class Chore < ActiveRecord::Base
   belongs_to :user, foreign_key: 'assignee_id'
 
   validates :name, presence: true, strict: true
-  validates :hideout_id, presence: true, strict: true
-  validates :assignee_id, presence: true, unless: -> { assignee_id.blank? }, strict: true
 end

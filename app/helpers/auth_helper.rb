@@ -1,11 +1,14 @@
 require 'jwt'
+require 'net/http'
+require 'base64'
+require 'json'
 
 module AuthHelper
   def AuthHelper.generate_token_by_type(type, payload)
     if type == :REFRESH
       expiry = Time.now.to_i + 2_592_000
     else
-      secret = expiry = Time.now.to_i + 900
+      expiry = expiry = Time.now.to_i + 900
     end
 
     payload[:exp] = expiry
@@ -19,6 +22,21 @@ module AuthHelper
       return { payload: decoded_token[0], success: true }
     rescue StandardError
       return { payload: nil, success: false }
+    end
+  end
+
+  def AuthHelper.validate_firebase_social_token(token)
+    begin
+      header64 = token.split('.')[0]
+      header = JSON.parse(Base64.decode64(header64))
+
+      google_public_key_URI = URI('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com')
+      response = Net::HTTP.get(google_public_key_URI)
+      response_json = JSON.parse(response)
+      JWT.decode(token, response_json[header['kid']], true, { algorithm: 'RS256' })
+      return { success: true }
+    rescue StandardError
+      return { success: false }
     end
   end
 end
