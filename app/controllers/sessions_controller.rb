@@ -3,84 +3,67 @@ require 'uri'
 require 'json'
 require 'bcrypt'
 
-require_relative '../helpers/auth_helper.rb'
-require_relative '../helpers/response_helper.rb'
-require_relative '../../lib/exceptions.rb'
-
 include ActionController::Cookies
 
 class SessionsController < ApplicationController
-
   def verify
-    refresh_token = cookies[:refresh_token]
-    result = AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
-    return render status: :unauthorized if not result[:success]
-    return render status: :ok
+    begin
+      refresh_token = cookies[:refresh_token]
+      AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
+      render status: :ok
+    rescue Exceptions::JWTException => error
+      return render status: :unauthorized, json: ResponseHelper.generate_error_response(error.message)
+    end
   end
 
   def create
     begin
       params.require(%i[email])
-      email = params[:email]
-      password = params[:password]
-      social_token = params[:social_token]
+      email, password, social_token = params[:email], params[:password], params[:social_token]
 
-      user = User.find_by!(email: email)
-      return render status: :bad_request if password.nil? == social_token.nil?
-
-      hashed_password = nil
-      if !social_token.nil?
-        result = AuthHelper.validate_firebase_social_token(social_token)
-        return render status: :unauthorized if !result[:success]
-      else
-        hashed_password = BCrypt::Password.create(password)
-        return render status: :unauthorized if hashed_password != password
+      if password.nil? == social_token.nil?
+        error_response = ResponseHelper.generate_error_response('Exactly one of social token or password must be provided.')
+        return render status: :bad_request, json: error_response
       end
 
-      user_hash = user.as_json
-      user_hash.delete('password')
+      user = User.find_by!(email: email)
+      password.nil? ? AuthHelper.validate_firebase_social_token(social_token) : user.validate_password(password: password)
 
-      refresh_token = AuthHelper.generate_token_by_type(:REFRESH, user_hash)
-      access_token = AuthHelper.generate_token_by_type(:ACCESS, user_hash)
-      cookies[:refresh_token] = {
-        value: refresh_token,
-        expires: 1.month,
-        secure: true,
-        httponly: true,
-        same_site: Rails.env == 'development' ? :None : :Strict,
-      }
+      refresh_token = AuthHelper.generate_token_by_type(:REFRESH, user.hashify)
+      access_token = AuthHelper.generate_token_by_type(:ACCESS, user.hashify)
+      cookies[:refresh_token] = AuthHelper.generate_cookie_hash(refresh_token)
+      response = { access_token: access_token }
 
-      response_json = { access_token: access_token }
-
-      return render status: 201, json: response_json.to_json
-    rescue ActionController::ParameterMissing
-      return render status: :bad_request
+      return render status: 201, json: response.to_json
+    rescue ActionController::ParameterMissing => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
+    rescue Exceptions::JWTException, Exceptions::AuthException => error
+      return render status: :unauthorized, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotFound
-      return render status: :unauthorized
+      return render status: :not_found, json: ResponseHelper.generate_error_response('No user with provided email exists.')
     end
   end
 
   def refresh
     begin
       refresh_token = cookies[:refresh_token]
-      return render status: :bad_request if refresh_token.nil?
+      if refresh_token.nil?
+        return render status: :bad_request, json: ResponseHelper.generate_error_response('Refresh token cannot be blank.')
+      end
 
       result = AuthHelper.validate_token_by_type(:REFRESH, refresh_token)
-      return render status: :unauthorized if not result[:success]
 
       user_id = result[:payload]['id']
       user = User.find_by!(id: user_id)
 
-      user_hash = user.as_json
-      user_hash.delete('password')
+      access_token = AuthHelper.generate_token_by_type(:ACCESS, user.hashify)
+      response = { access_token: access_token }
 
-      access_token = AuthHelper.generate_token_by_type(:ACCESS, user_hash)
-
-      response_json = { access_token: access_token }
-
-      return render status: :ok, json: response_json.to_json
+      return render status: :ok, json: response.to_json
+    rescue Exceptions::JWTException => error
+      return render status: :unauthorized, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotFound
-      return render status: :not_found, json: ResponseHelper.generate_error_response('User not found')
+      return render status: :not_found, json: ResponseHelper.generate_error_response('User not found.')
     end
   end
 
@@ -88,13 +71,7 @@ class SessionsController < ApplicationController
     refresh_token = cookies[:refresh_token]
     return render status: :bad_request if refresh_token.nil?
 
-    cookies[:refresh_token] = {
-      value: nil,
-      expires: Time.at(0),
-      secure: true,
-      httponly: true,
-      same_site: Rails.env == 'development' ? :None : :Strict,
-    }
+    cookies[:refresh_token] = AuthHelper.generate_deleted_cookie
     return render status: :no_content
   end
 end

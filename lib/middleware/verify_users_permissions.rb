@@ -9,12 +9,14 @@ module Middleware
     def call(env)
       request = ActionDispatch::Request.new(env)
       request_identifier, path_id, payload = MiddlewareHelper.retrieve_request_details(request)
-      return @app.call(env) if Constants::PUBLIC_ROUTES.include?(request_identifier)
+      if Constants::PUBLIC_ROUTES.include?(request_identifier) or request.path.exclude?(Constants::API_PATHS[:USERS])
+        return @app.call(env)
+      end
 
       begin
-        User.find_by!(id: payload['id'])
-        if request.method != Constants::HTTP_METHODS[:POST] and request.path.include?(Constants::API_PATHS[:USERS])
-          return 400, {}, [] if path_id != payload['id']
+        User.find_by!(id: payload[:id])
+        if request.method != Constants::HTTP_METHODS[:POST]
+          return 401, {}, [] if path_id != payload[:id]
         end
       rescue ActiveRecord::RecordNotFound
         error = { error: 'User not found' }

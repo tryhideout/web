@@ -1,5 +1,4 @@
-require_relative '../../app/helpers/auth_helper.rb'
-
+require 'constants'
 module Middleware
   class VerifyAccessToken
     def initialize(app)
@@ -8,23 +7,26 @@ module Middleware
 
     def call(env)
       request = ActionDispatch::Request.new(env)
-      request_identifier = "#{request.method} #{request.path}"
-      if not ENV['PUBLIC_ROUTES'].include?(request_identifier)
+      request_identifier, _, payload = MiddlewareHelper.retrieve_request_details(request)
+
+      if not Constants::PUBLIC_ROUTES.include?(request_identifier)
         authoriation_header = request.headers[:Authorization]
-        return 401, {}, [] if authoriation_header.nil?
+        return 401, {}, [ResponseHelper.generate_error_response('Invalid access token.')] if authoriation_header.nil?
 
         access_token = authoriation_header.split[1]
         result = AuthHelper.validate_token_by_type(:ACCESS, access_token)
-        return 401, {}, [] if not result[:success]
 
         begin
           payload = result[:payload]
           payload.transform_keys!(&:to_sym)
           current_user = User.find_by!(email: payload[:email])
-          payload[:hideout_id] = current_user[:hideout_id]
-          request.update_param(:payload, result[:payload])
+          payload[:hideout_id] = current_user.hideout_id
+          request.params[:payload] = payload
+          request.update_param(:payload, payload)
+        rescue Exceptions::JWTException
+          return 401, {}, [ResponseHelper.generate_error_response('Invalid access token.')]
         rescue ActiveRecord::RecordNotFound
-          return 400, {}, []
+          return 400, {}, [ResponseHelper.generate_error_response('User not found.')]
         end
       end
 
