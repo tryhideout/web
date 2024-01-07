@@ -28,6 +28,9 @@ class Hideout < ApplicationRecord
     user = User.find_by(id: owner_id)
     user.update(color: @@hideout_colors.sample)
     user.update(hideout_id: hideout.id)
+    user.update(status: 'available')
+
+    Status.create!(user_id: owner_id, hideout_id: hideout.id)
     return hideout
   end
 
@@ -40,6 +43,7 @@ class Hideout < ApplicationRecord
     usable_colors = @@hideout_colors - used_colors
     user.update(color: usable_colors.sample)
     user.update(hideout_id: self.id)
+    user.update(status: 'available')
   end
 
   def update_hideout_and_owner(name:, owner_id:)
@@ -56,14 +60,14 @@ class Hideout < ApplicationRecord
     owner = Owner.find_by(hideout_id: self.id)
     raise Exceptions::ModelException.new('Owner cannot leave hideout.') if owner.user_id == user_id
 
-    user.update(hideout_id: nil, color: nil)
+    user.update(hideout_id: nil, color: nil, status: nil)
     Chore.where(assignee_id: user.id).update_all(assignee_id: nil)
     Expense.where(debtor_id: user.id).update_all(debtor_id: nil)
     Expense.where(creditor_id: user.id).update_all(creditor_id: nil)
   end
 
   def destroy_and_reset_users
-    User.where(hideout_id: self.id).update_all(color: nil)
+    User.where(hideout_id: self.id).update_all(color: nil, status: nil)
     self.destroy
   end
 end

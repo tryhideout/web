@@ -8,5 +8,6 @@ FactoryBot.define do
     hideout { association(:hideout) }
     color { %w[red blue purple yellow green orange].sample }
     password { 'password' }
+    status { %w[available away busy do_not_disturb].sample }
   end
 end

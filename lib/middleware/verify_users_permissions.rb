@@ -14,9 +14,9 @@ module Middleware
       end
 
       begin
-        User.find_by!(id: payload[:id])
+        user = User.find_by!(id: payload[:id])
         if request.method != Constants::HTTP_METHODS[:POST]
-          return 401, {}, [] if path_id != payload[:id]
+          return 401, {}, [] if path_id != payload[:id] or payload[:id] != user.id
         end
       rescue ActiveRecord::RecordNotFound
         error = { error: 'User not found' }

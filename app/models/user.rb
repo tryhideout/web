@@ -3,6 +3,7 @@ require 'exceptions'
 
 class User < ApplicationRecord
   self.table_name = 'users'
+
   has_many :chores, foreign_key: 'assignee_id'
   has_many :credit_expenses, class_name: 'Expense', foreign_key: 'creditor_id'
   has_many :debt_expenses, class_name: 'Expense', foreign_key: 'debtor_id'
@@ -13,6 +14,7 @@ class User < ApplicationRecord
   validates :first_name, presence: true, strict: true
   validates :last_name, presence: true, strict: true
   validates :color, presence: true, unless: -> { hideout_id.blank? }, strict: true
+  validates :status, presence: true, unless: -> { hideout_id.blank? }, strict: true
 
   def jsonify
     hash = self.as_json
@@ -40,5 +42,10 @@ class User < ApplicationRecord
     hashed_password = password.nil? ? nil : BCrypt::Password.create(password)
     new_user = User.create!(first_name: first_name, last_name: last_name, email: email, password: hashed_password)
     return new_user
+  end
+
+  def self.get_all_statuses_by_hideout_id(hideout_id:)
+    statuses = User.where(hideout_id: hideout_id).select(%w[id status])
+    return statuses
   end
 end

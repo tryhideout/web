@@ -2,11 +2,11 @@ require 'exceptions'
 
 class Chore < ApplicationRecord
   self.table_name = 'chores'
-  enum status: { backlog: 'backlog', in_progress: 'in_progress', completed: 'completed' }
   belongs_to :hideout, foreign_key: 'hideout_id'
   belongs_to :assignee, class_name: 'User', foreign_key: 'assignee_id', optional: true
 
   validates :name, presence: true, strict: true
+  validates :status, presence: true, strict: true
 
   def self.new_chore(name:, description:, hideout_id:, assignee_id:, due_date:, status:)
     validate_assignee_id(assignee_id: assignee_id) if !assignee_id.nil?

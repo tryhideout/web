@@ -7,6 +7,8 @@ require 'exceptions'
 include ActionController::Cookies
 
 class UsersController < ApplicationController
+  @@status_values = %w[available busy away do_not_disturb]
+
   def show
     id = params[:id]
     user = User.find_by(id: id)
@@ -42,5 +44,22 @@ class UsersController < ApplicationController
     rescue ActiveRecord::RecordNotUnique
       return render status: :conflict, json: ResponseHelper.generate_error_response('User already exists.')
     end
+  end
+
+  def update_status
+    params.require(%i[status])
+    id, status = params[:id], params[:status]
+
+    unless @@status_values.include?(status)
+      return render status: :bad_request, json: ResponseHelper.generate_error_response('Invalid user status provided')
+    end
+
+    user = User.find_by(id: id)
+    user.update(status: status)
+
+    user_statuses = User.get_all_statuses_by_hideout_id(hideout_id: user.hideout_id)
+    channel_name = 'statuses:' + user.hideout_id.to_s
+    ActionCable.server.broadcast(channel_name, user_statuses.to_json)
+    return render status: :ok
   end
 end

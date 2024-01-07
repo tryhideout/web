@@ -25,6 +25,7 @@ export interface UsersAPIResponse {
 	last_name: string | null;
 	hideout_id: string | null;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
+	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
 }
 
 export interface Hideout {
