@@ -9,8 +9,8 @@ const theme = extendTheme({
 		},
 	},
 	fonts: {
-		heading: `'Hellix'`,
-		body: `'Hellix'`,
+		heading: `'Hellix', sans-serif`,
+		body: `'Hubot', sans-serif`,
 	},
 	components: {
 		Button: {
@@ -23,6 +23,12 @@ const theme = extendTheme({
 					borderRadius: '16px',
 					padding: '0px 32px',
 					fontSize: '24px',
+				},
+				plg: {
+					width: '155px',
+					height: '48px',
+					fontSize: '18px',
+					borderRadius: '16px',
 				},
 				lg: {
 					borderRadius: '16px',
@@ -59,7 +65,7 @@ const theme = extendTheme({
 			},
 			defaultProps: {
 				size: 'xl',
-				variant: 'gradient',
+				variant: 'gradient400',
 			},
 		},
 		Input: {
