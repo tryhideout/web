@@ -1,43 +1,65 @@
 require 'net/http'
 require 'uri'
 require 'json'
-
-require_relative '../helpers/auth_helper.rb'
-require_relative '../../lib/exceptions.rb'
+require 'bcrypt'
+require 'exceptions'
 
 include ActionController::Cookies
 
 class UsersController < ApplicationController
-  @@firebase_signup_URI = URI("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=#{ENV['FIREBASE_API_KEY']}")
-  @@hideout_colors = %w[red blue purple yellow green orange]
+  @@status_values = %w[available busy away do_not_disturb]
 
   def show
     id = params[:id]
     user = User.find_by(id: id)
-    return render status: 200, json: user.as_json
+    return render status: :ok, json: user.jsonify
   end
 
   def create
     begin
-      params.require(%i[first_name last_name email password])
-      first_name = params[:first_name]
-      last_name = params[:last_name]
-      email = params[:email]
-      password = params[:password]
+      params.require(%i[first_name last_name email])
+      first_name, last_name, email, password, social_token =
+        params[:first_name],
+        params[:last_name],
+        params[:email],
+        params[:password],
+        params[:social_token]
 
-      new_user = User.create!(first_name: first_name, last_name: last_name, email: email)
+      if password.nil? == social_token.nil?
+        error_response = ResponseHelper.generate_error_response('Exactly one of social token or password must be provided.')
+        return render status: :bad_request, json: error_response
+      end
 
-      response = Net::HTTP.post_form(@@firebase_signup_URI, email: email, password: password)
-      raise Exceptions::FirebaseNotUniqueError if response.code == '400'
+      AuthHelper.validate_firebase_social_token(social_token) if !social_token.nil?
+      new_user = User.new_user(first_name: first_name, last_name: last_name, email: email, password: password)
 
-      render status: :created, json: new_user.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
+      user_resource_location = ResponseHelper.generate_resource_location_url('users', new_user.id)
+      response.set_header('Location', user_resource_location)
+
+      return render status: :created, json: new_user.jsonify
+    rescue Exceptions::JWTException, Exceptions::ModelException => error
+      return render status: :unauthorized, json: ResponseHelper.generate_error_response(error.message)
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotUnique
-      return render status: 400, body: 'Resource Already Exists'
-    rescue Exceptions::FirebaseNotUniqueError
-      new_user.destroy
-      return render status: 400, body: 'Resource Already Exists'
+      return render status: :conflict, json: ResponseHelper.generate_error_response('User already exists.')
     end
+  end
+
+  def update_status
+    params.require(%i[status])
+    id, status = params[:id], params[:status]
+
+    unless @@status_values.include?(status)
+      return render status: :bad_request, json: ResponseHelper.generate_error_response('Invalid user status provided')
+    end
+
+    user = User.find_by(id: id)
+    user.update(status: status)
+
+    user_statuses = User.get_all_statuses_by_hideout_id(hideout_id: user.hideout_id)
+    channel_name = 'statuses:' + user.hideout_id.to_s
+    ActionCable.server.broadcast(channel_name, user_statuses.to_json)
+    return render status: :ok
   end
 end

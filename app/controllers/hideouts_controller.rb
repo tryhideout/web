@@ -1,134 +1,111 @@
-require_relative '../helpers/hideout_helper.rb'
+require 'exceptions'
 
 class HideoutsController < ApplicationController
-  @@hideout_colors = %w[red blue purple yellow green orange]
-
   def show
     id = params[:id]
     hideout = Hideout.find_by(id: id)
-    return render status: 200, json: hideout.as_json
+    return render status: :ok, json: hideout.jsonify
   end
 
   def users
     id = params[:id]
-    users = User.where(hideout_id: id)
-    return render status: 200, json: users.to_json
+    users = User.get_all_users_by_hideout_id(hideout_id: id, jsonify: true)
+    return render status: :ok, json: users.to_json
   end
 
   def chores
     id = params[:id]
-    chores = Chore.where(hideout_id: id)
-    return render status: 200, json: chores.to_json
+    chores = Chore.get_all_chores_by_hideout_id(hideout_id: id)
+    return render status: :ok, json: chores.to_json
   end
 
   def expenses
     id = params[:id]
-    expenses = Expense.where(hideout_id: id)
-    return render status: 200, json: expenses.to_json
+    expenses = Expense.get_all_expenses_by_hideout_id(hideout_id: id)
+    return render status: :ok, json: expenses.to_json
   end
 
   def create
     begin
       params.require(%i[name owner_id])
+      name, owner_id, payload = params[:name], params[:owner_id], params[:payload]
 
-      payload = params[:payload]
-      name = params[:name]
-      owner_id = payload[:id]
+      if !payload[:hideout_id].nil?
+        return render status: :bad_request, json: ResponseHelper.generate_error_response('User already in a hideout.')
+      end
 
-      return render status: 400 if name.length > 20 or name.length < 3
-      return render status: 400, body: 'User Already In Hideout' if !payload[:hideout_id].nil?
+      hideout = Hideout.new_hideout(name: name, owner_id: owner_id)
 
-      hideout = Hideout.create(owner_id: owner_id, name: name)
-      join_code = HideoutHelper.generate_join_code(hideout.id)
-      hideout.update(join_code: join_code)
+      hideout_resource_location = ResponseHelper.generate_resource_location_url('hideouts', hideout.id)
+      response.set_header('Location', hideout_resource_location)
 
-      owner = User.find_by(id: owner_id)
-      owner.update(hideout_id: hideout.id)
-      owner.update(color: @@hideout_colors.sample)
-
-      return render status: 201, json: hideout.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
+      return render status: 201, json: hideout.jsonify
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
+    rescue ActiveRecord::RecordNotUnique
+      hideout.destroy
+      return render status: :conflict, json: ResponseHelper.generate_error_response('Resource already exists.')
     end
   end
 
   def join
     begin
       params.require(:join_code)
-      payload = params[:payload]
+      join_code, payload = params[:join_code], params[:payload]
       user_id = payload[:id]
-      join_code = params[:join_code]
-      email = params[:email]
 
-      return render status: 400, body: 'User Already In Hideout' if !payload[:hideout_id].nil?
+      if !payload[:hideout_id].nil?
+        return render status: :bad_request, json: ResponseHelper.generate_error_response('User already in a hideout.')
+      end
 
-      user = User.find_by(id: user_id)
       hideout = Hideout.find_by!(join_code: join_code)
+      hideout.add_user(user_id: user_id)
 
-      roommates = User.select(:color).where(['hideout_id = :hideout_id', { hideout_id: hideout.id }])
-      return render status: 400, body: 'Hideout Full' if roommates.length() == 6
-
-      user.update(hideout_id: hideout.id)
-      used_colors = roommates.collect { |user| user.color }
-      usable_colors = @@hideout_colors - used_colors
-      user.update(color: usable_colors.sample)
-      return render status: 200, json: hideout.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
+      return render status: :ok
+    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed, Exceptions::ModelException => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Invalid Join Code'
+      return render status: :not_found, json: ResponseHelper.generate_error_response('Invalid join code.')
     end
   end
 
   def update
     begin
       params.require(%i[name owner_id])
-      id = params[:id]
-      name = params[:name]
-      owner_id = payload[:id]
+      id, name, owner_id = params[:id], params[:name], params[:owner_id]
 
       hideout = Hideout.find_by(id: id)
-      hideout.update(name: name, owner_id: owner_id)
+      hideout.update_hideout_and_owner(name: name, owner_id: owner_id)
 
-      return render status: 200, json: hideout.as_json
-    rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed
-      return render status: 400
-    rescue ActiveRecord::RecordNotFound
-      return render status: 404, body: 'Owner Not Found'
+      return render status: :ok, json: hideout.to_json
+    rescue ActionController::ParameterMissing,
+           ActiveModel::StrictValidationFailed,
+           ActiveRecord::RecordNotFound,
+           Exceptions::ModelException => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotUnique
-      return render status: 400, body: 'Owner Already Exists'
+      return render status: :bad_request, json: ResponseHelper.generate_error_response('Owner already exists.')
     end
   end
 
   def leave
     begin
-      id = params[:id]
-      payload = params[:payload]
+      id, payload = params[:id], params[:payload]
       user_id = payload[:id]
 
       hideout = Hideout.find_by(id: id)
-      user = User.find_by(id: user_id)
+      hideout.remove_user_by_id(user_id: user_id)
 
-      user.update(hideout_id: nil, color: nil)
-      Chore.where(assignee_id: user.id).update_all(assignee_id: nil)
-      Expense.where(debtor_id: user.id).update_all(debtor_id: nil)
-      Expense.where(creditor_id: user.id).update_all(creditor_id: nil)
-      return render status: 200
-    rescue ActiveRecord::RecordNotFound
-      return render status: 404
+      return render status: :ok
+    rescue Exceptions::ModelException => error
+      return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
     end
   end
 
   def destroy
     id = params[:id]
-    payload = params[:payload]
-    user_id = payload[:id]
-
-    user = User.find_by(id: user_id)
-    user.update(color: nil)
-
     hideout = Hideout.find_by(id: id)
-    hideout.destroy
-    return render status: 200
+    hideout.destroy_and_reset_users
+    return render status: :no_content
   end
 end

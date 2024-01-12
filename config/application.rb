@@ -1,6 +1,4 @@
 require_relative 'boot'
-require_relative '../lib/middleware/verify_access_token.rb'
-require_relative '../lib/middleware/verify_user_permissions.rb'
 
 require 'rails/all'
 require 'set'
@@ -13,6 +11,14 @@ module HideoutWeb
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+    config.autoload_lib(ignore: [])
+
+    require 'middleware/verify_access_token'
+    require 'middleware/verify_users_permissions'
+    require 'middleware/verify_hideouts_permissions'
+    require 'middleware/verify_chores_permissions'
+    require 'middleware/verify_expenses_permissions'
+    require 'constants'
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -22,15 +28,16 @@ module HideoutWeb
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      env_file = File.join(Rails.root, 'config', Constants::LOCAL_ENV_YAML_FILE)
       YAML.load(File.open(env_file)).each { |key, value| ENV[key.to_s] = value } if File.exist?(env_file)
-      ENV[
-        'PUBLIC_ROUTES'
-      ] = 'GET /api/health, POST /api/users, POST /api/sessions, PUT /api/sessions, DELETE /api/sessions, GET /api/sessions'
+      ENV['API_BASE_URL'] = Constants::LOCALHOST_API_URL if Rails.env == Constants::ENVIRONMENTS[:DEVELOPMENT]
     end
 
     config.middleware.use Middleware::VerifyAccessToken
-    config.middleware.use Middleware::VerifyUserPermissions
+    config.middleware.use Middleware::VerifyUsersPermissions
+    config.middleware.use Middleware::VerifyHideoutsPermissions
+    config.middleware.use Middleware::VerifyChoresPermissions
+    config.middleware.use Middleware::VerifyExpensesPermissions
     config.middleware.use ActionDispatch::Cookies
   end
 end

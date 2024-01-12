@@ -3,13 +3,12 @@ Rails.application.routes.draw do
 
   get '/api/sessions', to: 'sessions#verify'
   post '/api/sessions', to: 'sessions#create'
-  put '/api/sessions', to: 'sessions#update'
+  get '/api/sessions/token', to: 'sessions#refresh'
   delete '/api/sessions', to: 'sessions#destroy'
 
   get '/api/users/:id', to: 'users#show'
   post '/api/users', to: 'users#create'
-  put '/api/users/:id/hideouts', to: 'users#join'
-  delete '/api/users/:id/hideouts', to: 'users#leave'
+  patch '/api/users/:id', to: 'users#update_status'
 
   get '/api/hideouts/:id', to: 'hideouts#show'
   get '/api/hideouts/:id/users', to: 'hideouts#users'
@@ -30,4 +29,6 @@ Rails.application.routes.draw do
   post '/api/expenses', to: 'expenses#create'
   delete '/api/expenses/:id', to: 'expenses#destroy'
   put '/api/expenses/:id', to: 'expenses#update'
+
+  mount ActionCable.server => '/cable'
 end
