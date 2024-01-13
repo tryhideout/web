@@ -18,5 +18,8 @@
 	"devDependencies": {
 		"@prettier/plugin-ruby": "^3.2.2",
 		"prettier": "^2.8.8"
+	},
+	"dependencies": {
+		"firebase": "^10.7.1"
 	}
 }
