@@ -1,4 +1,5 @@
 import { store } from 'redux/store';
+import { AuthProviderIDs } from './constants';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -12,17 +13,18 @@ export interface User {
 }
 
 export interface UsersAPIRequest {
-	email: string | null;
-	password: string | null;
-	first_name: string | null;
-	last_name: string | null;
+	email: string;
+	password?: string;
+	social_token?: string;
+	first_name: string;
+	last_name: string;
 }
 
 export interface UsersAPIResponse {
-	id: string | null;
-	email: string | null;
-	first_name: string | null;
-	last_name: string | null;
+	id: string;
+	email: string;
+	first_name: string;
+	last_name: string;
 	hideout_id: string | null;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
@@ -45,7 +47,6 @@ export interface HideoutsAPIResponse {
 	name: string;
 	owner_id: string;
 	join_code: string;
-	users: UsersAPIResponse[];
 }
 
 export interface Session {
@@ -66,3 +67,5 @@ export interface SessionsAPISocialLoginRequest {
 export interface SessionsAPIResponse {
 	access_token: string;
 }
+
+export type FirebaseProviderID = AuthProviderIDs.GOOGLE | AuthProviderIDs.FACEBOOK | AuthProviderIDs.GITHUB;

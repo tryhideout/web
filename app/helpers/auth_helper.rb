@@ -2,6 +2,7 @@ require 'jwt'
 require 'net/http'
 require 'base64'
 require 'json'
+require 'openssl'
 
 module AuthHelper
   def AuthHelper.generate_token_by_type(type, payload)
@@ -33,7 +34,9 @@ module AuthHelper
       google_public_key_URI = URI('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com')
       response = Net::HTTP.get(google_public_key_URI)
       response_json = JSON.parse(response)
-      JWT.decode(token, response_json[header['kid']], true, { algorithm: 'RS256' })
+      cert = OpenSSL::X509::Certificate.new(response_json[header['kid']])
+      JWT.decode(token, cert.public_key, true, { algorithm: 'RS256' })
+
       return { success: true }
     rescue StandardError
       raise Exceptions::JWTException.new('Invalid social token.')

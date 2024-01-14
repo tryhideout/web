@@ -1,3 +1,5 @@
+import toast from 'utils/helpers/toast';
+
 export const formatAPIPath = (args: (string | number)[]): string => {
 	let formattedURL = '';
 	args.forEach((arg) => {
@@ -6,3 +8,20 @@ export const formatAPIPath = (args: (string | number)[]): string => {
 	});
 	return formattedURL.startsWith('/') ? formattedURL : '/' + formattedURL;
 };
+
+export class CustomError extends Error {
+	title: string;
+	body: string;
+
+	constructor(title: string, body: string) {
+		const errorMessage = title + ' ' + body;
+		super(errorMessage);
+		this.title = title;
+		this.body = body;
+		this.name = 'BaseCustomError';
+	}
+
+	toast() {
+		toast.error(this.title, this.body);
+	}
+}

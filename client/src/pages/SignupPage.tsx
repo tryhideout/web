@@ -2,37 +2,45 @@ import React, { useState } from 'react';
 import { FormControl, Button, Input, Box, Link, Divider, Text, Center, Heading, Image } from '@chakra-ui/react';
 import { IoLogoGoogle, IoLogoFacebook, IoLogoGithub } from 'react-icons/io5';
 
+import { AuthProviderIDs, FormRegex } from 'utils/constants';
+import { CustomError } from 'utils/helpers/common';
+import { FirebaseProviderID, UsersAPIRequest } from 'utils/types';
+import { adaptSocialAuth } from 'utils/helpers/forms';
 import toast from 'utils/helpers/toast';
 import logo from 'assets/images/logo.svg';
+import { useCreateUserMutation } from 'redux/api/users';
+import { adaptSignupForm } from 'utils/helpers/forms';
+import { useNavigate } from 'react-router-dom';
+
+const initialFormState = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+};
 
 const SignupPage = () => {
-	const [inputState, setInputState] = useState({
-		firstName: '',
-		lastName: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-	});
+	const [inputState, setInputState] = useState(initialFormState);
+	const [triggerCreateUser, result] = useCreateUserMutation();
+	const navigate = useNavigate();
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-		const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+	const handleStandardAuth = async () => {
+		try {
+			const requestBody = adaptSignupForm(inputState);
+			await triggerCreateUser(requestBody);
+		} catch (error) {
+			(error as CustomError).toast();
+		}
+	};
 
-		const tests = {
-			email: emailRegex.test(inputState.email),
-			password: passwordRegex.test(inputState.password),
-			passwordsMatch: inputState.password === inputState.confirmPassword,
-		};
-
-		if (tests.email && tests.password && tests.passwordsMatch) {
-			// await signUpWithCredentials(inputState.email, inputState.password, inputState.firstName, inputState.lastName);
-		} else {
-			if (!tests.email) toast.warning('Improper email format.', 'Emails must be in the abc@abc.com format.');
-			if (!tests.password)
-				toast.warning('Insecure password.', 'Use at least 8 letters, 1 number, 1 uppercase and 1 lowercase letter.');
-			if (!tests.passwordsMatch)
-				toast.warning('Passwords do not match.', 'Ensure that the password and confirm password fields match.');
+	const handleSocialAuth = async (providerID: FirebaseProviderID) => {
+		try {
+			const { isNewUser, requestBody } = await adaptSocialAuth(providerID);
+			await triggerCreateUser(requestBody);
+			navigate('/app/expenses');
+		} catch (error) {
+			(error as CustomError).toast();
 		}
 	};
 
@@ -54,7 +62,7 @@ const SignupPage = () => {
 					Hey there! To sign up for Hideout, enter your details below or click on one of our social providers.
 				</Box>
 				<Box display='flex' flexDirection='column' alignItems='center'>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleStandardAuth}>
 						<FormControl isInvalid={true}>
 							<Box display='flex' mt='20px' alignItems='center' gap='15px'>
 								<Input
@@ -102,13 +110,28 @@ const SignupPage = () => {
 					<Divider mt='24px' w='90%' borderWidth='1.5px' borderStyle='solid' borderRadius='5' />
 				</Box>
 				<Box display='flex' gap='22px' mt='20px'>
-					<Button size='plg' background='red.500' leftIcon={<IoLogoGoogle color='white' />}>
+					<Button
+						size='plg'
+						background='red.500'
+						leftIcon={<IoLogoGoogle color='white' />}
+						onClick={() => handleSocialAuth(AuthProviderIDs.GOOGLE)}
+					>
 						Google
 					</Button>
-					<Button size='plg' background='blue.500' leftIcon={<IoLogoFacebook color='white' />}>
+					<Button
+						size='plg'
+						background='blue.500'
+						leftIcon={<IoLogoFacebook color='white' />}
+						onClick={() => handleSocialAuth(AuthProviderIDs.FACEBOOK)}
+					>
 						Facebook
 					</Button>
-					<Button size='plg' background='black' leftIcon={<IoLogoGithub />}>
+					<Button
+						size='plg'
+						background='black'
+						leftIcon={<IoLogoGithub />}
+						onClick={() => handleSocialAuth(AuthProviderIDs.GITHUB)}
+					>
 						Github
 					</Button>
 				</Box>

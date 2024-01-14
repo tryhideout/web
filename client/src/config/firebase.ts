@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 interface FirebaseConfig {
 	apiKey: string;
@@ -7,12 +8,12 @@ interface FirebaseConfig {
 	appId: string;
 }
 
-const firebaseConfig = {
-	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-	appId: process.env.REACT_APP_FIREBASE_APP_ID,
+const firebaseConfig: FirebaseConfig = {
+	apiKey: process.env.REACT_APP_FIREBASE_API_KEY!,
+	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN!,
+	projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID!,
+	appId: process.env.REACT_APP_FIREBASE_APP_ID!,
 };
 
-const app = initializeApp(firebaseConfig);
-export default app;
+const firebaseApp = initializeApp(firebaseConfig);
+getAuth(firebaseApp);
