@@ -11,7 +11,7 @@ import {
 	OnboardingInvitePage,
 	OnboardingJoinPage,
 } from 'pages';
-import { SideBar, TopBar, Gateway, Protected } from 'components';
+import { SideBar, TopBar, Gateway, Protected } from 'containers';
 import theme from 'config/theme';
 
 const InteriorLayout = () => (

@@ -67,6 +67,10 @@ export const FormRegex = {
 	PASSWORD: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
 };
 
-export enum FirebaseAuthErrorCodes {
-	EXISTING_SOCIAL_CREDENTIAL = 'auth/account-exists-with-different-credential',
+export enum CLIENT_ROUTES {
+	EXPENSES = '/app/expenses',
+	CHORES = '/app/chores',
+	EXTERNAL = '/',
+	LOGIN = '/auth/login',
+	SIGNUP = '/auth/signup',
 }

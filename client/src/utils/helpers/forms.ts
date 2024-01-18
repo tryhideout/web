@@ -9,31 +9,22 @@ import {
 } from 'firebase/auth';
 
 import { FirebaseProviderID } from 'utils/types';
-import { AuthProviderIDs, FirebaseAuthErrorCodes, ProviderScopes } from 'utils/constants';
+import { AuthProviderIDs, ProviderScopes } from 'utils/constants';
 import { FirebaseError } from 'firebase/app';
 
 import { FormRegex } from 'utils/constants';
-import { CustomError } from 'utils/helpers/common';
+import { CustomError } from 'utils/exceptions';
 
 interface SignupFormData {
 	firstName: string;
 	lastName: string;
 	email: string;
 	password: string;
-	confirmPassword: string;
 }
 
 export const adaptSignupForm = (inputState: SignupFormData) => {
-	const validations =
-		FormRegex.EMAIL.test(inputState.email) &&
-		FormRegex.PASSWORD.test(inputState.password) &&
-		inputState.password === inputState.confirmPassword;
-
-	if (!validations)
-		throw new CustomError(
-			'Invalid data.',
-			'Invalid email, insecure password or unmatching confirm field. Please try again.',
-		);
+	if (!(FormRegex.EMAIL.test(inputState.email) && FormRegex.PASSWORD.test(inputState.password)))
+		throw new CustomError('Invalid email, insecure password or unmatching confirm field.');
 
 	return {
 		email: inputState.email,
@@ -79,6 +70,6 @@ export const adaptSocialAuth = async (providerID: FirebaseProviderID) => {
 
 		return { isNewUser: additionalInfo?.isNewUser, requestBody };
 	} catch (error) {
-		throw new CustomError('An unknown error occured.', (error as FirebaseError).code);
+		throw new CustomError((error as FirebaseError).code);
 	}
 };

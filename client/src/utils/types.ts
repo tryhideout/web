@@ -30,6 +30,13 @@ export interface UsersAPIResponse {
 	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
 }
 
+export interface APIResponseError {
+	data: {
+		error: string;
+	};
+	status: number;
+}
+
 export interface Hideout {
 	id: string | null;
 	name: string | null;
@@ -61,7 +68,7 @@ export interface SessionsAPIEmailLoginRequest {
 
 export interface SessionsAPISocialLoginRequest {
 	email: string;
-	password: string;
+	social_token: string;
 }
 
 export interface SessionsAPIResponse {

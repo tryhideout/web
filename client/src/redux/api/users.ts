@@ -16,3 +16,4 @@ const extendedAPI = coreAPI.injectEndpoints({
 });
 
 export const { useGetUserQuery, useCreateUserMutation } = extendedAPI;
+export default extendedAPI;

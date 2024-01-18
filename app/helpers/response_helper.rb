@@ -1,6 +1,6 @@
 module ResponseHelper
   def ResponseHelper.generate_error_response(message)
-    error_response = { error: message }
+    error_response = { error: message.end_with?('.') ? message : message + '.' }
     return error_response.to_json
   end
 

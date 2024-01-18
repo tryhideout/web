@@ -1,6 +1,6 @@
 import { Box, Image, Text } from '@chakra-ui/react';
 
-import { SideBarTile } from 'components';
+import { SideBarTile } from 'containers';
 import logo from 'assets/images/logo.svg';
 import userImage from 'assets/images/user-image.svg';
 
