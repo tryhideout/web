@@ -6,8 +6,8 @@ import { IoLogoFacebook, IoLogoGithub, IoLogoGoogle } from 'react-icons/io5';
 import { useCreateSessionMutation } from 'redux/api/sessions';
 import { useCreateUserMutation } from 'redux/api/users';
 import { AuthProviderIDs, CLIENT_ROUTES } from 'utils/constants';
-import { catchify } from 'utils/exceptions';
-import { adaptSignupForm, adaptSocialAuth } from 'utils/helpers/forms';
+import { errorBoundary, toastifyError } from 'utils/exceptions';
+import { adaptSignupForm, adaptSocialAuth, deleteUserByEntity } from 'utils/helpers/forms';
 import { FirebaseProviderID } from 'utils/types';
 
 const initialFormState = {
@@ -19,26 +19,36 @@ const initialFormState = {
 
 const SignupForm = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [providerLoading, setProviderLoading] = useState<null | string>(null);
 	const [formState, setFormState] = useState(initialFormState);
 	const [triggerCreateUser, userResult] = useCreateUserMutation();
 	const [triggerCreateSession, sessionResult] = useCreateSessionMutation();
 	const navigate = useNavigate();
 
+	// TODO: change these function so that they call firebase in services file and form adaption separately
 	const handleStandardAuth = async () => {
 		const requestBody = adaptSignupForm(formState);
 		await triggerCreateUser(requestBody).unwrap();
 
 		const sessionRequestBody = { email: requestBody.email, password: requestBody.password };
 		await triggerCreateSession(sessionRequestBody);
+		navigate(CLIENT_ROUTES.EXPENSES);
 	};
 
 	const handleSocialAuth = async (providerID: FirebaseProviderID) => {
-		const { isNewUser, requestBody } = await adaptSocialAuth(providerID);
-		if (isNewUser) await triggerCreateUser(requestBody).unwrap();
+		setProviderLoading(providerID);
+		const { currentUser, isNewUser, requestBody } = await adaptSocialAuth(providerID);
 
-		const sessionRequestBody = { email: requestBody.email, social_token: requestBody.social_token };
-		await triggerCreateSession(sessionRequestBody);
-		await navigate(CLIENT_ROUTES.EXPENSES);
+		try {
+			if (isNewUser) await triggerCreateUser(requestBody).unwrap();
+
+			const sessionRequestBody = { email: requestBody.email, social_token: requestBody.social_token };
+			await triggerCreateSession(sessionRequestBody);
+			navigate(CLIENT_ROUTES.EXPENSES);
+		} catch (error) {
+			await errorBoundary(deleteUserByEntity, currentUser);
+			toastifyError(error);
+		}
 	};
 
 	return (
@@ -84,11 +94,11 @@ const SignupForm = () => {
 					</Box>
 					<Button
 						isLoading={userResult.isLoading || sessionResult.isLoading}
-						isDisabled={userResult.isLoading || sessionResult.isLoading}
+						isDisabled={userResult.isLoading || sessionResult.isLoading || providerLoading !== null}
 						mt='24px'
 						width='100%'
 						type='button'
-						onClick={() => catchify(handleStandardAuth)}
+						onClick={() => errorBoundary(handleStandardAuth)}
 					>
 						Sign Up
 					</Button>
@@ -100,15 +110,19 @@ const SignupForm = () => {
 					size='plg'
 					background='red.500'
 					leftIcon={<IoLogoGoogle color='white' />}
-					onClick={() => handleSocialAuth(AuthProviderIDs.GOOGLE)}
+					isDisabled={providerLoading !== null}
+					isLoading={providerLoading === AuthProviderIDs.GOOGLE}
+					onClick={() => errorBoundary(handleSocialAuth, AuthProviderIDs.GOOGLE)}
 				>
 					Google
 				</Button>
 				<Button
 					size='plg'
 					background='blue.500'
+					isDisabled={providerLoading !== null || userResult.isLoading || sessionResult.isLoading}
+					isLoading={providerLoading === AuthProviderIDs.FACEBOOK}
 					leftIcon={<IoLogoFacebook color='white' />}
-					onClick={() => handleSocialAuth(AuthProviderIDs.FACEBOOK)}
+					onClick={() => errorBoundary(handleSocialAuth, AuthProviderIDs.FACEBOOK)}
 				>
 					Facebook
 				</Button>
@@ -116,7 +130,9 @@ const SignupForm = () => {
 					size='plg'
 					background='black'
 					leftIcon={<IoLogoGithub />}
-					onClick={() => handleSocialAuth(AuthProviderIDs.GITHUB)}
+					isDisabled={providerLoading !== null}
+					isLoading={providerLoading === AuthProviderIDs.GITHUB}
+					onClick={() => errorBoundary(handleSocialAuth, AuthProviderIDs.GITHUB)}
 				>
 					Github
 				</Button>

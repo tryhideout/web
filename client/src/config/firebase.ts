@@ -1,5 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 
 interface FirebaseConfig {
 	apiKey: string;
@@ -15,5 +14,4 @@ const firebaseConfig: FirebaseConfig = {
 	appId: process.env.REACT_APP_FIREBASE_APP_ID!,
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-getAuth(firebaseApp);
+initializeApp(firebaseConfig);

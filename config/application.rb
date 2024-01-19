@@ -38,6 +38,5 @@ module HideoutWeb
     config.middleware.use Middleware::VerifyHideoutsPermissions
     config.middleware.use Middleware::VerifyChoresPermissions
     config.middleware.use Middleware::VerifyExpensesPermissions
-    config.middleware.use ActionDispatch::Cookies
   end
 end

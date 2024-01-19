@@ -3,6 +3,7 @@ require 'net/http'
 require 'base64'
 require 'json'
 require 'openssl'
+require 'constants'
 
 module AuthHelper
   def AuthHelper.generate_token_by_type(type, payload)
@@ -50,6 +51,7 @@ module AuthHelper
       secure: true,
       httponly: true,
       same_site: Rails.env == 'development' ? :None : :Strict,
+      path: Constants::API_PATHS[:SESSIONS_TOKEN],
     }
     return cookie
   end

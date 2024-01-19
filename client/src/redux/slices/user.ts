@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import usersAPI from 'redux/api/users';
 import { ReduxSliceNames } from 'utils/constants';
 import type { RootState, User, UsersAPIResponse } from 'utils/types';
@@ -11,7 +12,7 @@ const INITIAL_STATE: User = {
 	color: null,
 };
 
-const loadUserAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
+const loadUsersAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
 	return {
 		...state,
 		id: action.payload.id,
@@ -26,12 +27,12 @@ const userSlice = createSlice({
 	name: ReduxSliceNames.USER,
 	initialState: INITIAL_STATE,
 	reducers: {
-		loadUser: loadUserAPIResponse,
-		createUser: loadUserAPIResponse,
+		loadUser: loadUsersAPIResponse,
+		createUser: loadUsersAPIResponse,
 	},
 	extraReducers: (builder) => {
-		builder.addMatcher(usersAPI.endpoints.getUser.matchFulfilled, loadUserAPIResponse);
-		builder.addMatcher(usersAPI.endpoints.createUser.matchFulfilled, loadUserAPIResponse);
+		builder.addMatcher(usersAPI.endpoints.getUser.matchFulfilled, loadUsersAPIResponse);
+		builder.addMatcher(usersAPI.endpoints.createUser.matchFulfilled, loadUsersAPIResponse);
 	},
 });
 

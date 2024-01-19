@@ -16,16 +16,19 @@ export class CustomError extends Error {
 	}
 }
 
-export const catchify = async (func: Function, ...args: any[]) => {
+export const toastifyError = (error: Error | APIResponseError) => {
+	if (error instanceof CustomError) {
+		error.toast();
+	} else {
+		const rtkQueryError = new CustomError((error as APIResponseError).data.error);
+		rtkQueryError.toast();
+	}
+};
+
+export const errorBoundary = async (func: Function, ...args: any[]) => {
 	try {
 		await func(...args);
 	} catch (error) {
-		console.log(error);
-		if (error instanceof CustomError) {
-			error.toast();
-		} else {
-			const rtkQueryError = new CustomError((error as APIResponseError).data.error);
-			rtkQueryError.toast();
-		}
+		toastifyError(error);
 	}
 };

@@ -30,3 +30,4 @@ const extendedAPI = coreAPI.injectEndpoints({
 
 export const { useVerifySessionQuery, useCreateSessionMutation, useRefreshSessionQuery, useEndSessionMutation } =
 	extendedAPI;
+export default extendedAPI;

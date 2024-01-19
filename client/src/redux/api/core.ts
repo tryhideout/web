@@ -4,6 +4,7 @@ import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery 
 import { endSession, refreshSession } from 'redux/slices/session';
 import { APIPaths, HTTPStatusCodes, ReduxTagTypes } from 'utils/constants';
 import { RootState } from 'utils/types';
+
 type baseQueryReturnType = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
 
 const baseQuery = fetchBaseQuery({
@@ -13,6 +14,7 @@ const baseQuery = fetchBaseQuery({
 		if (token) headers.set('Authorization', `Bearer ${token}`);
 		return headers;
 	},
+	credentials: 'include',
 });
 
 const baseQueryWithReAuth: baseQueryReturnType = async (args, api, extraOptions) => {
@@ -36,12 +38,6 @@ const baseQueryWithReAuth: baseQueryReturnType = async (args, api, extraOptions)
 
 export const coreAPI = createApi({
 	baseQuery: baseQueryWithReAuth,
-	tagTypes: [
-		ReduxTagTypes.SESSION,
-		ReduxTagTypes.USER,
-		ReduxTagTypes.HIDEOUT,
-		ReduxTagTypes.EXPENSES,
-		ReduxTagTypes.CHORES,
-	],
+	tagTypes: [ReduxTagTypes.SESSION, ReduxTagTypes.USER, ReduxTagTypes.HIDEOUT, ReduxTagTypes.EXPENSES, ReduxTagTypes.CHORES],
 	endpoints: () => ({}),
 });

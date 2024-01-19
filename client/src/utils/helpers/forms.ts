@@ -6,6 +6,8 @@ import {
 	GithubAuthProvider,
 	AuthProvider,
 	getAdditionalUserInfo,
+	User,
+	deleteUser,
 } from 'firebase/auth';
 
 import { FirebaseProviderID } from 'utils/types';
@@ -51,6 +53,9 @@ const generateFirebaseProvider = (providerID: FirebaseProviderID): AuthProvider 
 	return provider;
 };
 
+/* TODO: change this file into only basic form adapting functions, create a separate services file
+for all firebase related stuff */
+
 export const adaptSocialAuth = async (providerID: FirebaseProviderID) => {
 	const auth = getAuth();
 	const provider = generateFirebaseProvider(providerID);
@@ -68,8 +73,12 @@ export const adaptSocialAuth = async (providerID: FirebaseProviderID) => {
 			social_token: socialToken,
 		};
 
-		return { isNewUser: additionalInfo?.isNewUser, requestBody };
+		return { currentUser, isNewUser: additionalInfo?.isNewUser, requestBody };
 	} catch (error) {
 		throw new CustomError((error as FirebaseError).code);
 	}
+};
+
+export const deleteUserByEntity = async (user: User) => {
+	await deleteUser(user);
 };
