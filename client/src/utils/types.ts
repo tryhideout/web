@@ -1,5 +1,5 @@
 import { store } from 'redux/store';
-import { AuthProviderIDs } from './constants';
+import { AuthProviderIDs } from 'utils/constants';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -76,3 +76,10 @@ export interface SessionsAPIResponse {
 }
 
 export type FirebaseProviderID = AuthProviderIDs.GOOGLE | AuthProviderIDs.FACEBOOK | AuthProviderIDs.GITHUB;
+
+export interface SignupFormState {
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+}

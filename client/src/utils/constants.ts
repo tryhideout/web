@@ -62,15 +62,27 @@ export const ProviderScopes = {
 	GITHUB: GithubProviderScopes,
 };
 
-export const FormRegex = {
-	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-	PASSWORD: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-};
-
-export enum CLIENT_ROUTES {
+export enum ClientRoutes {
 	EXPENSES = '/app/expenses',
 	CHORES = '/app/chores',
 	EXTERNAL = '/',
 	LOGIN = '/auth/login',
 	SIGNUP = '/auth/signup',
+	ONBOARDING_CREATE = '/onboarding/create',
+	ONBOARDING_JOIN = '/onboarding/join',
+}
+
+export const ToastDefaultOptions = {
+	duration: 9000,
+	variant: 'left-accent',
+	isClosable: true,
+	position: 'top-right',
+};
+
+export enum ToastDefaultTitles {
+	INFO = 'A quick note.',
+	LOADING = 'Action pending...',
+	WARNING = 'Caution.',
+	ERROR = 'An error occurred.',
+	SUCCESS = 'Success!',
 }
