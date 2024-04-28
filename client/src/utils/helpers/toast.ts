@@ -1,6 +1,6 @@
 import { CreateToastFnReturn } from '@chakra-ui/react';
-import { ToastDefaultTitles } from 'utils/constants';
-import { UsersAPIResponse } from 'utils/types';
+import { ToastDefaultTitles } from '@/utils/constants';
+import { UsersAPIResponse } from '@/utils/types';
 
 class Toast {
 	static showCreateUserPromiseToast = (

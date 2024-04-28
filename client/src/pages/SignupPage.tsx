@@ -1,7 +1,7 @@
 import { Box, Link, Text, Center, Heading, Image } from '@chakra-ui/react';
 
-import { SignupForm } from 'containers';
-import logo from 'assets/images/logo.svg';
+import { SignupForm } from '@/containers';
+import logo from '@/assets/images/logo.svg';
 
 const SignupPage = () => {
 	return (

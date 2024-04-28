@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { LandingHeader, LandingContent } from 'containers';
+import { LandingHeader, LandingContent } from '@/containers';
 
 const LandingPage = () => {
 	return (

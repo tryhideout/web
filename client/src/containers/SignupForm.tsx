@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Divider, FormControl, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import { IoLogoFacebook, IoLogoGithub, IoLogoGoogle } from 'react-icons/io5';
 
-import { useCreateSessionMutation } from 'redux/api/sessions';
-import { useCreateUserMutation } from 'redux/api/users';
-import { AuthProviderIDs, ClientRoutes } from 'utils/constants';
-import { catchify } from 'utils/helpers/common';
-import { FirebaseAuthFlow } from 'utils/services';
-import { generateEmptyStringObject } from 'utils/helpers/common';
-import { FirebaseProviderID, SignupFormState } from 'utils/types';
-import adapters from 'utils/helpers/adapters';
-import Toast from 'utils/helpers/toast';
+import { useCreateSessionMutation } from '@/redux/api/sessions';
+import { useCreateUserMutation } from '@/redux/api/users';
+import { AuthProviderIDs, ClientRoutes } from '@/utils/constants';
+import { catchify } from '@/utils/helpers/common';
+import { FirebaseAuthFlow } from '@/utils/services';
+import { generateEmptyStringObject } from '@/utils/helpers/common';
+import { FirebaseProviderID, SignupFormState } from '@/utils/types';
+import adapters from '@/utils/helpers/adapters';
+import Toast from '@/utils/helpers/toast';
 
 const initialFormState = generateEmptyStringObject(['email', 'password', 'firstName', 'lastName']) as SignupFormState;
 
@@ -36,7 +36,7 @@ const SignupForm = () => {
 
 		const createSessionRequestBody = adapters.standardAuthCreateSessionRequest(formState);
 		await triggerCreateSession(createSessionRequestBody);
-		navigate(ClientRoutes.ONBOARDING_CREATE);
+		navigate(ClientRoutes.EXPENSES);
 	};
 
 	/**
@@ -58,7 +58,7 @@ const SignupForm = () => {
 
 		const sessionRequestBody = adapters.socialAuthCreateSessionRequest(currentUser, socialToken);
 		await triggerCreateSession(sessionRequestBody);
-		navigate(ClientRoutes.ONBOARDING_CREATE);
+		navigate(ClientRoutes.EXPENSES);
 	};
 
 	return (
@@ -67,6 +67,7 @@ const SignupForm = () => {
 				<FormControl isInvalid={true}>
 					<Box display='flex' mt='20px' alignItems='center' gap='15px'>
 						<Input
+							id='first_name'
 							placeholder='First name'
 							value={formState.firstName}
 							onChange={(e) => setFormState({ ...formState, firstName: e.target.value })}
@@ -80,6 +81,7 @@ const SignupForm = () => {
 						/>
 					</Box>
 					<Input
+						id='email'
 						placeholder='Email address'
 						mt='1rem'
 						type='email'
@@ -90,6 +92,7 @@ const SignupForm = () => {
 					<Box display='flex' mt='17px' alignItems='center' gap='15px'>
 						<InputGroup>
 							<Input
+								id='password'
 								placeholder='Password'
 								type={showPassword ? 'text' : 'password'}
 								onChange={(e) => setFormState({ ...formState, password: e.target.value })}

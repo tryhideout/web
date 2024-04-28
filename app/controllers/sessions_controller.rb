@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
       refresh_token = AuthHelper.generate_token_by_type(:REFRESH, user.hashify)
       access_token = AuthHelper.generate_token_by_type(:ACCESS, user.hashify)
       cookies[:refresh_token] = AuthHelper.generate_cookie_hash(refresh_token)
-      response = { access_token: access_token }
+      response = { user_id: user.id, access_token: access_token }
 
       return render status: 201, json: response.to_json
     rescue ActionController::ParameterMissing => error
@@ -57,7 +57,7 @@ class SessionsController < ApplicationController
       user = User.find_by!(id: user_id)
 
       access_token = AuthHelper.generate_token_by_type(:ACCESS, user.hashify)
-      response = { access_token: access_token }
+      response = { user_id: user.id, access_token: access_token }
 
       return render status: :ok, json: response.to_json
     rescue Exceptions::JWTException => error

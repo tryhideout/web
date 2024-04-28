@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
-import { CustomError } from 'utils/exceptions';
-import { SignupFormState } from 'utils/types';
+import { CustomError } from '@/utils/exceptions';
+import { SignupFormState } from '@/utils/types';
 
 const FormRegex = {
 	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,

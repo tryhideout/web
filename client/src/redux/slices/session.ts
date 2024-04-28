@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReduxSliceNames } from 'utils/constants';
-import type { Session, SessionsAPIResponse } from 'utils/types';
+import { ReduxSliceNames } from '@/utils/constants';
+import type { Session, SessionsAPIResponse } from '@/utils/types';
 
 const INITIAL_STATE: Session = {
 	isLoggedIn: null,
 	accessToken: null,
+	userID: null,
 };
 
 const loadSessionAPIResponse = (_state: Session, action: PayloadAction<SessionsAPIResponse>): Session => {
-	return { isLoggedIn: true, accessToken: action.payload.access_token };
+	return { isLoggedIn: true, accessToken: action.payload.access_token, userID: action.payload.user_id };
 };
 
 const sessionSlice = createSlice({

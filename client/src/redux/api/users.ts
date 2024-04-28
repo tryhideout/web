@@ -1,11 +1,11 @@
-import { coreAPI } from 'redux/api/core';
-import { APIPaths, HTTPRequestMethods, ReduxTagTypes } from 'utils/constants';
-import { formatAPIPath } from 'utils/helpers/common';
-import { UsersAPIResponse, UsersAPIRequest } from 'utils/types';
+import { coreAPI } from '@/redux/api/core';
+import { APIPaths, HTTPRequestMethods, ReduxTagTypes } from '@/utils/constants';
+import { formatAPIPath } from '@/utils/helpers/common';
+import { UsersAPIResponse, UsersAPIRequest } from '@/utils/types';
 
 const extendedAPI = coreAPI.injectEndpoints({
 	endpoints: (builder) => ({
-		getUser: builder.query<UsersAPIResponse, string>({
+		getUser: builder.query<UsersAPIResponse, number>({
 			query: (userID) => ({ url: formatAPIPath([APIPaths.USERS_PATH, userID]) }),
 			providesTags: [ReduxTagTypes.USER],
 		}),

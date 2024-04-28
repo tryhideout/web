@@ -1,6 +1,6 @@
 import { Box, Button, Link, Image } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import LogoImage from 'assets/images/logo.svg';
+import LogoImage from '@/assets/images/logo.svg';
 
 const LandingHeader = () => {
 	return (

@@ -10,10 +10,10 @@ import {
 	deleteUser,
 } from 'firebase/auth';
 
-import { FirebaseProviderID } from 'utils/types';
-import { AuthProviderIDs, ProviderScopes } from 'utils/constants';
+import { FirebaseProviderID } from '@/utils/types';
+import { AuthProviderIDs, ProviderScopes } from '@/utils/constants';
 import { FirebaseError } from 'firebase/app';
-import { CustomError } from 'utils/exceptions';
+import { CustomError } from '@/utils/exceptions';
 
 class FirebaseAuthFlow {
 	providerID: FirebaseProviderID;

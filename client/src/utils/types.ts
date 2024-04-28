@@ -1,15 +1,17 @@
-import { store } from 'redux/store';
-import { AuthProviderIDs } from 'utils/constants';
+import { store } from '@/redux/store';
+import { AuthProviderIDs } from '@/utils/constants';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export interface User {
-	id: string | null;
+	id: number | null;
 	email: string | null;
 	firstName: string | null;
 	lastName: string | null;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
+	hideoutID: number | null;
+	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
 }
 
 export interface UsersAPIRequest {
@@ -21,11 +23,11 @@ export interface UsersAPIRequest {
 }
 
 export interface UsersAPIResponse {
-	id: string;
+	id: number;
 	email: string;
 	first_name: string;
 	last_name: string;
-	hideout_id: string | null;
+	hideout_id: number | null;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
 }
@@ -38,9 +40,9 @@ export interface APIResponseError {
 }
 
 export interface Hideout {
-	id: string | null;
+	id: number | null;
 	name: string | null;
-	ownerID: string | null;
+	ownerID: number | null;
 	joinCode: string | null;
 }
 
@@ -50,15 +52,16 @@ export interface HideoutsAPIRequest {
 }
 
 export interface HideoutsAPIResponse {
-	id: string;
+	id: number;
 	name: string;
-	owner_id: string;
+	owner_id: number;
 	join_code: string;
 }
 
 export interface Session {
 	isLoggedIn: boolean | null;
 	accessToken: string | null;
+	userID: number | null;
 }
 
 export interface SessionsAPIEmailLoginRequest {
@@ -72,6 +75,7 @@ export interface SessionsAPISocialLoginRequest {
 }
 
 export interface SessionsAPIResponse {
+	user_id: number;
 	access_token: string;
 }
 

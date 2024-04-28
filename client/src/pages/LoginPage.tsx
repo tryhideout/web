@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Box, Link, Divider, Text, Center, Heading, Image, FormControl, Input } from '@chakra-ui/react';
 import { IoLogoGoogle, IoLogoFacebook, IoLogoGithub } from 'react-icons/io5';
 
-import logo from 'assets/images/logo.svg';
+import logo from '@/assets/images/logo.svg';
 
 const LoginPage = () => {
 	const [inputState, setInputState] = useState({ email: '', password: '' });

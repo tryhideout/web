@@ -1,6 +1,6 @@
 import { UseToastOptions, createStandaloneToast } from '@chakra-ui/react';
-import theme from 'config/theme';
-import { ToastDefaultOptions } from 'utils/constants';
+import theme from '@/config/theme';
+import { ToastDefaultOptions } from '@/utils/constants';
 
 const { toast } = createStandaloneToast({ theme, defaultOptions: ToastDefaultOptions as UseToastOptions });
 

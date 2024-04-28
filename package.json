@@ -8,7 +8,7 @@
 		"test": "test"
 	},
 	"scripts": {
-		"client": "cd client && npm start",
+		"client": "cd client && npm run dev",
 		"server": "rails server",
 		"build": "cd client && npm run build",
 		"console": "rails console"
@@ -18,8 +18,5 @@
 	"devDependencies": {
 		"@prettier/plugin-ruby": "^3.2.2",
 		"prettier": "^2.8.8"
-	},
-	"dependencies": {
-		"firebase": "^10.7.1"
 	}
 }

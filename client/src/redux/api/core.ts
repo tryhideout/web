@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { endSession, refreshSession } from 'redux/slices/session';
-import { APIPaths, HTTPStatusCodes, ReduxTagTypes } from 'utils/constants';
-import { RootState } from 'utils/types';
+import { endSession, refreshSession } from '@/redux/slices/session';
+import { APIPaths, HTTPStatusCodes, ReduxTagTypes } from '@/utils/constants';
+import { RootState } from '@/utils/types';
 
 type baseQueryReturnType = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: process.env.REACT_APP_SERVER_URL + APIPaths.BASE_PATH,
+	baseUrl: import.meta.env.VITE_SERVER_URL + APIPaths.BASE_PATH,
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).session.accessToken;
 		if (token) headers.set('Authorization', `Bearer ${token}`);
@@ -22,7 +22,7 @@ const baseQueryWithReAuth: baseQueryReturnType = async (args, api, extraOptions)
 	if (result.error && result.error.status === HTTPStatusCodes.UNAUTHORIZED) {
 		try {
 			const refreshTokenResult = await axios.get(
-				process.env.REACT_APP_SERVER_URL + APIPaths.SESSIONS_PATH + APIPaths.TOKEN_PATH,
+				import.meta.env.VITE_SERVER_URL + APIPaths.SESSIONS_PATH + APIPaths.TOKEN_PATH,
 				{
 					withCredentials: true,
 				},

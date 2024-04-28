@@ -8,7 +8,6 @@ module Middleware
     def call(env)
       request = ActionDispatch::Request.new(env)
       request_identifier, _, payload = MiddlewareHelper.retrieve_request_details(request)
-      puts request.origin
 
       if not Constants::PUBLIC_ROUTES.include?(request_identifier)
         authoriation_header = request.headers[:Authorization]

@@ -10,10 +10,10 @@ import {
 	OnboardingCreatePage,
 	OnboardingInvitePage,
 	OnboardingJoinPage,
-} from 'pages';
-import { SideBar, TopBar, Gateway, Protected } from 'containers';
-import theme from 'config/theme';
-import { ToastDefaultOptions } from 'utils/constants';
+} from '@/pages';
+import { SideBar, TopBar, Gateway, Protected } from '@/containers';
+import theme from '@/config/theme';
+import { ToastDefaultOptions } from '@/utils/constants';
 
 const InteriorLayout = () => (
 	<Box display='flex' flexDirection='row'>
@@ -64,7 +64,7 @@ const App = () => {
 						}
 					/>
 					<Route
-						path='/invite'
+						path='/onboarding/invite'
 						element={
 							<Protected>
 								<OnboardingInvitePage />

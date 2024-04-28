@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Box, Image, Text } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
-import treeIcon from 'assets/images/tree-icon.svg';
-import userImage from 'assets/images/user-image.svg';
+import treeIcon from '@/assets/images/tree-icon.svg';
+import userImage from '@/assets/images/user-image.svg';
 
 const TopBar = () => {
 	const pathnameArray = useLocation().pathname.split('/');

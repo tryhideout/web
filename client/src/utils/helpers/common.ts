@@ -1,5 +1,5 @@
-import { CustomError } from 'utils/exceptions';
-import { APIResponseError } from 'utils/types';
+import { CustomError } from '@/utils/exceptions';
+import { APIResponseError } from '@/utils/types';
 
 export const formatAPIPath = (args: (string | number)[]): string => {
 	let formattedURL = '';
@@ -14,10 +14,12 @@ export const generateEmptyStringObject = (keys: string[]) => {
 	return keys.reduce((o, key) => ({ ...o, [key]: '' }), {});
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
 export const catchify = async (func: Function, ...args: any[]) => {
 	try {
 		await func(...args);
 	} catch (error) {
+		console.log(error);
 		if (error instanceof CustomError) {
 			error.toast();
 		} else {
