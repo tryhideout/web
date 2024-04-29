@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Input, Box, Link, Divider, Text, Heading, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import single from 'assets/images/singleline.svg';
+import single from '@/assets/images/singleline.svg';
 
 const OnboardingJoinPage = () => {
 	const [joinCode, setJoinCode] = useState('');

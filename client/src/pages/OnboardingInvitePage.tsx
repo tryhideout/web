@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Box, Heading, Text, Image, Input, Button } from '@chakra-ui/react';
 
-import double from 'assets/images/doubleline.svg';
-import toast from 'utils/helpers/toast';
+import double from '@/assets/images/doubleline.svg';
+import toast from '@/utils/helpers/toast';
 
 const OnboardingInvitePage = () => {
 	useEffect(() => {
@@ -14,6 +14,7 @@ const OnboardingInvitePage = () => {
 
 	return (
 		<Box display='flex' alignItems='center' justifyContent='center' height='100vh' width='100vw'>
+			invite
 			{/* <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' maxWidth='550px'>
 				<Box flex='0.2'>
 					<Image src={double} alt='Single' />

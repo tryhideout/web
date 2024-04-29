@@ -34,3 +34,55 @@ export enum APIPaths {
 export enum HTTPStatusCodes {
 	UNAUTHORIZED = 401,
 }
+
+export enum AuthProviderIDs {
+	GOOGLE = 'GOOGLE',
+	FACEBOOK = 'FACEBOOK',
+	GITHUB = 'GITHUB',
+}
+
+enum GoogleProviderScopes {
+	EMAIL = 'https://www.googleapis.com/auth/userinfo.email',
+	PROFILE = 'https://www.googleapis.com/auth/userinfo.profile',
+}
+
+enum FacebookProviderScopes {
+	EMAIL = 'email',
+	PROFILE = 'public_profile',
+}
+
+enum GithubProviderScopes {
+	EMAIL = 'user:email',
+	PROFILE = 'read:user',
+}
+
+export const ProviderScopes = {
+	GOOGLE: GoogleProviderScopes,
+	FACEBOOK: FacebookProviderScopes,
+	GITHUB: GithubProviderScopes,
+};
+
+export enum ClientRoutes {
+	EXPENSES = '/app/expenses',
+	CHORES = '/app/chores',
+	EXTERNAL = '/',
+	LOGIN = '/auth/login',
+	SIGNUP = '/auth/signup',
+	ONBOARDING_CREATE = '/onboarding/create',
+	ONBOARDING_JOIN = '/onboarding/join',
+}
+
+export const ToastDefaultOptions = {
+	duration: 9000,
+	variant: 'left-accent',
+	isClosable: true,
+	position: 'top-right',
+};
+
+export enum ToastDefaultTitles {
+	INFO = 'A quick note.',
+	LOADING = 'Action pending...',
+	WARNING = 'Caution.',
+	ERROR = 'An error occurred.',
+	SUCCESS = 'Success!',
+}

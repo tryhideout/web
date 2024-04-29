@@ -1,14 +1,14 @@
 import { Box, Image, Text } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 
-import expensesIcon from 'assets/images/expenses-icon.svg';
-import choreIcon from 'assets/images/chores-icon.svg';
-import settingsIcon from 'assets/images/settings-icon.svg';
-import feedbackIcon from 'assets/images/feedback-icon.svg';
-import expensesIconSelected from 'assets/images/expenses-icon-selected.svg';
-import choreIconSelected from 'assets/images/chores-icon-selected.svg';
-import settingsIconSelected from 'assets/images/settings-icon-selected.svg';
-import feedbackIconSelected from 'assets/images/feedback-icon-selected.svg';
+import expensesIcon from '@/assets/images/expenses-icon.svg';
+import choreIcon from '@/assets/images/chores-icon.svg';
+import settingsIcon from '@/assets/images/settings-icon.svg';
+import feedbackIcon from '@/assets/images/feedback-icon.svg';
+import expensesIconSelected from '@/assets/images/expenses-icon-selected.svg';
+import choreIconSelected from '@/assets/images/chores-icon-selected.svg';
+import settingsIconSelected from '@/assets/images/settings-icon-selected.svg';
+import feedbackIconSelected from '@/assets/images/feedback-icon-selected.svg';
 
 interface titleImageAdapter {
 	expenses: string;

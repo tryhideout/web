@@ -1,7 +1,7 @@
-import { coreAPI } from 'redux/api/core';
-import { FETCH_CREDENTIALS_INCLUDE, APIPaths, HTTPRequestMethods, ReduxTagTypes } from 'utils/constants';
-import { formatAPIPath } from 'utils/helpers/common';
-import { SessionsAPIEmailLoginRequest, SessionsAPIResponse, SessionsAPISocialLoginRequest } from 'utils/types';
+import { coreAPI } from '@/redux/api/core';
+import { FETCH_CREDENTIALS_INCLUDE, APIPaths, HTTPRequestMethods, ReduxTagTypes } from '@/utils/constants';
+import { formatAPIPath } from '@/utils/helpers/common';
+import { SessionsAPIEmailLoginRequest, SessionsAPIResponse, SessionsAPISocialLoginRequest } from '@/utils/types';
 
 const extendedAPI = coreAPI.injectEndpoints({
 	endpoints: (builder) => ({
@@ -30,3 +30,4 @@ const extendedAPI = coreAPI.injectEndpoints({
 
 export const { useVerifySessionQuery, useCreateSessionMutation, useRefreshSessionQuery, useEndSessionMutation } =
 	extendedAPI;
+export default extendedAPI;

@@ -1,11 +1,11 @@
-import { coreAPI } from 'redux/api/core';
-import { APIPaths, HTTPRequestMethods, ReduxTagTypes } from 'utils/constants';
-import { formatAPIPath } from 'utils/helpers/common';
-import { HideoutsAPIRequest, HideoutsAPIResponse } from 'utils/types';
+import { coreAPI } from '@/redux/api/core';
+import { APIPaths, HTTPRequestMethods, ReduxTagTypes } from '@/utils/constants';
+import { formatAPIPath } from '@/utils/helpers/common';
+import { HideoutsAPIRequest, HideoutsAPIResponse } from '@/utils/types';
 
 const extendedAPI = coreAPI.injectEndpoints({
 	endpoints: (builder) => ({
-		getHideout: builder.query<HideoutsAPIResponse, string>({
+		getHideout: builder.query<HideoutsAPIResponse, number>({
 			query: (hideoutID) => ({ url: formatAPIPath([APIPaths.SESSIONS_PATH, hideoutID]) }),
 			providesTags: [ReduxTagTypes.HIDEOUT],
 		}),
@@ -14,7 +14,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 			query: (body) => ({ url: APIPaths.HIDEOUTS_PATH, method: HTTPRequestMethods.POST, body }),
 		}),
 
-		joinHideout: builder.mutation<void, { join_code: string; hideoutID: string }>({
+		joinHideout: builder.mutation<void, { join_code: string; hideoutID: number }>({
 			query: ({ join_code, hideoutID }) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.POST,
@@ -23,7 +23,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.SESSION, ReduxTagTypes.USER],
 		}),
 
-		leaveHideout: builder.mutation<void, string>({
+		leaveHideout: builder.mutation<void, number>({
 			query: (hideoutID) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.DELETE,

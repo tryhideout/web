@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReduxSliceNames } from 'utils/constants';
-import type { RootState, Session, SessionsAPIResponse } from 'utils/types';
+import { ReduxSliceNames } from '@/utils/constants';
+import type { Session, SessionsAPIResponse } from '@/utils/types';
 
 const INITIAL_STATE: Session = {
 	isLoggedIn: null,
 	accessToken: null,
+	userID: null,
+};
+
+const loadSessionAPIResponse = (_state: Session, action: PayloadAction<SessionsAPIResponse>): Session => {
+	return { isLoggedIn: true, accessToken: action.payload.access_token, userID: action.payload.user_id };
 };
 
 const sessionSlice = createSlice({
@@ -18,23 +23,14 @@ const sessionSlice = createSlice({
 				accessToken: action.payload.isLoggedIn ? state.accessToken : null,
 			};
 		},
-		createSession(_state: Session, action: PayloadAction<SessionsAPIResponse>): Session {
-			return {
-				isLoggedIn: true,
-				accessToken: action.payload.access_token,
-			};
-		},
-		refreshSession(_state: Session, action: PayloadAction<SessionsAPIResponse>): Session {
-			return { isLoggedIn: true, accessToken: action.payload.access_token };
-		},
+		createSession: loadSessionAPIResponse,
+		refreshSession: loadSessionAPIResponse,
 		endSession(_state: Session, _action: PayloadAction<undefined>): Session {
 			return INITIAL_STATE;
 		},
 	},
 });
 
-export const { createSession, refreshSession, endSession } = sessionSlice.actions;
-
-export const selectSession = (state: RootState) => state.session;
+export const { verifySession, createSession, refreshSession, endSession } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

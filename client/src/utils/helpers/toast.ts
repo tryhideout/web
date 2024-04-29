@@ -1,56 +1,43 @@
-import { createStandaloneToast } from '@chakra-ui/react';
-import theme from 'config/theme';
-const { toast } = createStandaloneToast({ theme });
+import { CreateToastFnReturn } from '@chakra-ui/react';
+import { ToastDefaultTitles } from '@/utils/constants';
+import { UsersAPIResponse } from '@/utils/types';
 
-const error = (title: string, description: string | null = null): void => {
-	toast({
-		title: title,
-		description: description,
-		status: 'error',
-		duration: 9000,
-		isClosable: true,
-		position: 'top-right',
+class Toast {
+	static showCreateUserPromiseToast = (
+		toast: CreateToastFnReturn,
+		promise: Promise<UsersAPIResponse>,
+		{ social }: { social: boolean },
+	) => {
+		const toastContent = this.#generatePromiseToastContent(
+			'Your account has been created.',
+			'Creating your account...',
+			social
+				? 'This email has already been registered by email and password.'
+				: 'An account with this email already exists! Please login instead.',
+		);
+		toast.promise(promise, toastContent);
+	};
+
+	static showBypassSignupToast = (toast: CreateToastFnReturn) =>
+		toast({
+			title: ToastDefaultTitles.INFO,
+			description: 'This email is already connected to a provider. Logging you in instead.',
+			status: 'info',
+		});
+
+	static #generatePromiseToastContent = (successDescription: string, loadingTitle: string, errorDescription: string) => ({
+		success: {
+			title: ToastDefaultTitles.SUCCESS,
+			description: successDescription,
+		},
+		loading: {
+			title: loadingTitle,
+		},
+		error: {
+			title: ToastDefaultTitles.ERROR,
+			description: errorDescription,
+		},
 	});
-};
+}
 
-const success = (title: string, description: string | null = null): void => {
-	toast({
-		title: title,
-		description: description,
-		status: 'success',
-		duration: 9000,
-		isClosable: true,
-		position: 'top-right',
-	});
-};
-
-const info = (title: string, description: string | null = null): void => {
-	toast({
-		title: title,
-		description: description,
-		status: 'info',
-		duration: 9000,
-		isClosable: true,
-		position: 'top-right',
-	});
-};
-
-const warning = (title: string, description: string | null = null): void => {
-	toast({
-		title: title,
-		description: description,
-		status: 'warning',
-		duration: 9000,
-		isClosable: true,
-		position: 'top-right',
-	});
-};
-
-const showToast = {
-	error,
-	success,
-	info,
-	warning,
-};
-
-export default showToast;
+export default Toast;

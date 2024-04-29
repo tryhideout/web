@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Box, Link, Divider, Text, Heading, Image, FormControl } from '@chakra-ui/react';
 
-import single from 'assets/images/singleline.svg';
+import single from '@/assets/images/singleline.svg';
 
 const OnboardingCreatePage = () => {
 	const [hideoutName, setHideoutName] = useState('');

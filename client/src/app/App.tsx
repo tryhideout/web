@@ -1,4 +1,4 @@
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider, UseToastOptions } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
 import {
@@ -10,9 +10,10 @@ import {
 	OnboardingCreatePage,
 	OnboardingInvitePage,
 	OnboardingJoinPage,
-} from 'pages';
-import { SideBar, TopBar, Gateway, Protected } from 'components';
-import theme from 'config/theme';
+} from '@/pages';
+import { SideBar, TopBar, Gateway, Protected } from '@/containers';
+import theme from '@/config/theme';
+import { ToastDefaultOptions } from '@/utils/constants';
 
 const InteriorLayout = () => (
 	<Box display='flex' flexDirection='row'>
@@ -26,7 +27,7 @@ const InteriorLayout = () => (
 
 const App = () => {
 	return (
-		<ChakraProvider theme={theme}>
+		<ChakraProvider theme={theme} toastOptions={{ defaultOptions: ToastDefaultOptions as UseToastOptions }}>
 			<Router>
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
@@ -63,7 +64,7 @@ const App = () => {
 						}
 					/>
 					<Route
-						path='/invite'
+						path='/onboarding/invite'
 						element={
 							<Protected>
 								<OnboardingInvitePage />

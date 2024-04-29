@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReduxSliceNames } from 'utils/constants';
-import type { HideoutsAPIResponse, Hideout, RootState } from 'utils/types';
+import { ReduxSliceNames } from '@/utils/constants';
+import type { HideoutsAPIResponse, Hideout, RootState } from '@/utils/types';
 
 const INITIAL_STATE: Hideout = {
 	id: null,

@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReduxSliceNames } from 'utils/constants';
-import type { RootState, User, UsersAPIResponse } from 'utils/types';
+
+import usersAPI from '@/redux/api/users';
+import { ReduxSliceNames } from '@/utils/constants';
+import type { RootState, User, UsersAPIResponse } from '@/utils/types';
 
 const INITIAL_STATE: User = {
 	id: null,
@@ -8,9 +10,11 @@ const INITIAL_STATE: User = {
 	firstName: null,
 	lastName: null,
 	color: null,
+	hideoutID: null,
+	status: null,
 };
 
-const loadUserAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
+const loadUsersAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
 	return {
 		...state,
 		id: action.payload.id,
@@ -18,6 +22,8 @@ const loadUserAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse
 		firstName: action.payload.first_name,
 		lastName: action.payload.last_name,
 		color: action.payload.color,
+		hideoutID: action.payload.hideout_id || 1,
+		status: action.payload.status,
 	};
 };
 
@@ -25,8 +31,12 @@ const userSlice = createSlice({
 	name: ReduxSliceNames.USER,
 	initialState: INITIAL_STATE,
 	reducers: {
-		loadUser: loadUserAPIResponse,
-		createUser: loadUserAPIResponse,
+		loadUser: loadUsersAPIResponse,
+		createUser: loadUsersAPIResponse,
+	},
+	extraReducers: (builder) => {
+		builder.addMatcher(usersAPI.endpoints.getUser.matchFulfilled, loadUsersAPIResponse);
+		builder.addMatcher(usersAPI.endpoints.createUser.matchFulfilled, loadUsersAPIResponse);
 	},
 });
 
