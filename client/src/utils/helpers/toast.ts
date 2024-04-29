@@ -25,6 +25,15 @@ class Toast {
 			status: 'info',
 		});
 
+	static showJoinHideoutPromiseToast = (toast: CreateToastFnReturn, promise: Promise<void>) => {
+		const toastContent = this.#generatePromiseToastContent(
+			"Awesome, you've joined the hideout!",
+			'Adding you to the hideout...',
+			'Invalid hideout code or hideout max capacity reached.',
+		);
+		toast.promise(promise, toastContent);
+	};
+
 	static #generatePromiseToastContent = (successDescription: string, loadingTitle: string, errorDescription: string) => ({
 		success: {
 			title: ToastDefaultTitles.SUCCESS,

@@ -12,9 +12,9 @@ const extendedAPI = coreAPI.injectEndpoints({
 		createHideout: builder.mutation<HideoutsAPIResponse, HideoutsAPIRequest>({
 			query: (body) => ({ url: APIPaths.HIDEOUTS_PATH, method: HTTPRequestMethods.POST, body }),
 		}),
-		joinHideout: builder.mutation<void, { join_code: string; hideoutID: number }>({
-			query: ({ join_code, hideoutID }) => ({
-				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),
+		joinHideout: builder.mutation<void, { join_code: string }>({
+			query: ({ join_code }) => ({
+				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.POST,
 				body: { join_code },
 			}),
@@ -31,3 +31,4 @@ const extendedAPI = coreAPI.injectEndpoints({
 });
 
 export const { useGetHideoutQuery, useCreateHideoutMutation, useJoinHideoutMutation, useLeaveHideoutMutation } = extendedAPI;
+export default extendedAPI;

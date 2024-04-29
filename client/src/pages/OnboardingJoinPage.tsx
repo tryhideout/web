@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import single from '@/assets/images/singleline.svg';
 import { ClientRoutes } from '@/utils/constants';
+import { OnboardingJoinForm } from '@/containers';
 
 const OnboardingJoinPage = () => {
 	const [joinCode, setJoinCode] = useState('');
@@ -29,25 +30,7 @@ const OnboardingJoinPage = () => {
 				<Box maxWidth='530px' fontFamily='Hubot' fontSize='20px' textAlign='center' mt='17px'>
 					To continue, either join a hideout by entering in the join code below or switch to creating a new one.
 				</Box>
-				<form onSubmit={handleSubmit}>
-					<Box>
-						<Input
-							placeholder='Enter a join code'
-							_placeholder={{ textTransform: 'none', letterSpacing: '0px', fontWeight: 'medium' }}
-							mt='30px'
-							width='543px'
-							textAlign='center'
-							textTransform='uppercase'
-							color='gray.600'
-							fontWeight='bold'
-							letterSpacing='5px'
-							onChange={(e) => setJoinCode(e.target.value)}
-						/>
-					</Box>
-					<Button type='submit' isLoading={formLoading} width='543px' variant='gradient500' mt='20px'>
-						Join a Hideout
-					</Button>
-				</form>
+				<OnboardingJoinForm />
 				<Divider width='90%' mt='32px' />
 				<Text mt='17px' fontFamily='Hubot' fontSize='16px' mb='20px'>
 					Don't have a hideout?{' '}
