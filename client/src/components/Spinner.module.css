@@ -1,13 +1,13 @@
-.pointer {
-	margin: 100px;
+.logoSpinner {
+	margin: 80px;
 	display: block;
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	border-radius: 50%;
 	background: transparent;
 	cursor: pointer;
 	box-shadow: 0 0 0 rgba(248, 147, 30, 0.4);
-	animation: pulse 1.2s infinite;
+	animation: pulse 1.1s infinite;
 }
 
 @-webkit-keyframes pulse {
@@ -15,7 +15,7 @@
 		-webkit-box-shadow: 0 0 0 0 rgba(248, 147, 30, 0.6);
 	}
 	70% {
-		-webkit-box-shadow: 0 0 0 25px rgba(248, 147, 30, 0.4);
+		-webkit-box-shadow: 0 0 0 23px rgba(248, 147, 30, 0.4);
 	}
 	100% {
 		-webkit-box-shadow: 0 0 0 0 rgba(248, 147, 30, 0);
@@ -27,11 +27,31 @@
 		box-shadow: 0 0 0 0 rgba(248, 147, 30, 0.4);
 	}
 	70% {
-		-moz-box-shadow: 0 0 0 25px rgba(248, 147, 30, 0.4);
-		box-shadow: 0 0 0 25px rgba(248, 147, 30, 0);
+		-moz-box-shadow: 0 0 0 23px rgba(248, 147, 30, 0.4);
+		box-shadow: 0 0 0 23px rgba(248, 147, 30, 0);
 	}
 	100% {
 		-moz-box-shadow: 0 0 0 0 rgba(248, 147, 30, 0);
 		box-shadow: 0 0 0 0 rgba(248, 147, 30, 0);
+	}
+}
+
+.standardSpinner {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	display: inline-block;
+	border-top: 4px solid #f8a11e;
+	border-right: 3px solid transparent;
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
 	}
 }

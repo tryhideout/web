@@ -3,18 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 
-import Spinner from '@/components/Spinner';
 import { useQuery } from '@/utils/hooks';
 import { RootState } from '@/utils/types';
 import { useRefreshSessionQuery } from '@/redux/api/sessions';
 import { refreshSession, verifySession } from '@/redux/slices/session';
+import { useGetUserQuery } from '@/redux/api/users';
+import { Spinner } from '@/components';
+import { ClientRoutes } from '@/utils/constants';
 
 const Gateway = ({ children }: { children: ReactElement }) => {
 	const { data, isLoading, isSuccess, isError } = useRefreshSessionQuery();
 
+	const session = useSelector((state: RootState) => state.session);
+	const currentUser = useSelector((state: RootState) => state.user);
+	useGetUserQuery(session.userID!, { skip: !session.isLoggedIn || currentUser.id !== null });
+
 	const dispatch = useDispatch();
-	const isLoggedIn = useSelector((state: RootState) => state.session.isLoggedIn);
-	const redirectURL = useQuery('redirect') || '/app/expenses';
+	const redirectURL = useQuery('redirect') || ClientRoutes.EXPENSES;
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -23,14 +28,14 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 			} else if (!isLoading && isError) {
 				dispatch(verifySession({ isLoggedIn: false }));
 			}
-		}, 1700);
+		}, 1800);
 	}, [dispatch, data, isLoading, isSuccess, isError]);
 
 	const getRenderContent = () => {
-		if (isLoggedIn === null) {
+		if (session.isLoggedIn === null || (session.isLoggedIn && currentUser.id === null)) {
 			return (
 				<Box width='100vw' height='100vh' display='flex' alignItems='center' justifyContent='center'>
-					<Spinner size={100} />
+					<Spinner size={80} useLogo={true} />
 				</Box>
 			);
 		} else {
@@ -38,7 +43,7 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 		}
 	};
 
-	return isLoggedIn ? <Navigate to={redirectURL} /> : getRenderContent();
+	return session.isLoggedIn && currentUser.id !== null ? <Navigate to={redirectURL} /> : getRenderContent();
 };
 
 export default Gateway;

@@ -9,11 +9,9 @@ const extendedAPI = coreAPI.injectEndpoints({
 			query: (hideoutID) => ({ url: formatAPIPath([APIPaths.SESSIONS_PATH, hideoutID]) }),
 			providesTags: [ReduxTagTypes.HIDEOUT],
 		}),
-
 		createHideout: builder.mutation<HideoutsAPIResponse, HideoutsAPIRequest>({
 			query: (body) => ({ url: APIPaths.HIDEOUTS_PATH, method: HTTPRequestMethods.POST, body }),
 		}),
-
 		joinHideout: builder.mutation<void, { join_code: string; hideoutID: number }>({
 			query: ({ join_code, hideoutID }) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),
@@ -22,7 +20,6 @@ const extendedAPI = coreAPI.injectEndpoints({
 			}),
 			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.SESSION, ReduxTagTypes.USER],
 		}),
-
 		leaveHideout: builder.mutation<void, number>({
 			query: (hideoutID) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),

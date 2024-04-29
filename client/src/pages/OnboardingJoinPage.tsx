@@ -3,6 +3,7 @@ import { Button, Input, Box, Link, Divider, Text, Heading, Image } from '@chakra
 import { useNavigate } from 'react-router-dom';
 
 import single from '@/assets/images/singleline.svg';
+import { ClientRoutes } from '@/utils/constants';
 
 const OnboardingJoinPage = () => {
 	const [joinCode, setJoinCode] = useState('');
@@ -13,7 +14,7 @@ const OnboardingJoinPage = () => {
 		e.preventDefault();
 		setFormLoading(true);
 		setFormLoading(false);
-		navigate('/app/expenses');
+		navigate(ClientRoutes.EXPENSES);
 	};
 
 	return (

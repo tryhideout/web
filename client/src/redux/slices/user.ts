@@ -22,7 +22,7 @@ const loadUsersAPIResponse = (state: User, action: PayloadAction<UsersAPIRespons
 		firstName: action.payload.first_name,
 		lastName: action.payload.last_name,
 		color: action.payload.color,
-		hideoutID: action.payload.hideout_id || 1,
+		hideoutID: action.payload.hideout_id,
 		status: action.payload.status,
 	};
 };
