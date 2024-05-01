@@ -1,10 +1,10 @@
 import { Box, Image, Text } from '@chakra-ui/react';
 
-import { SideBarTile } from '@/containers';
+import { SidebarTile } from '@/components';
 import logo from '@/assets/images/logo.svg';
 import userImage from '@/assets/images/user-image.svg';
 
-const SideBar = (props: object) => {
+const Sidebar = (props: object) => {
 	// const { user } = props;
 
 	return (
@@ -76,4 +76,4 @@ const SideBar = (props: object) => {
 	);
 };
 
-export default SideBar;
+export default Sidebar;

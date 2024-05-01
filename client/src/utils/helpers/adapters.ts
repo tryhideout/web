@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { CustomError } from '@/utils/exceptions';
-import { SignupFormState } from '@/utils/types';
+import { OnboardingJoinFormState, SignupFormState } from '@/utils/types';
 
 const FormRegex = {
 	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -36,11 +36,16 @@ const socialAuthCreateSessionRequest = (currentUser: User, socialToken: string) 
 	social_token: socialToken,
 });
 
+const onboardingJoinHideoutRequest = (formState: OnboardingJoinFormState) => ({
+	join_code: formState.joinCode,
+});
+
 const adapters = {
 	standardAuthCreateUserRequest,
 	socialAuthCreateUserRequest,
 	standardAuthCreateSessionRequest,
 	socialAuthCreateSessionRequest,
+	onboardingJoinHideoutRequest,
 };
 
 export default adapters;

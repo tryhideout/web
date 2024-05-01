@@ -11,13 +11,14 @@ import {
 	OnboardingInvitePage,
 	OnboardingJoinPage,
 } from '@/pages';
-import { SideBar, TopBar, Gateway, Protected } from '@/containers';
+import { TopBar, Gateway, Protected } from '@/containers';
+import { Sidebar } from '@/components';
 import theme from '@/config/theme';
 import { ToastDefaultOptions } from '@/utils/constants';
 
 const InteriorLayout = () => (
 	<Box display='flex' flexDirection='row'>
-		<SideBar />
+		<Sidebar />
 		<Box display='flex' flexDirection='column' width='100%'>
 			<TopBar />
 			<Outlet />

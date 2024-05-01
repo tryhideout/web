@@ -19,7 +19,7 @@ export const catchify = async (func: Function, ...args: any[]) => {
 	try {
 		await func(...args);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		if (error instanceof CustomError) {
 			error.toast();
 		} else {

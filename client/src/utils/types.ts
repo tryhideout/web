@@ -87,3 +87,7 @@ export interface SignupFormState {
 	email: string;
 	password: string;
 }
+
+export interface OnboardingJoinFormState {
+	joinCode: string;
+}

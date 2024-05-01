@@ -61,7 +61,7 @@ class HideoutsController < ApplicationController
       hideout = Hideout.find_by!(join_code: join_code)
       hideout.add_user(user_id: user_id)
 
-      return render status: :ok
+      render status: :ok, body: nil
     rescue ActionController::ParameterMissing, ActiveModel::StrictValidationFailed, Exceptions::ModelException => error
       return render status: :bad_request, json: ResponseHelper.generate_error_response(error.message)
     rescue ActiveRecord::RecordNotFound

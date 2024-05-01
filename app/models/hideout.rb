@@ -27,10 +27,8 @@ class Hideout < ApplicationRecord
 
     user = User.find_by(id: owner_id)
     user.update(color: @@hideout_colors.sample)
-    user.update(hideout_id: hideout.id)
     user.update(status: 'available')
-
-    Status.create!(user_id: owner_id, hideout_id: hideout.id)
+    user.update(hideout_id: hideout.id)
     return hideout
   end
 
@@ -42,8 +40,8 @@ class Hideout < ApplicationRecord
     used_colors = roommates.collect { |user| user.color }
     usable_colors = @@hideout_colors - used_colors
     user.update(color: usable_colors.sample)
-    user.update(hideout_id: self.id)
     user.update(status: 'available')
+    user.update(hideout_id: self.id)
   end
 
   def update_hideout_and_owner(name:, owner_id:)
