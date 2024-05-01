@@ -1,12 +1,16 @@
-import { useJoinHideoutMutation } from '@/redux/api/hideouts';
-import { ClientRoutes } from '@/utils/constants';
-import adapters from '@/utils/helpers/adapters';
-import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
-import Toast from '@/utils/helpers/toast';
-import { OnboardingJoinFormState } from '@/utils/types';
-import { Box, Button, FormControl, Input, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, FormControl, Input, useToast } from '@chakra-ui/react';
+
+import { useJoinHideoutMutation } from '@/redux/api/hideouts';
+import usersAPI from '@/redux/api/users';
+import { ClientRoutes } from '@/utils/constants';
+import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
+import { OnboardingJoinFormState, RootState } from '@/utils/types';
+import { store } from '@/redux/store';
+import Toast from '@/utils/helpers/toast';
+import adapters from '@/utils/helpers/adapters';
 
 const initialFormState = generateEmptyStringObject(['joinCode']) as OnboardingJoinFormState;
 
@@ -14,12 +18,15 @@ const OnboardingJoinForm = () => {
 	const navigate = useNavigate();
 	const toast = useToast();
 
+	const currentUser = useSelector((state: RootState) => state.user);
+
 	const [formState, setFormState] = useState(initialFormState);
 	const [triggerJoinHideout, joinHideoutResult] = useJoinHideoutMutation();
 
 	const handleJoinHideout = async () => {
 		const requestBody = adapters.onboardingJoinHideoutRequest(formState);
 		const joinHideoutPromise = triggerJoinHideout(requestBody).unwrap();
+		store.dispatch(usersAPI.endpoints.getUser.initiate(currentUser.id!));
 
 		Toast.showJoinHideoutPromiseToast(toast, joinHideoutPromise);
 		navigate(ClientRoutes.EXPENSES);
@@ -27,7 +34,7 @@ const OnboardingJoinForm = () => {
 
 	return (
 		<Box display='flex' flexDirection='column' alignItems='center'>
-			<form onSubmit={() => catchify(handleJoinHideout)}>
+			<form>
 				<FormControl isInvalid={true}>
 					<Input
 						placeholder='Enter a join code'
@@ -44,7 +51,7 @@ const OnboardingJoinForm = () => {
 						isRequired
 					/>
 					<Button
-						type='submit'
+						onClick={() => catchify(handleJoinHideout)}
 						isLoading={joinHideoutResult.isLoading}
 						isDisabled={joinHideoutResult.isLoading}
 						width='543px'

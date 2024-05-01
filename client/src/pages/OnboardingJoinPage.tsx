@@ -1,23 +1,9 @@
-import { useState } from 'react';
-import { Button, Input, Box, Link, Divider, Text, Heading, Image } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { Box, Link, Divider, Text, Heading, Image } from '@chakra-ui/react';
 
 import single from '@/assets/images/singleline.svg';
-import { ClientRoutes } from '@/utils/constants';
 import { OnboardingJoinForm } from '@/containers';
 
 const OnboardingJoinPage = () => {
-	const [joinCode, setJoinCode] = useState('');
-	const [formLoading, setFormLoading] = useState(false);
-	const navigate = useNavigate();
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setFormLoading(true);
-		setFormLoading(false);
-		navigate(ClientRoutes.EXPENSES);
-	};
-
 	return (
 		<Box display='flex' alignItems='center' justifyContent='center' height='100vh' width='100vw'>
 			<Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' maxWidth='550px'>

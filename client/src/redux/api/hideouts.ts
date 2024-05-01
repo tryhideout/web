@@ -17,6 +17,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.POST,
 				body: { join_code },
+				responseHandler: 'text',
 			}),
 			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.SESSION, ReduxTagTypes.USER],
 		}),
@@ -24,6 +25,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 			query: (hideoutID) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.DELETE,
+				responseHandler: 'text',
 			}),
 			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.SESSION, ReduxTagTypes.USER],
 		}),

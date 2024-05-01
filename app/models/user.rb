@@ -14,7 +14,6 @@ class User < ApplicationRecord
   validates :first_name, presence: true, strict: true
   validates :last_name, presence: true, strict: true
   validates :color, presence: true, unless: -> { hideout_id.blank? }, strict: true
-  validates :status, presence: true, unless: -> { hideout_id.blank? }, strict: true
 
   def jsonify
     hash = self.as_json
