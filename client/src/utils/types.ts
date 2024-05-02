@@ -1,9 +1,10 @@
 import { store } from '@/redux/store';
-import { AuthProviderIDs } from '@/utils/constants';
+import { AuthProviderIDs, ToastStatuses } from '@/utils/constants';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+// Model & API Request / Response Types
 export interface User {
 	id: number | null;
 	email: string | null;
@@ -79,6 +80,9 @@ export interface SessionsAPIResponse {
 	access_token: string;
 }
 
+export type APIResponses = UsersAPIResponse | SessionsAPIResponse | HideoutsAPIResponse;
+
+// Domain-specific State & Toast Types
 export type FirebaseProviderID = AuthProviderIDs.GOOGLE | AuthProviderIDs.FACEBOOK | AuthProviderIDs.GITHUB;
 
 export interface SignupFormState {
@@ -90,4 +94,24 @@ export interface SignupFormState {
 
 export interface OnboardingJoinFormState {
 	joinCode: string;
+}
+
+export type toastStatus =
+	| ToastStatuses.info
+	| ToastStatuses.loading
+	| ToastStatuses.warning
+	| ToastStatuses.error
+	| ToastStatuses.success;
+
+export interface RequestToastMessages {
+	success: {
+		toastStatus: toastStatus;
+		toastDescription: string;
+	} | null;
+	error: {
+		[key: number]: {
+			toastStatus: toastStatus;
+			toastDescription: string;
+		};
+	};
 }

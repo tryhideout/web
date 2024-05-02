@@ -31,6 +31,7 @@ class FirebaseAuthFlow {
 		try {
 			const result = await signInWithPopup(auth, this.authProvider);
 			const currentUser = result.user;
+			this.currentUser = currentUser;
 			const additionalInfo = getAdditionalUserInfo(result);
 
 			const socialToken = await currentUser.getIdToken();

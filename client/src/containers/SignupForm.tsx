@@ -5,19 +5,31 @@ import { IoLogoFacebook, IoLogoGithub, IoLogoGoogle } from 'react-icons/io5';
 
 import { useCreateSessionMutation } from '@/redux/api/sessions';
 import { useCreateUserMutation } from '@/redux/api/users';
-import { AuthProviderIDs, ClientRoutes } from '@/utils/constants';
+import {
+	AuthProviderIDs,
+	ClientRoutes,
+	CreateSessionToastMessages,
+	CreateUserSocialAuthToastMessages,
+	CreateUserStandardAuthToastMessages,
+	HTTPStatusCodes,
+	StandaloneBypassSignupToast,
+} from '@/utils/constants';
 import { catchify } from '@/utils/helpers/common';
 import { FirebaseAuthFlow } from '@/utils/services';
 import { generateEmptyStringObject } from '@/utils/helpers/common';
-import { FirebaseProviderID, SignupFormState } from '@/utils/types';
+import { APIResponseError, FirebaseProviderID, SessionsAPIResponse, SignupFormState } from '@/utils/types';
 import adapters from '@/utils/helpers/adapters';
-import Toast from '@/utils/helpers/toast';
+import RequestHandler from '@/utils/helpers/requests';
+import { useDispatch } from 'react-redux';
+import { createSession } from '@/redux/slices/session';
 
 const initialFormState = generateEmptyStringObject(['email', 'password', 'firstName', 'lastName']) as SignupFormState;
 
 const SignupForm = () => {
-	const navigate = useNavigate();
 	const toast = useToast();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const requestHandler = new RequestHandler(toast);
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [providerLoading, setProviderLoading] = useState<null | string>(null);
@@ -28,15 +40,23 @@ const SignupForm = () => {
 
 	/**
 	 * Handles email and password auth initiating create user and session API requests.
+	 * Manually dispatches createSession action based on result of API request.
 	 */
 	const handleStandardAuth = async () => {
 		const createUserRequestBody = adapters.standardAuthCreateUserRequest(formState);
 		const createUserPromise = triggerCreateUser(createUserRequestBody).unwrap();
-		Toast.showCreateUserPromiseToast(toast, createUserPromise, { social: false });
+		await requestHandler.awaitAndToastRequest(createUserPromise, CreateUserStandardAuthToastMessages);
 
 		const createSessionRequestBody = adapters.standardAuthCreateSessionRequest(formState);
-		await triggerCreateSession(createSessionRequestBody);
-		navigate(ClientRoutes.EXPENSES);
+		const createSessionPromise = triggerCreateSession(createSessionRequestBody).unwrap();
+
+		const responsePayload = (await requestHandler.awaitAndToastRequest(
+			createSessionPromise,
+			CreateSessionToastMessages,
+		)) as SessionsAPIResponse;
+		dispatch(createSession(responsePayload));
+
+		navigate(ClientRoutes.ONBOARDING_JOIN);
 	};
 
 	/**
@@ -47,18 +67,31 @@ const SignupForm = () => {
 	const handleSocialAuth = async (providerID: FirebaseProviderID) => {
 		const authFlow = new FirebaseAuthFlow(providerID);
 		const { currentUser, additionalInfo, socialToken } = await authFlow.trigger();
+		setProviderLoading(null);
 
 		if (additionalInfo?.isNewUser) {
 			const requestBody = adapters.socialAuthCreateUserRequest(currentUser, socialToken);
 			const createUserPromise = triggerCreateUser(requestBody).unwrap();
-			Toast.showCreateUserPromiseToast(toast, createUserPromise, { social: true });
+			await requestHandler.awaitAndToastRequest(
+				createUserPromise,
+				CreateUserSocialAuthToastMessages,
+				async (error: APIResponseError) => {
+					if (error.status === HTTPStatusCodes.CONFLICT) await authFlow.cancel();
+				},
+			);
 		} else {
-			Toast.showBypassSignupToast(toast);
+			toast(StandaloneBypassSignupToast);
 		}
 
 		const sessionRequestBody = adapters.socialAuthCreateSessionRequest(currentUser, socialToken);
-		await triggerCreateSession(sessionRequestBody);
-		navigate(ClientRoutes.EXPENSES);
+		const createSessionPromise = triggerCreateSession(sessionRequestBody).unwrap();
+
+		const responsePayload = (await requestHandler.awaitAndToastRequest(
+			createSessionPromise,
+			CreateSessionToastMessages,
+		)) as SessionsAPIResponse;
+		dispatch(createSession(responsePayload));
+		navigate(ClientRoutes.ONBOARDING_JOIN);
 	};
 
 	return (

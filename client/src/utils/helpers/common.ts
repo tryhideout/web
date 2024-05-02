@@ -1,5 +1,4 @@
 import { CustomError } from '@/utils/exceptions';
-import { APIResponseError } from '@/utils/types';
 
 export const formatAPIPath = (args: (string | number)[]): string => {
 	let formattedURL = '';
@@ -19,12 +18,9 @@ export const catchify = async (func: Function, ...args: any[]) => {
 	try {
 		await func(...args);
 	} catch (error) {
-		console.error(error);
 		if (error instanceof CustomError) {
 			error.toast();
-		} else {
-			const rtkQueryError = new CustomError((error as APIResponseError).data.error);
-			rtkQueryError.toast();
 		}
+		if (import.meta.env.DEV) console.error(error);
 	}
 };

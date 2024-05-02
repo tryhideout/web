@@ -1,6 +1,7 @@
 import { User } from 'firebase/auth';
 import { CustomError } from '@/utils/exceptions';
 import { OnboardingJoinFormState, SignupFormState } from '@/utils/types';
+import { CustomErrorMessages } from '@/utils/constants';
 
 const FormRegex = {
 	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -9,7 +10,7 @@ const FormRegex = {
 
 const standardAuthCreateUserRequest = (formState: SignupFormState) => {
 	if (!(FormRegex.EMAIL.test(formState.email) && FormRegex.PASSWORD.test(formState.password)))
-		throw new CustomError('Invalid email, insecure password or unmatching confirm field.');
+		throw new CustomError(CustomErrorMessages.SignupStandardAuthValidationMessage);
 
 	return {
 		email: formState.email,

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Box, Heading, Text, Image, Input, Button } from '@chakra-ui/react';
 
 import double from '@/assets/images/doubleline.svg';
-import toast from '@/utils/helpers/toast';
+import toast from '@/utils/helpers/requests';
 
 const OnboardingInvitePage = () => {
 	useEffect(() => {

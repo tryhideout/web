@@ -9,7 +9,7 @@ import { ClientRoutes } from '@/utils/constants';
 import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
 import { OnboardingJoinFormState, RootState } from '@/utils/types';
 import { store } from '@/redux/store';
-import Toast from '@/utils/helpers/toast';
+import Toast from '@/utils/helpers/requests';
 import adapters from '@/utils/helpers/adapters';
 
 const initialFormState = generateEmptyStringObject(['joinCode']) as OnboardingJoinFormState;
