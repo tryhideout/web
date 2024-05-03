@@ -1,34 +1,33 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, FormControl, Input, useToast } from '@chakra-ui/react';
 
-import { useJoinHideoutMutation } from '@/redux/api/hideouts';
-import usersAPI from '@/redux/api/users';
-import { ClientRoutes } from '@/utils/constants';
-import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
-import { OnboardingJoinFormState, RootState } from '@/utils/types';
-import { store } from '@/redux/store';
-import Toast from '@/utils/helpers/requests';
 import adapters from '@/utils/helpers/adapters';
+import APIRequestHandler from '@/utils/helpers/requests';
+import { useJoinHideoutMutation } from '@/redux/api/hideouts';
+import { OnboardingJoinFormState, RootState } from '@/utils/types';
+import { ClientRoutes, JoinHideoutToastMessages } from '@/utils/constants';
+import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
 
 const initialFormState = generateEmptyStringObject(['joinCode']) as OnboardingJoinFormState;
 
 const OnboardingJoinForm = () => {
-	const navigate = useNavigate();
 	const toast = useToast();
-
-	const currentUser = useSelector((state: RootState) => state.user);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const requestHandler = new APIRequestHandler(toast, dispatch);
 
 	const [formState, setFormState] = useState(initialFormState);
+	const currentUser = useSelector((state: RootState) => state.user);
 	const [triggerJoinHideout, joinHideoutResult] = useJoinHideoutMutation();
 
 	const handleJoinHideout = async () => {
 		const requestBody = adapters.onboardingJoinHideoutRequest(formState);
 		const joinHideoutPromise = triggerJoinHideout(requestBody).unwrap();
-		store.dispatch(usersAPI.endpoints.getUser.initiate(currentUser.id!));
+		await requestHandler.awaitAndToastRequest(joinHideoutPromise, JoinHideoutToastMessages);
 
-		Toast.showJoinHideoutPromiseToast(toast, joinHideoutPromise);
+		await requestHandler.refreshUserAndSessionState(currentUser);
 		navigate(ClientRoutes.EXPENSES);
 	};
 

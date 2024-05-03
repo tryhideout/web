@@ -11,6 +11,7 @@ const extendedAPI = coreAPI.injectEndpoints({
 		}),
 		createHideout: builder.mutation<HideoutsAPIResponse, HideoutsAPIRequest>({
 			query: (body) => ({ url: APIPaths.HIDEOUTS_PATH, method: HTTPRequestMethods.POST, body }),
+			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.USER, ReduxTagTypes.SESSION],
 		}),
 		joinHideout: builder.mutation<void, { join_code: string }>({
 			query: ({ join_code }) => ({

@@ -1,10 +1,18 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Divider, FormControl, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import { IoLogoFacebook, IoLogoGithub, IoLogoGoogle } from 'react-icons/io5';
 
-import { useCreateSessionMutation } from '@/redux/api/sessions';
+import adapters from '@/utils/helpers/adapters';
+import { catchify } from '@/utils/helpers/common';
+import { FirebaseAuthFlow } from '@/utils/services';
+import RequestHandler from '@/utils/helpers/requests';
+import { createSession } from '@/redux/slices/session';
 import { useCreateUserMutation } from '@/redux/api/users';
+import { useCreateSessionMutation } from '@/redux/api/sessions';
+import { generateEmptyStringObject } from '@/utils/helpers/common';
+import { APIResponseError, FirebaseProviderID, SessionsAPIResponse, SignupFormState } from '@/utils/types';
 import {
 	AuthProviderIDs,
 	ClientRoutes,
@@ -14,14 +22,6 @@ import {
 	HTTPStatusCodes,
 	StandaloneBypassSignupToast,
 } from '@/utils/constants';
-import { catchify } from '@/utils/helpers/common';
-import { FirebaseAuthFlow } from '@/utils/services';
-import { generateEmptyStringObject } from '@/utils/helpers/common';
-import { APIResponseError, FirebaseProviderID, SessionsAPIResponse, SignupFormState } from '@/utils/types';
-import adapters from '@/utils/helpers/adapters';
-import RequestHandler from '@/utils/helpers/requests';
-import { useDispatch } from 'react-redux';
-import { createSession } from '@/redux/slices/session';
 
 const initialFormState = generateEmptyStringObject(['email', 'password', 'firstName', 'lastName']) as SignupFormState;
 
@@ -62,7 +62,7 @@ const SignupForm = () => {
 	/**
 	 * Handles social auth via the selected Firebase provider and initiates user & session API requests.
 	 * Bypasses create user API request if user already has social auth account with selected email.
-	 * @param {FirebaseProviderID} providerID - The Firebase provider selected for this social auth flow.
+	 * @param {FirebaseProviderID} providerID - Firebase provider selected for this social auth flow.
 	 */
 	const handleSocialAuth = async (providerID: FirebaseProviderID) => {
 		const authFlow = new FirebaseAuthFlow(providerID);

@@ -5,12 +5,12 @@ import double from '@/assets/images/doubleline.svg';
 import toast from '@/utils/helpers/requests';
 
 const OnboardingInvitePage = () => {
-	useEffect(() => {
-		const loadData = async () => {
-			// if (user.hideoutID !== null && hideout.name === null) await loadHideoutData(user.hideoutID);
-		};
-		loadData().catch(console.error);
-	}, []);
+	// useEffect(() => {
+	// 	const loadData = async () => {
+	// 		// if (user.hideoutID !== null && hideout.name === null) await loadHideoutData(user.hideoutID);
+	// 	};
+	// 	loadData().catch(console.error);
+	// }, []);
 
 	return (
 		<Box display='flex' alignItems='center' justifyContent='center' height='100vh' width='100vw'>

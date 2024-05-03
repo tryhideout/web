@@ -96,6 +96,10 @@ export interface OnboardingJoinFormState {
 	joinCode: string;
 }
 
+export interface OnboardingCreateFormState {
+	hideoutName: string;
+}
+
 export type toastStatus =
 	| ToastStatuses.info
 	| ToastStatuses.loading

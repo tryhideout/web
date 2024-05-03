@@ -26,7 +26,13 @@ export enum ClientRoutes {
 	SIGNUP = '/auth/signup',
 	ONBOARDING_CREATE = '/onboarding/create',
 	ONBOARDING_JOIN = '/onboarding/join',
+	ONBOARDING_INVITE = '/onboarding/invite',
 }
+
+export const FormRegex = {
+	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+	PASSWORD: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+};
 
 // API Request / Response Constants
 
@@ -140,6 +146,31 @@ export const CreateUserSocialAuthToastMessages = {
 };
 
 export const CreateSessionToastMessages = BlankToastMessages;
+
+export const JoinHideoutToastMessages = {
+	success: {
+		toastStatus: ToastStatuses.success,
+		toastDescription: "You've successfully joined the hideout!",
+	},
+	error: {
+		404: {
+			toastStatus: ToastStatuses.error,
+			toastDescription: 'The provided join code is invalid.',
+		},
+		400: {
+			toastStatus: ToastStatuses.error,
+			toastDescription: "This hideout's max capacity has been reached.",
+		},
+	},
+};
+
+export const CreateHideoutToastMessages = {
+	success: {
+		toastStatus: ToastStatuses.success,
+		toastDescription: 'Your hideout has been created!',
+	},
+	error: {},
+};
 
 export const StandaloneBypassSignupToast = {
 	title: ToastDefaultTitles.success,
