@@ -6,7 +6,7 @@ import { FormControl, Input, Button, Box, useToast } from '@chakra-ui/react';
 import adapters from '@/utils/helpers/adapters';
 import APIRequestHandler from '@/utils/helpers/requests';
 import { useCreateHideoutMutation } from '@/redux/api/hideouts';
-import { OnboardingCreateFormState, RootState } from '@/utils/types';
+import { OnboardingCreateFormState, RootState, Session, User } from '@/utils/types';
 import { ClientRoutes, CreateHideoutToastMessages } from '@/utils/constants';
 import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
 
@@ -19,15 +19,21 @@ const OnboardingCreateForm = () => {
 	const requestHandler = new APIRequestHandler(toast, dispatch);
 
 	const [formState, setFormState] = useState(initialFormState);
-	const currentUser = useSelector((state: RootState) => state.user);
+	const currentUser: User = useSelector((state: RootState) => state.user);
+	const session: Session = useSelector((state: RootState) => state.session);
 	const [triggerCreateHideout, createHideoutResult] = useCreateHideoutMutation();
 
+	/**
+	 * Handles create hideout flow and toasts success / error result.
+	 * Refreshes the user and session state after successful create hideout request.
+	 * @async
+	 */
 	const handleCreateHideout = async () => {
 		const requestBody = adapters.onboardingCreateHideoutRequest(formState, currentUser);
 		const createHideoutPromise = triggerCreateHideout(requestBody).unwrap();
 		await requestHandler.awaitAndToastRequest(createHideoutPromise, CreateHideoutToastMessages);
 
-		await requestHandler.refreshUserAndSessionState(currentUser);
+		await requestHandler.refreshUserAndSessionState(session);
 		navigate(ClientRoutes.ONBOARDING_INVITE);
 	};
 

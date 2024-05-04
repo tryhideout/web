@@ -6,14 +6,14 @@ import { HideoutsAPIRequest, HideoutsAPIResponse } from '@/utils/types';
 const extendedAPI = coreAPI.injectEndpoints({
 	endpoints: (builder) => ({
 		getHideout: builder.query<HideoutsAPIResponse, number>({
-			query: (hideoutID) => ({ url: formatAPIPath([APIPaths.SESSIONS_PATH, hideoutID]) }),
+			query: (hideoutID) => ({ url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID]) }),
 			providesTags: [ReduxTagTypes.HIDEOUT],
 		}),
 		createHideout: builder.mutation<HideoutsAPIResponse, HideoutsAPIRequest>({
 			query: (body) => ({ url: APIPaths.HIDEOUTS_PATH, method: HTTPRequestMethods.POST, body }),
 			invalidatesTags: [ReduxTagTypes.HIDEOUT, ReduxTagTypes.USER, ReduxTagTypes.SESSION],
 		}),
-		joinHideout: builder.mutation<void, { join_code: string }>({
+		joinHideout: builder.mutation<HideoutsAPIResponse, { join_code: string }>({
 			query: ({ join_code }) => ({
 				url: formatAPIPath([APIPaths.HIDEOUTS_PATH, APIPaths.USERS_PATH]),
 				method: HTTPRequestMethods.POST,

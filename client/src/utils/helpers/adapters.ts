@@ -2,6 +2,7 @@ import { User as FirebaseUser } from 'firebase/auth';
 import { CustomError } from '@/utils/exceptions';
 import {
 	HideoutsAPIRequest,
+	LoginFormState,
 	OnboardingCreateFormState,
 	OnboardingJoinFormState,
 	SessionsAPIEmailLoginRequest,
@@ -48,7 +49,7 @@ const socialAuthCreateUserRequest = (currentFirebaseUser: FirebaseUser, socialTo
  * @param {SignupFormState} formState - Component state to use in generating request body.
  * @returns {{ email: any; password: any; }}
  */
-const standardAuthCreateSessionRequest = (formState: SignupFormState): SessionsAPIEmailLoginRequest => ({
+const standardAuthCreateSessionRequest = (formState: SignupFormState | LoginFormState): SessionsAPIEmailLoginRequest => ({
 	email: formState.email,
 	password: formState.password,
 });

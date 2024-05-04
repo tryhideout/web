@@ -30,6 +30,7 @@ const hideoutSlice = createSlice({
 	extraReducers: (builder) => {
 		builder.addMatcher(hideoutsAPI.endpoints.getHideout.matchFulfilled, loadHideoutsAPIResponse);
 		builder.addMatcher(hideoutsAPI.endpoints.createHideout.matchFulfilled, loadHideoutsAPIResponse);
+		builder.addMatcher(hideoutsAPI.endpoints.joinHideout.matchFulfilled, loadHideoutsAPIResponse);
 	},
 });
 

@@ -4,7 +4,15 @@ import { CreateToastFnReturn, UseToastOptions } from '@chakra-ui/react';
 import usersAPI from '@/redux/api/users';
 import sessionsAPI from '@/redux/api/sessions';
 import { ToastDefaultTitles, ToastStatuses } from '@/utils/constants';
-import { APIResponseError, APIResponses, RequestToastMessages, User } from '@/utils/types';
+import {
+	APIResponseError,
+	APIResponses,
+	RequestHandlerRefreshOptions,
+	RequestToastMessages,
+	Session,
+	SessionsAPIResponse,
+	User,
+} from '@/utils/types';
 import store from '@/main';
 import { refreshSession } from '@/redux/slices/session';
 
@@ -61,7 +69,7 @@ class APIRequestHandler {
 				}
 				return payload;
 			})
-			.catch((error: APIResponseError) => {
+			.catch(async (error: APIResponseError) => {
 				const toastOptions: UseToastOptions = {
 					title:
 						error.status in toastMessages.error
@@ -73,7 +81,7 @@ class APIRequestHandler {
 				};
 				this.toastFn(toastOptions);
 
-				if (onCatchFn !== undefined) onCatchFn(error);
+				if (onCatchFn !== undefined) await onCatchFn(error);
 				throw new Error();
 			});
 	};
@@ -83,10 +91,15 @@ class APIRequestHandler {
 	 * @async
 	 * @param {User} currentUser - The current User state object from the redux store.
 	 */
-	refreshUserAndSessionState = async (currentUser: User) => {
-		await store.dispatch(usersAPI.endpoints.getUser.initiate(currentUser.id!)).unwrap();
-		const responsePayload = await store.dispatch(sessionsAPI.endpoints.refreshSession.initiate()).unwrap();
-		this.dispatchFn(refreshSession(responsePayload));
+	refreshUserAndSessionState = async (session: Session, options?: RequestHandlerRefreshOptions) => {
+		if (!options?.skipSessionRefresh) {
+			const responsePayload = (await store
+				.dispatch(sessionsAPI.endpoints.refreshSession.initiate())
+				.unwrap()) as SessionsAPIResponse;
+			this.dispatchFn(refreshSession(responsePayload));
+		}
+
+		if (!options?.skipUserRefresh) await store.dispatch(usersAPI.endpoints.getUser.initiate(session.userID!)).unwrap();
 	};
 }
 

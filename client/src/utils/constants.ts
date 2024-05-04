@@ -145,7 +145,33 @@ export const CreateUserSocialAuthToastMessages = {
 	},
 };
 
-export const CreateSessionToastMessages = BlankToastMessages;
+export const SignupCreateSessionToastMessages = BlankToastMessages;
+
+export const StandaloneBypassSignupToast = {
+	title: ToastDefaultTitles.info,
+	description: 'This email is already in use via social auth. Logging you in instead.',
+};
+
+export const LoginStandardAuthCreateSessionToastMessages = {
+	success: null,
+	error: {
+		404: {
+			toastStatus: ToastStatuses.error,
+			toastDescription: 'Unable to find an account with this email.',
+		},
+		401: {
+			toastStatus: ToastStatuses.error,
+			toastDescription: 'Invalid email, password or both.',
+		},
+	},
+};
+
+export const LoginSocialAuthCreateSessionToastMessages = BlankToastMessages;
+
+export const StandaloneLoginNewFirebaseUserErrorToast = {
+	title: ToastDefaultTitles.error,
+	description: 'Unable to find an account with this email. Please sign up instead.',
+};
 
 export const JoinHideoutToastMessages = {
 	success: {
@@ -170,11 +196,6 @@ export const CreateHideoutToastMessages = {
 		toastDescription: 'Your hideout has been created!',
 	},
 	error: {},
-};
-
-export const StandaloneBypassSignupToast = {
-	title: ToastDefaultTitles.success,
-	description: 'This email is already in use via social auth. Logging you in instead.',
 };
 
 export enum CustomErrorMessages {

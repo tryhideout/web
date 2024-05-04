@@ -27,6 +27,7 @@ const SignupPage = () => {
 					<Link href='/auth/login' color='blue.400' fontWeight='bold'>
 						Log in here
 					</Link>
+					.
 				</Text>
 			</Center>
 		</Center>

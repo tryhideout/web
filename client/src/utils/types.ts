@@ -82,6 +82,31 @@ export interface SessionsAPIResponse {
 
 export type APIResponses = UsersAPIResponse | SessionsAPIResponse | HideoutsAPIResponse;
 
+// Internal helper types
+export type toastStatus =
+	| ToastStatuses.info
+	| ToastStatuses.loading
+	| ToastStatuses.warning
+	| ToastStatuses.error
+	| ToastStatuses.success;
+export interface RequestToastMessages {
+	success: {
+		toastStatus: toastStatus;
+		toastDescription: string;
+	} | null;
+	error: {
+		[key: number]: {
+			toastStatus: toastStatus;
+			toastDescription: string;
+		};
+	};
+}
+
+export interface RequestHandlerRefreshOptions {
+	skipSessionRefresh?: true;
+	skipUserRefresh?: true;
+}
+
 // Domain-specific State & Toast Types
 export type FirebaseProviderID = AuthProviderIDs.GOOGLE | AuthProviderIDs.FACEBOOK | AuthProviderIDs.GITHUB;
 
@@ -100,22 +125,7 @@ export interface OnboardingCreateFormState {
 	hideoutName: string;
 }
 
-export type toastStatus =
-	| ToastStatuses.info
-	| ToastStatuses.loading
-	| ToastStatuses.warning
-	| ToastStatuses.error
-	| ToastStatuses.success;
-
-export interface RequestToastMessages {
-	success: {
-		toastStatus: toastStatus;
-		toastDescription: string;
-	} | null;
-	error: {
-		[key: number]: {
-			toastStatus: toastStatus;
-			toastDescription: string;
-		};
-	};
+export interface LoginFormState {
+	email: string;
+	password: string;
 }

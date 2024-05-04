@@ -6,7 +6,7 @@ import { Box, Button, FormControl, Input, useToast } from '@chakra-ui/react';
 import adapters from '@/utils/helpers/adapters';
 import APIRequestHandler from '@/utils/helpers/requests';
 import { useJoinHideoutMutation } from '@/redux/api/hideouts';
-import { OnboardingJoinFormState, RootState } from '@/utils/types';
+import { OnboardingJoinFormState, RootState, Session } from '@/utils/types';
 import { ClientRoutes, JoinHideoutToastMessages } from '@/utils/constants';
 import { catchify, generateEmptyStringObject } from '@/utils/helpers/common';
 
@@ -19,15 +19,20 @@ const OnboardingJoinForm = () => {
 	const requestHandler = new APIRequestHandler(toast, dispatch);
 
 	const [formState, setFormState] = useState(initialFormState);
-	const currentUser = useSelector((state: RootState) => state.user);
+	const session: Session = useSelector((state: RootState) => state.session);
 	const [triggerJoinHideout, joinHideoutResult] = useJoinHideoutMutation();
 
+	/**
+	 * Handles join hideout flow and toasts success / error result.
+	 * Refreshes the user and session state after successful join hideout request.
+	 * @async
+	 */
 	const handleJoinHideout = async () => {
 		const requestBody = adapters.onboardingJoinHideoutRequest(formState);
 		const joinHideoutPromise = triggerJoinHideout(requestBody).unwrap();
 		await requestHandler.awaitAndToastRequest(joinHideoutPromise, JoinHideoutToastMessages);
 
-		await requestHandler.refreshUserAndSessionState(currentUser);
+		await requestHandler.refreshUserAndSessionState(session);
 		navigate(ClientRoutes.EXPENSES);
 	};
 
