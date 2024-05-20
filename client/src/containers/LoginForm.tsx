@@ -102,7 +102,7 @@ const LoginForm = () => {
 						variant='gradient400'
 						mt='25px'
 						isLoading={createSessionResult.isLoading}
-						isDisabled={createSessionResult.isLoading}
+						isDisabled={createSessionResult.isLoading || loadingProvider !== null}
 						type='submit'
 						onClick={() => catchify(handleStandardAuth)}
 					>
@@ -114,7 +114,7 @@ const LoginForm = () => {
 			<Box display='flex' gap='22px' mt='20px'>
 				<Button
 					size='plg'
-					isLoading={createSessionResult.isLoading || loadingProvider === AuthProviderIDs.GOOGLE}
+					isLoading={loadingProvider === AuthProviderIDs.GOOGLE}
 					isDisabled={createSessionResult.isLoading || loadingProvider !== null}
 					background='red.500'
 					leftIcon={<IoLogoGoogle color='white' />}
@@ -127,7 +127,7 @@ const LoginForm = () => {
 				</Button>
 				<Button
 					size='plg'
-					isLoading={createSessionResult.isLoading || loadingProvider === AuthProviderIDs.FACEBOOK}
+					isLoading={loadingProvider === AuthProviderIDs.FACEBOOK}
 					isDisabled={createSessionResult.isLoading || loadingProvider !== null}
 					background='blue.500'
 					leftIcon={<IoLogoFacebook color='white' />}
@@ -140,7 +140,7 @@ const LoginForm = () => {
 				</Button>
 				<Button
 					size='plg'
-					isLoading={createSessionResult.isLoading || loadingProvider === AuthProviderIDs.GITHUB}
+					isLoading={loadingProvider === AuthProviderIDs.GITHUB}
 					isDisabled={createSessionResult.isLoading || loadingProvider !== null}
 					background='black'
 					leftIcon={<IoLogoGithub />}

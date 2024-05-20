@@ -3,13 +3,14 @@ import { Box, Image, Text } from '@chakra-ui/react';
 import { SidebarTile } from '@/components';
 import logo from '@/assets/images/logo.svg';
 import userImage from '@/assets/images/user-image.svg';
+import { RootState, User } from '@/utils/types';
+import { useSelector } from 'react-redux';
 
-const Sidebar = (props: object) => {
-	// const { user } = props;
-
+const Sidebar = () => {
+	const currentUser: User = useSelector((state: RootState) => state.user);
 	return (
 		<Box backgroundColor='#171923' height='100vh' width='260px' display='flex' flexDirection='column'>
-			{/* <Box display='flex' alignItems='center' justifyContent='center' py='1.2rem' paddingRight='1.3rem' flex='0.05'>
+			<Box display='flex' alignItems='center' justifyContent='center' py='1.2rem' paddingRight='1.3rem' flex='0.05'>
 				<Image src={logo} alt='Logo' height='35px' marginRight='0.6rem' />
 				<Text fontFamily='Hellix' fontSize='26px' fontWeight='500' lineHeight='2rem' color='#ffffff'>
 					Hideout
@@ -29,13 +30,13 @@ const Sidebar = (props: object) => {
 				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem'>
 					GENERAL
 				</Text>
-				<SideBarTile title='expenses'></SideBarTile>
-				<SideBarTile title='chores'></SideBarTile>
+				<SidebarTile title='expenses'></SidebarTile>
+				<SidebarTile title='chores'></SidebarTile>
 				<Text fontFamily='Hellix' fontSize='10px' lineHeight='1rem' fontWeight='600' letterSpacing='0.025rem' mt='19px'>
 					SUPPORT
 				</Text>
-				<SideBarTile title='settings'></SideBarTile>
-				<SideBarTile title='feedback'></SideBarTile>
+				<SidebarTile title='settings'></SidebarTile>
+				<SidebarTile title='feedback'></SidebarTile>
 			</Box>
 			<Box
 				display='flex'
@@ -50,7 +51,7 @@ const Sidebar = (props: object) => {
 			>
 				<Box display='flex' gap='15px' flexDirection='row' alignItems='center' ml='15px' mr='auto'>
 					<Box
-						backgroundColor={`${user.color}.500`}
+						backgroundColor={`${currentUser.color}.500`}
 						width='2.5rem'
 						height='2.5rem'
 						padding='0.625rem'
@@ -64,14 +65,14 @@ const Sidebar = (props: object) => {
 					</Box>
 					<Box display='flex' flexDirection='column' pt='4px'>
 						<Text color='white' fontSize='16px' fontWeight='600' lineHeight='1.25rem'>
-							{`${user.firstName} ${user.lastName}`}
+							{`${currentUser.firstName} ${currentUser.lastName}`}
 						</Text>
 						<Text color='gray.500' fontSize='11px' fontWeight='500'>
-							{user.email}
+							{currentUser.email}
 						</Text>
 					</Box>
 				</Box>
-			</Box> */}
+			</Box>
 		</Box>
 	);
 };
