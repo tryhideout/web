@@ -12,7 +12,8 @@ const Protected = ({ children }: { children: ReactElement }) => {
 	const getRenderContent = () => {
 		if (currentUser.hideoutID === null && (!pathname.includes('onboarding') || pathname.includes('invite')))
 			return <Navigate to={'/onboarding/join'} />;
-		else if (currentUser.hideoutID !== null && pathname.includes('onboarding')) return <Navigate to={'/app/expenses'} />;
+		else if (currentUser.hideoutID !== null && pathname.includes('onboarding') && !pathname.includes('invite'))
+			return <Navigate to={'/app/expenses'} />;
 		return children;
 	};
 

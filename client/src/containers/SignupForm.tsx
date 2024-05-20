@@ -1,64 +1,96 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Divider, FormControl, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import { IoLogoFacebook, IoLogoGithub, IoLogoGoogle } from 'react-icons/io5';
 
-import { useCreateSessionMutation } from '@/redux/api/sessions';
-import { useCreateUserMutation } from '@/redux/api/users';
-import { AuthProviderIDs, ClientRoutes } from '@/utils/constants';
+import adapters from '@/utils/helpers/adapters';
 import { catchify } from '@/utils/helpers/common';
 import { FirebaseAuthFlow } from '@/utils/services';
+import RequestHandler from '@/utils/helpers/requests';
+import { createSession } from '@/redux/slices/session';
+import { useCreateUserMutation } from '@/redux/api/users';
+import { useCreateSessionMutation } from '@/redux/api/sessions';
 import { generateEmptyStringObject } from '@/utils/helpers/common';
-import { FirebaseProviderID, SignupFormState } from '@/utils/types';
-import adapters from '@/utils/helpers/adapters';
-import Toast from '@/utils/helpers/toast';
+import { FirebaseProviderID, SessionsAPIResponse, SignupFormState } from '@/utils/types';
+import {
+	AuthProviderIDs,
+	ClientRoutes,
+	SignupCreateSessionToastMessages,
+	CreateUserSocialAuthToastMessages,
+	CreateUserStandardAuthToastMessages,
+	StandaloneBypassSignupToast,
+} from '@/utils/constants';
 
 const initialFormState = generateEmptyStringObject(['email', 'password', 'firstName', 'lastName']) as SignupFormState;
 
 const SignupForm = () => {
-	const navigate = useNavigate();
 	const toast = useToast();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const requestHandler = new RequestHandler(toast, dispatch);
 
 	const [showPassword, setShowPassword] = useState(false);
-	const [providerLoading, setProviderLoading] = useState<null | string>(null);
+	const [loadingProvider, setLoadingProvider] = useState<AuthProviderIDs | null>(null);
 	const [formState, setFormState] = useState(initialFormState);
 
 	const [triggerCreateUser, createUserResult] = useCreateUserMutation();
 	const [triggerCreateSession, createSessionResult] = useCreateSessionMutation();
 
 	/**
-	 * Handles email and password auth initiating create user and session API requests.
+	 * Handles email and password auth by initiating create user and session API requests.
+	 * Manually dispatches createSession action based on API response.
+	 * @async
 	 */
 	const handleStandardAuth = async () => {
 		const createUserRequestBody = adapters.standardAuthCreateUserRequest(formState);
 		const createUserPromise = triggerCreateUser(createUserRequestBody).unwrap();
-		Toast.showCreateUserPromiseToast(toast, createUserPromise, { social: false });
+		await requestHandler.awaitAndToastRequest(createUserPromise, CreateUserStandardAuthToastMessages);
 
 		const createSessionRequestBody = adapters.standardAuthCreateSessionRequest(formState);
-		await triggerCreateSession(createSessionRequestBody);
-		navigate(ClientRoutes.EXPENSES);
+		const createSessionPromise = triggerCreateSession(createSessionRequestBody).unwrap();
+
+		const responsePayload = (await requestHandler.awaitAndToastRequest(
+			createSessionPromise,
+			SignupCreateSessionToastMessages,
+		)) as SessionsAPIResponse;
+		dispatch(createSession(responsePayload));
+
+		navigate(ClientRoutes.ONBOARDING_JOIN);
 	};
 
 	/**
 	 * Handles social auth via the selected Firebase provider and initiates user & session API requests.
 	 * Bypasses create user API request if user already has social auth account with selected email.
-	 * @param {FirebaseProviderID} providerID - The Firebase provider selected for this social auth flow.
+	 * @async
+	 * @param {FirebaseProviderID} providerID - Firebase provider selected for this social auth flow.
 	 */
 	const handleSocialAuth = async (providerID: FirebaseProviderID) => {
 		const authFlow = new FirebaseAuthFlow(providerID);
 		const { currentUser, additionalInfo, socialToken } = await authFlow.trigger();
+		setLoadingProvider(null);
 
 		if (additionalInfo?.isNewUser) {
-			const requestBody = adapters.socialAuthCreateUserRequest(currentUser, socialToken);
-			const createUserPromise = triggerCreateUser(requestBody).unwrap();
-			Toast.showCreateUserPromiseToast(toast, createUserPromise, { social: true });
+			const userRequestBody = adapters.socialAuthCreateUserRequest(currentUser, socialToken);
+			const createUserPromise = triggerCreateUser(userRequestBody).unwrap();
+			await requestHandler.awaitAndToastRequest(
+				createUserPromise,
+				CreateUserSocialAuthToastMessages,
+				async (_) => await authFlow.cancel(),
+			);
 		} else {
-			Toast.showBypassSignupToast(toast);
+			toast(StandaloneBypassSignupToast);
 		}
 
 		const sessionRequestBody = adapters.socialAuthCreateSessionRequest(currentUser, socialToken);
-		await triggerCreateSession(sessionRequestBody);
-		navigate(ClientRoutes.EXPENSES);
+		const createSessionPromise = triggerCreateSession(sessionRequestBody).unwrap();
+
+		const responsePayload = (await requestHandler.awaitAndToastRequest(
+			createSessionPromise,
+			SignupCreateSessionToastMessages,
+		)) as SessionsAPIResponse;
+		dispatch(createSession(responsePayload));
+		navigate(ClientRoutes.ONBOARDING_JOIN);
 	};
 
 	return (
@@ -107,7 +139,7 @@ const SignupForm = () => {
 					</Box>
 					<Button
 						isLoading={createUserResult.isLoading || createSessionResult.isLoading}
-						isDisabled={createUserResult.isLoading || createSessionResult.isLoading || providerLoading !== null}
+						isDisabled={createUserResult.isLoading || createSessionResult.isLoading || loadingProvider !== null}
 						mt='24px'
 						width='100%'
 						type='button'
@@ -123,10 +155,10 @@ const SignupForm = () => {
 					size='plg'
 					background='red.500'
 					leftIcon={<IoLogoGoogle color='white' />}
-					isDisabled={providerLoading !== null}
-					isLoading={providerLoading === AuthProviderIDs.GOOGLE}
+					isDisabled={loadingProvider !== null}
+					isLoading={loadingProvider === AuthProviderIDs.GOOGLE}
 					onClick={() => {
-						setProviderLoading(AuthProviderIDs.GOOGLE);
+						setLoadingProvider(AuthProviderIDs.GOOGLE);
 						catchify(handleSocialAuth, AuthProviderIDs.GOOGLE);
 					}}
 				>
@@ -135,11 +167,11 @@ const SignupForm = () => {
 				<Button
 					size='plg'
 					background='blue.500'
-					isDisabled={providerLoading !== null || createUserResult.isLoading || createSessionResult.isLoading}
-					isLoading={providerLoading === AuthProviderIDs.FACEBOOK}
+					isDisabled={loadingProvider !== null || createUserResult.isLoading || createSessionResult.isLoading}
+					isLoading={loadingProvider === AuthProviderIDs.FACEBOOK}
 					leftIcon={<IoLogoFacebook color='white' />}
 					onClick={() => {
-						setProviderLoading(AuthProviderIDs.FACEBOOK);
+						setLoadingProvider(AuthProviderIDs.FACEBOOK);
 						catchify(handleSocialAuth, AuthProviderIDs.FACEBOOK);
 					}}
 				>
@@ -149,10 +181,10 @@ const SignupForm = () => {
 					size='plg'
 					background='black'
 					leftIcon={<IoLogoGithub />}
-					isDisabled={providerLoading !== null}
-					isLoading={providerLoading === AuthProviderIDs.GITHUB}
+					isDisabled={loadingProvider !== null}
+					isLoading={loadingProvider === AuthProviderIDs.GITHUB}
 					onClick={() => {
-						setProviderLoading(AuthProviderIDs.GITHUB);
+						setLoadingProvider(AuthProviderIDs.GITHUB);
 						catchify(handleSocialAuth, AuthProviderIDs.GITHUB);
 					}}
 				>

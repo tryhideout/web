@@ -11,7 +11,7 @@ const baseQuery = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_SERVER_URL + APIPaths.BASE_PATH,
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).session.accessToken;
-		if (token) headers.set('Authorization', `Bearer ${token}`);
+		if (token !== null) headers.set('Authorization', `Bearer ${token}`);
 		return headers;
 	},
 	credentials: 'include',
@@ -19,7 +19,9 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReAuth: baseQueryReturnType = async (args, api, extraOptions) => {
 	let result = await baseQuery(args, api, extraOptions);
-	if (result.error && result.error.status === HTTPStatusCodes.UNAUTHORIZED) {
+	const state = api.getState() as RootState;
+
+	if (state.session.isLoggedIn && result.error && result.error.status === HTTPStatusCodes.UNAUTHORIZED) {
 		try {
 			const refreshTokenResult = await axios.get(
 				import.meta.env.VITE_SERVER_URL + APIPaths.SESSIONS_PATH + APIPaths.TOKEN_PATH,

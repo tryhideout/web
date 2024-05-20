@@ -10,6 +10,7 @@ import { refreshSession, verifySession } from '@/redux/slices/session';
 import { useGetUserQuery } from '@/redux/api/users';
 import { Spinner } from '@/components';
 import { ClientRoutes } from '@/utils/constants';
+import { useGetHideoutQuery } from '@/redux/api/hideouts';
 
 const Gateway = ({ children }: { children: ReactElement }) => {
 	const { data, isLoading, isSuccess, isError } = useRefreshSessionQuery();
@@ -17,6 +18,7 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 	const session = useSelector((state: RootState) => state.session);
 	const currentUser = useSelector((state: RootState) => state.user);
 	useGetUserQuery(session.userID!, { skip: !session.isLoggedIn || currentUser.id !== null });
+	useGetHideoutQuery(currentUser.hideoutID!, { skip: currentUser.hideoutID === null });
 
 	const dispatch = useDispatch();
 	const redirectURL = useQuery('redirect') || ClientRoutes.EXPENSES;

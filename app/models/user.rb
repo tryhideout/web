@@ -10,7 +10,7 @@ class User < ApplicationRecord
   belongs_to :hideout, foreign_key: 'hideout_id', optional: true
   has_one :owner, foreign_key: 'owner_id'
 
-  validates :email, presence: true, strict: true, uniqueness: true
+  validates :email, presence: true, strict: true
   validates :first_name, presence: true, strict: true
   validates :last_name, presence: true, strict: true
   validates :color, presence: true, unless: -> { hideout_id.blank? }, strict: true
@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   def validate_password(password:)
     hashed_password = BCrypt::Password.create(password)
-    raise Exceptions::AuthException.new('Invalid password.') if hashed_password != password
+    raise Exceptions::AuthException.new('Invalid password.') if hashed_password != self.password
   end
 
   def self.get_all_users_by_hideout_id(hideout_id:)

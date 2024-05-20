@@ -20,7 +20,7 @@ class Hideout < ApplicationRecord
 
   def self.new_hideout(name:, owner_id:)
     hideout = Hideout.create!(name: name)
-    join_code = HideoutHelper.generate_join_code(hideout.id)
+    join_code = HideoutHelper.generate_join_code(hideout.id).upcase
     hideout.update(join_code: join_code)
 
     Owner.create(hideout_id: hideout.id, user_id: owner_id)

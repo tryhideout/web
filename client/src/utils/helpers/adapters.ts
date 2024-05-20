@@ -1,15 +1,27 @@
-import { User } from 'firebase/auth';
+import { User as FirebaseUser } from 'firebase/auth';
 import { CustomError } from '@/utils/exceptions';
-import { OnboardingJoinFormState, SignupFormState } from '@/utils/types';
+import {
+	HideoutsAPIRequest,
+	LoginFormState,
+	OnboardingCreateFormState,
+	OnboardingJoinFormState,
+	SessionsAPIEmailLoginRequest,
+	SessionsAPISocialLoginRequest,
+	SignupFormState,
+	User,
+	UsersAPIRequest,
+} from '@/utils/types';
+import { CustomErrorMessages, FormRegex } from '@/utils/constants';
 
-const FormRegex = {
-	EMAIL: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-	PASSWORD: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-};
-
-const standardAuthCreateUserRequest = (formState: SignupFormState) => {
+/**
+ * Generates POST /users request body for standard auth; Throws CustomError if email / password regex fail.
+ * @param {SignupFormState} formState - Component state to use in generating request body.
+ * @returns {UsersAPIRequest}
+ * @throws {CustomError}
+ */
+const standardAuthCreateUserRequest = (formState: SignupFormState): UsersAPIRequest => {
 	if (!(FormRegex.EMAIL.test(formState.email) && FormRegex.PASSWORD.test(formState.password)))
-		throw new CustomError('Invalid email, insecure password or unmatching confirm field.');
+		throw new CustomError(CustomErrorMessages.SignupStandardAuthValidationMessage);
 
 	return {
 		email: formState.email,
@@ -19,25 +31,61 @@ const standardAuthCreateUserRequest = (formState: SignupFormState) => {
 	};
 };
 
-const socialAuthCreateUserRequest = (currentUser: User, socialToken: string) => ({
-	email: currentUser.email!,
-	first_name: currentUser.displayName!.split(' ')[0],
-	last_name: currentUser.displayName!.split(' ')[1] || '',
+/**
+ * Generates POST /users request body for social auth flow.
+ * @param {FirebaseUser} currentFirebaseUser - Firebase current user's object to source details from.
+ * @param {string} socialToken - Token sourced from successful Firebase auth flow attempt.
+ * @returns {UsersAPIRequest}
+ */
+const socialAuthCreateUserRequest = (currentFirebaseUser: FirebaseUser, socialToken: string): UsersAPIRequest => ({
+	email: currentFirebaseUser.email!,
+	first_name: currentFirebaseUser.displayName!.split(' ')[0],
+	last_name: currentFirebaseUser.displayName!.split(' ')[1] || '',
 	social_token: socialToken,
 });
 
-const standardAuthCreateSessionRequest = (formState: SignupFormState) => ({
+/**
+ * Generates POST /sessions request body for standard auth flow.
+ * @param {SignupFormState} formState - Component state to use in generating request body.
+ * @returns {{ email: any; password: any; }}
+ */
+const standardAuthCreateSessionRequest = (formState: SignupFormState | LoginFormState): SessionsAPIEmailLoginRequest => ({
 	email: formState.email,
 	password: formState.password,
 });
 
-const socialAuthCreateSessionRequest = (currentUser: User, socialToken: string) => ({
-	email: currentUser.email!,
+/**
+ * Generates POST /users request body for social auth flow.
+ * @param {FirebaseUser} currentFirebaseUser - Firebase current user's object to source details from.
+ * @param {string} socialToken - Token sourced from successful Firebase auth flow attempt.
+ * @returns {{ email: any; social_token: string; }}
+ */
+const socialAuthCreateSessionRequest = (
+	currentFirebaseUser: FirebaseUser,
+	socialToken: string,
+): SessionsAPISocialLoginRequest => ({
+	email: currentFirebaseUser.email!,
 	social_token: socialToken,
 });
 
+/**
+ * Generates POST /hideouts/users request body for join hideout flow.
+ * @param {OnboardingJoinFormState} formState - Component state to use in generating request body.
+ * @returns {{ join_code: string; }}
+ */
 const onboardingJoinHideoutRequest = (formState: OnboardingJoinFormState) => ({
 	join_code: formState.joinCode,
+});
+
+/**
+ * Generates POST /hideouts/ request body for create hideout flow.
+ * @param {OnboardingJoinFormState} formState - Component state to use in generating request body.
+ * @param {User} currentUser - The current User state object from the redux store.
+ * @returns {HideoutsAPIRequest}
+ */
+const onboardingCreateHideoutRequest = (formState: OnboardingCreateFormState, currentUser: User): HideoutsAPIRequest => ({
+	name: formState.hideoutName,
+	owner_id: currentUser.id!,
 });
 
 const adapters = {
@@ -46,6 +94,7 @@ const adapters = {
 	standardAuthCreateSessionRequest,
 	socialAuthCreateSessionRequest,
 	onboardingJoinHideoutRequest,
+	onboardingCreateHideoutRequest,
 };
 
 export default adapters;
