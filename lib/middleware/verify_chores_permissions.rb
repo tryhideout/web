@@ -17,12 +17,15 @@ module Middleware
         user = User.find_by(id: payload[:id])
         if request.method != Constants::HTTP_METHODS[:POST]
           chore = Chore.find_by!(id: path_id)
-          return 401, {}, [] if chore.hideout_id != user.hideout_id
+          if chore.hideout_id != user.hideout_id
+            return 401, {}, [ResponseHelper.generate_error_response('User not in referenced hideout.')]
+          end
         elsif request.method == Constants::HTTP_METHODS[:POST]
-          return 400, {}, [] if user.hideout_id == nil
+          Hideout.find_by!(id: request.params[:hideout_id])
+          return 400, {}, [ResponseHelper.generate_error_response('User must be in a hideout.')] if user.hideout_id == nil
         end
       rescue ActiveRecord::RecordNotFound
-        return 404, {}, [ResponseHelper.generate_error_response('Chore not found.')]
+        return 404, {}, [ResponseHelper.generate_error_response('Chore or Hideout not found.')]
       end
 
       @app.call(env)

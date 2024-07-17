@@ -27,7 +27,7 @@ const sessionSlice = createSlice({
 		verifySession: loadVerifiedSessionResponse,
 		createSession: loadStandardSessionAPIResponse,
 		refreshSession: loadStandardSessionAPIResponse,
-		endSession(_state: Session, _action: PayloadAction<undefined>): Session {
+		endSession: (_state: Session, _action: PayloadAction<undefined>): Session => {
 			return INITIAL_STATE;
 		},
 	},

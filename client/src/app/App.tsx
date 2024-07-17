@@ -11,8 +11,8 @@ import {
 	OnboardingInvitePage,
 	OnboardingJoinPage,
 } from '@/pages';
-import { TopBar } from '@/containers';
-import { Sidebar, Gateway, Protected } from '@/components';
+import { Sidebar, TopBar } from '@/containers';
+import { Gateway, Protected } from '@/components';
 import theme from '@/config/theme';
 import { ToastDefaultOptions } from '@/utils/constants';
 

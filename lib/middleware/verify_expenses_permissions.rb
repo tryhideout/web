@@ -21,6 +21,7 @@ module Middleware
             return 401, {}, [ResponseHelper.generate_error_response('User not in referenced hideout.')]
           end
         elsif request.method == Constants::HTTP_METHODS[:POST]
+          Hideout.find_by!(id: request.params[:hideout_id])
           return 400, {}, [ResponseHelper.generate_error_response('User must be in a hideout.')] if user.hideout_id == nil
         end
       rescue ActiveRecord::RecordNotFound

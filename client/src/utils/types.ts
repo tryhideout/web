@@ -1,6 +1,10 @@
 import { store } from '@/redux/store';
 import { AuthProviderIDs, ToastStatuses } from '@/utils/constants';
 
+export type Nullable<T> = {
+	[K in keyof T]: null;
+};
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
@@ -57,6 +61,78 @@ export interface HideoutsAPIResponse {
 	name: string;
 	owner_id: number;
 	join_code: string;
+}
+
+export interface Chore {
+	id: number | null;
+	name: string | null;
+	description: string | null;
+	dueDate: string | null;
+	assigneeID: number | null;
+	hideoutID: number | null;
+	status: 'backlog' | 'in_progress' | 'completed' | null;
+}
+
+export interface ChoresAPIRequest {
+	name: string;
+	description: string | null;
+	due_date: string | null;
+	assignee_id: number | null;
+	hideout_id: number;
+	status: 'backlog' | 'in_progress' | 'completed';
+}
+
+export interface ChoresAPIResponse {
+	id: number;
+	name: string;
+	description: string | null;
+	due_date: string | null;
+	assignee_id: number | null;
+	hideout_id: number;
+	status: 'backlog' | 'in_progress' | 'completed';
+}
+
+export interface ChoresReduxStore {
+	[key: number]: Chore;
+}
+
+export interface Expense {
+	id: number | null;
+	name: string | null;
+	amount: number | null;
+	dueDate: string | null;
+	debtorID: number | null;
+	creditorID: number | null;
+	hideoutID: number | null;
+	comments: string | null;
+	active: boolean | null;
+}
+
+export interface ExpensesAPIRequest {
+	name: string;
+	amount: number;
+	due_date: string | null;
+	debtor_id: number | null;
+	creditor_id: number | null;
+	hideout_id: number;
+	comments: string | null;
+	active: boolean;
+}
+
+export interface ExpensesAPIResponse {
+	id: number;
+	name: string;
+	amount: number;
+	due_date: string | null;
+	debtor_id: number | null;
+	creditor_id: number | null;
+	hideout_id: number;
+	comments: string | null;
+	active: boolean;
+}
+
+export interface ExpensesReduxStore {
+	[key: number]: Expense;
 }
 
 export interface Session {

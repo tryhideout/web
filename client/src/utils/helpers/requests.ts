@@ -11,7 +11,6 @@ import {
 	RequestToastMessages,
 	Session,
 	SessionsAPIResponse,
-	User,
 } from '@/utils/types';
 import store from '@/main';
 import { refreshSession } from '@/redux/slices/session';
