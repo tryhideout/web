@@ -15,7 +15,11 @@ const extendedAPI = coreAPI.injectEndpoints({
 			query: (body) => ({ url: formatAPIPath([APIPaths.CHORES_PATH, body.id]), method: HTTPRequestMethods.PUT, body }),
 		}),
 		deleteChore: builder.mutation<void, number>({
-			query: (choreID) => ({ url: formatAPIPath([APIPaths.CHORES_PATH, choreID]), method: HTTPRequestMethods.DELETE }),
+			query: (choreID) => ({
+				url: formatAPIPath([APIPaths.CHORES_PATH, choreID]),
+				method: HTTPRequestMethods.DELETE,
+				responseHandler: 'text',
+			}),
 		}),
 		getAllChoresByHideout: builder.query<ChoresAPIResponse[], number>({
 			query: (hideoutID) => ({ url: formatAPIPath([APIPaths.HIDEOUTS_PATH, hideoutID, APIPaths.CHORES_PATH]) }),
@@ -24,5 +28,11 @@ const extendedAPI = coreAPI.injectEndpoints({
 	}),
 });
 
-export const { useGetChoreQuery, useCreateChoreMutation, useUpdateChoreMutation } = extendedAPI;
+export const {
+	useGetChoreQuery,
+	useCreateChoreMutation,
+	useUpdateChoreMutation,
+	useDeleteChoreMutation,
+	useGetAllChoresByHideoutQuery,
+} = extendedAPI;
 export default extendedAPI;

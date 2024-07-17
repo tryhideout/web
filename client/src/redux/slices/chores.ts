@@ -18,10 +18,7 @@ const loadSingularChore = (chore: ChoresAPIResponse): Chore => {
 	};
 };
 
-const loadAllHideoutChoresAPIResponse = (
-	_: ChoresReduxStore,
-	action: PayloadAction<ChoresAPIResponse[]>,
-): ChoresReduxStore => {
+const loadHideoutChoresAPIResponse = (_: ChoresReduxStore, action: PayloadAction<ChoresAPIResponse[]>): ChoresReduxStore => {
 	const updatedState: ChoresReduxStore = {};
 	action.payload.forEach((chore) => (updatedState[chore.id] = loadSingularChore(chore)));
 	return updatedState;
@@ -54,7 +51,7 @@ const choresSlice = createSlice({
 		builder.addMatcher(choresAPI.endpoints.createChore.matchFulfilled, updateByChoresAPIResponse);
 		builder.addMatcher(choresAPI.endpoints.getChore.matchFulfilled, updateByChoresAPIResponse);
 		builder.addMatcher(choresAPI.endpoints.updateChore.matchFulfilled, updateByChoresAPIResponse);
-		builder.addMatcher(choresAPI.endpoints.getAllChoresByHideout.matchFulfilled, loadAllHideoutChoresAPIResponse);
+		builder.addMatcher(choresAPI.endpoints.getAllChoresByHideout.matchFulfilled, loadHideoutChoresAPIResponse);
 	},
 });
 
