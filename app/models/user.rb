@@ -28,8 +28,8 @@ class User < ApplicationRecord
   end
 
   def validate_password(password:)
-    hashed_password = BCrypt::Password.create(password)
-    raise Exceptions::AuthException.new('Invalid password.') if hashed_password != self.password
+    stored_password = BCrypt::Password.new(self.password)
+    raise Exceptions::AuthException.new('Invalid password.') if stored_password != password
   end
 
   def self.get_all_users_by_hideout_id(hideout_id:)

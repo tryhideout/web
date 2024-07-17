@@ -49,6 +49,8 @@ export enum APIPaths {
 	TOKEN_PATH = '/token',
 	USERS_PATH = '/users',
 	HIDEOUTS_PATH = '/hideouts',
+	CHORES_PATH = '/chores',
+	EXPENSES_PATH = '/expenses',
 }
 
 export enum HTTPStatusCodes {
