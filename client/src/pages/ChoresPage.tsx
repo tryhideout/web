@@ -1,7 +1,8 @@
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'; 
+import TopBar from '../components/TopBar'
 
 const ChoresPage = () => {
-	return <Box display='flex' alignItems='flex-start'></Box>;
+	return <TopBar/>;
 };
 
 export default ChoresPage;
