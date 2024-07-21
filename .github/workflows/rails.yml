@@ -18,7 +18,7 @@ jobs:
           MYSQL_PASSWORD: password
     env:
       RAILS_ENV: test
-      DATABASE_URL: 'mysql2://rails:password@127.0.0.1:5432/hideout_test'
+      DATABASE_URL: 'mysql2://rails:password@localhost:5432/hideout_test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
