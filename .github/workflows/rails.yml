@@ -11,10 +11,10 @@ jobs:
       mysql:
         image: mysql:8.0.32
         ports:
-          - '5432:5432'
+          - '3306:3306'
     env:
       RAILS_ENV: test
-      MYSQL_TEST_DATABASE_URL: 'mysql2://rails:password@localhost:5432/hideout_test'
+      MYSQL_TEST_DATABASE_URL: 'mysql2://rails:password@127.0.0.1/hideout_test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
