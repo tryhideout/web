@@ -8,8 +8,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: postgres:16.1-alpine
+      mysql:
+        image: mysql:8.0.32-debian
         ports:
           - '5432:5432'
         env:
