@@ -1,6 +1,6 @@
 class CreateOwnersTable < ActiveRecord::Migration[7.0]
   def change
-    create_table :owners, primary_key: [:owner_id, :hideout_id] do |t|
+    create_table :owners, primary_key: %i[owner_id hideout_id] do |t|
       t.bigint :owner_id, null: false
       t.bigint :hideout_id, null: false
       t.timestamps

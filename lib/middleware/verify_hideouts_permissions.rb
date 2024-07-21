@@ -25,11 +25,13 @@ module Middleware
           if payload[:id] != request.params['owner_id']
             return 400, {}, [ResponseHelper.generate_error_response('Owner ID must be the same as token user ID.')]
           end
-          return 400, {}, [ResponseHelper.generate_error_response('User already in hideout.')] if !user.hideout_id.nil?
+          unless user.hideout_id.nil?
+            return 400, {}, [ResponseHelper.generate_error_response('User already in hideout.')]
+          end
         end
 
         if (request.method == Constants::HTTP_METHODS[:DELETE] or request.method == Constants::HTTP_METHODS[:PUT]) and
-             request.path.exclude?('users')
+           request.path.exclude?('users')
           hideout = Hideout.find_by!(id: path_id)
           owner = Owner.find_by!(hideout_id: hideout.id)
           if owner.user_id != user.id

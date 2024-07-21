@@ -28,7 +28,7 @@ module HideoutWeb
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.before_configuration do
-      env_file = File.join(Rails.root, 'config', Constants::LOCAL_ENV_YAML_FILE)
+      env_file = Rails.root.join('config', Constants::LOCAL_ENV_YAML_FILE).to_s
       YAML.load(File.open(env_file)).each { |key, value| ENV[key.to_s] = value } if File.exist?(env_file)
       ENV['API_BASE_URL'] = Constants::LOCALHOST_API_URL if Rails.env == Constants::ENVIRONMENTS[:DEVELOPMENT]
     end

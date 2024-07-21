@@ -9,7 +9,7 @@ module Middleware
       request = ActionDispatch::Request.new(env)
       request_identifier, _, payload = MiddlewareHelper.retrieve_request_details(request)
 
-      if not Constants::PUBLIC_ROUTES.include?(request_identifier)
+      unless Constants::PUBLIC_ROUTES.include?(request_identifier)
         authoriation_header = request.headers[:Authorization]
         return 401, {}, [ResponseHelper.generate_error_response('Invalid access token.')] if authoriation_header.nil?
 
