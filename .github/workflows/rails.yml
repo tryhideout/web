@@ -31,6 +31,8 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Create test database
+        run: bin/rails db:create
       - name: Set up database schema
         run: bin/rails db:schema:load
       - name: Run tests
