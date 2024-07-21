@@ -21,7 +21,7 @@ jobs:
           --health-retries=5
     env:
       RAILS_ENV: test
-      MYSQL_TEST_DATABASE_URL: 'mysql2://rails:password@127.0.0.1:3307/hideout_test'
+      MYSQL_TEST_DATABASE_URL: 'mysql2://root:password@127.0.0.1:3307/hideout_test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
