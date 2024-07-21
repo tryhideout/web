@@ -9,16 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.0.32-debian
+        image: mysql:8.0.32
         ports:
           - '5432:5432'
         env:
+          MYSQL_HOST: 127.0.0.1
           MYSQL_DB: hideout_test
           MYSQL_USER: rails
           MYSQL_PASSWORD: password
     env:
       RAILS_ENV: test
-      DATABASE_URL: 'mysql2://rails:password@localhost:5432/hideout_test'
+      DATABASE_URL: 'mysql2://rails:password@127.0.0.1:5432/hideout_test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
