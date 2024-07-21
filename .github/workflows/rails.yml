@@ -1,4 +1,4 @@
-name: 'Ruby on Rails CI'
+name: 'Rails CI'
 on:
   push:
     branches: ['main']
@@ -18,7 +18,6 @@ jobs:
           POSTGRES_PASSWORD: password
     env:
       RAILS_ENV: test
-      DATABASE_URL: 'postgres://rails:password@localhost:5432/hideout_test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
