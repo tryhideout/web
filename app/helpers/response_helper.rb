@@ -1,10 +1,10 @@
 module ResponseHelper
-  def ResponseHelper.generate_error_response(message)
+  def self.generate_error_response(message)
     error_response = { error: message.end_with?('.') ? message : message + '.' }
-    return error_response.to_json
+    error_response.to_json
   end
 
-  def ResponseHelper.generate_resource_location_url(resource_name, object_id)
-    return ENV['API_BASE_URL'] + "/#{resource_name}/#{object_id}"
+  def self.generate_resource_location_url(resource_name, object_id)
+    ENV['API_BASE_URL'] + "/#{resource_name}/#{object_id}"
   end
 end

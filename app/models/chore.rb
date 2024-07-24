@@ -2,38 +2,33 @@ require 'exceptions'
 
 class Chore < ApplicationRecord
   self.table_name = 'chores'
-  belongs_to :hideout, foreign_key: 'hideout_id'
-  belongs_to :assignee, class_name: 'User', foreign_key: 'assignee_id', optional: true
+  belongs_to :hideout
+  belongs_to :assignee, class_name: 'User', optional: true
 
   validates :name, presence: true, strict: true
   validates :status, presence: true, strict: true
 
   def self.new_chore(name:, description:, hideout_id:, assignee_id:, due_date:, status:)
-    validate_assignee_id(assignee_id: assignee_id) if !assignee_id.nil?
+    validate_assignee_id(assignee_id:) unless assignee_id.nil?
 
-    chore =
-      Chore.create!(
-        name: name,
-        description: description,
-        hideout_id: hideout_id,
-        assignee_id: assignee_id,
-        due_date: due_date,
-        status: status,
-      )
-    return chore
+    Chore.create!(
+      name:,
+      description:,
+      hideout_id:,
+      assignee_id:,
+      due_date:,
+      status:
+    )
   end
 
   def self.get_all_chores_by_hideout_id(hideout_id:)
-    chores = Chore.where(hideout_id: hideout_id)
-    return chores
+    Chore.where(hideout_id:)
   end
 
   def update_chore(name:, description:, assignee_id:, due_date:, status:)
-    validate_assignee_id(assignee_id: assignee_id) if !assignee_id.nil?
-    self.update(name: name, description: description, assignee_id: assignee_id, due_date: due_date, status: status)
+    validate_assignee_id(assignee_id:) unless assignee_id.nil?
+    update(name:, description:, assignee_id:, due_date:, status:)
   end
-
-  private
 
   def self.validate_assignee_id(assignee_id:)
     assignee = User.find_by!(id: assignee_id)

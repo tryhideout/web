@@ -10,7 +10,7 @@ class Constants
     USERS: '/api/users',
     HIDEOUTS: '/api/hideouts',
     EXPENSES: '/api/expenses',
-    CHORES: '/api/chores',
+    CHORES: '/api/chores'
   }
   PUBLIC_ROUTES = [
     [HTTP_METHODS[:GET], API_PATHS[:HEALTH]],
@@ -18,6 +18,6 @@ class Constants
     [HTTP_METHODS[:DELETE], API_PATHS[:SESSIONS]],
     [HTTP_METHODS[:GET], API_PATHS[:SESSIONS]],
     [HTTP_METHODS[:POST], API_PATHS[:SESSIONS]],
-    [HTTP_METHODS[:GET], API_PATHS[:SESSIONS_TOKEN]],
+    [HTTP_METHODS[:GET], API_PATHS[:SESSIONS_TOKEN]]
   ]
 end

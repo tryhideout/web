@@ -5,6 +5,7 @@ class AddStatusColumnToChores < ActiveRecord::Migration[7.0]
     SQL
     add_index :chores, :status
   end
+
   def down
     remove_column :chores, :status
   end
