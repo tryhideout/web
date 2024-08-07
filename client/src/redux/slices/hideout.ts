@@ -2,9 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReduxSliceNames } from '@/utils/constants';
 import type { HideoutsAPIResponse, Hideout } from '@/utils/types';
 import hideoutsAPI from '@/redux/api/hideouts';
-import { generateNullObjectByType } from '@/utils/helpers/common';
 
-const INITIAL_STATE: Hideout = generateNullObjectByType<Hideout>();
+const INITIAL_STATE: Hideout = {
+	id: null,
+	name: null,
+	ownerID: null,
+	joinCode: null,
+};
 
 const loadHideoutsAPIResponse = (state: Hideout, action: PayloadAction<HideoutsAPIResponse>): Hideout => {
 	return {

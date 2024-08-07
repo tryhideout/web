@@ -3,9 +3,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import usersAPI from '@/redux/api/users';
 import { ReduxSliceNames } from '@/utils/constants';
 import type { User, UsersAPIResponse } from '@/utils/types';
-import { generateNullObjectByType } from '@/utils/helpers/common';
 
-const INITIAL_STATE: User = generateNullObjectByType<User>();
+const INITIAL_STATE: User = {
+	id: null,
+	email: null,
+	firstName: null,
+	lastName: null,
+	color: null,
+	hideoutID: null,
+	status: null,
+};
 
 const loadUsersAPIResponse = (state: User, action: PayloadAction<UsersAPIResponse>): User => {
 	return {
@@ -23,7 +30,9 @@ const loadUsersAPIResponse = (state: User, action: PayloadAction<UsersAPIRespons
 const userSlice = createSlice({
 	name: ReduxSliceNames.USER,
 	initialState: INITIAL_STATE,
-	reducers: {},
+	reducers: {
+		getUser: loadUsersAPIResponse,
+	},
 	extraReducers: (builder) => {
 		builder.addMatcher(usersAPI.endpoints.getUser.matchFulfilled, loadUsersAPIResponse);
 		builder.addMatcher(usersAPI.endpoints.createUser.matchFulfilled, loadUsersAPIResponse);

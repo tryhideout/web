@@ -1,10 +1,10 @@
-import { Box, Image, Text } from '@chakra-ui/react';
-
-import { SidebarTile } from '@/components';
-import logo from '@/assets/images/logo.svg';
-import userImage from '@/assets/images/user-image.svg';
-import { RootState, User } from '@/utils/types';
+import { Box, Icon, Image, Text } from '@chakra-ui/react';
+import { HiDotsVertical } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
+
+import { RootState, User } from '@/utils/types';
+import logo from '@/assets/images/logo.svg';
+import { SidebarTile } from '@/components';
 
 const Sidebar = () => {
 	const currentUser: User = useSelector((state: RootState) => state.user);
@@ -50,27 +50,15 @@ const Sidebar = () => {
 				pt='24px'
 			>
 				<Box display='flex' gap='15px' flexDirection='row' alignItems='center' ml='15px' mr='auto'>
-					<Box
-						backgroundColor={`${currentUser.color}.500`}
-						width='2.5rem'
-						height='2.5rem'
-						padding='0.625rem'
-						display='flex'
-						justifyContent='center'
-						alignItems='center'
-						borderRadius='0.875rem'
-						mt='0.15rem'
-					>
-						<Image src={userImage} />
-					</Box>
 					<Box display='flex' flexDirection='column' pt='4px'>
-						<Text color='white' fontSize='16px' fontWeight='600' lineHeight='1.25rem'>
+						<Text fontFamily='Hellix' color='white' fontSize='16px' fontWeight='600' lineHeight='1.25rem'>
 							{`${currentUser.firstName} ${currentUser.lastName}`}
 						</Text>
-						<Text color='gray.500' fontSize='11px' fontWeight='500'>
+						<Text fontFamily='Hellix' color='gray.500' fontSize='11px' fontWeight='500'>
 							{currentUser.email}
 						</Text>
 					</Box>
+					<Icon as={HiDotsVertical} color='gray.500' marginLeft='34px' />
 				</Box>
 			</Box>
 		</Box>
