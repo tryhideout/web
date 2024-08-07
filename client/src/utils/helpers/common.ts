@@ -1,5 +1,4 @@
 import { CustomError } from '@/utils/exceptions';
-import { Nullable } from '@/utils/types';
 
 /**
  * Generates an API path string using the provided string & number argument list.
@@ -22,21 +21,6 @@ export const formatAPIPath = (args: (string | number)[]): string => {
  */
 export const generateEmptyStringObject = (keys: string[]): object => {
 	return keys.reduce((o, key) => ({ ...o, [key]: '' }), {});
-};
-
-/**
- * Generates a null object based on the given type.
- * @returns {Nullable<T>} - object with all keys set to null.
- */
-export const generateNullObjectByType = <T>(): Nullable<T> => {
-	const nullObject = {} as Nullable<T>;
-	for (const key in nullObject) {
-		if (Object.prototype.hasOwnProperty.call(nullObject, key)) {
-			nullObject[key] = null;
-		}
-	}
-
-	return nullObject;
 };
 
 /**

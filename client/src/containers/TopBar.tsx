@@ -1,21 +1,17 @@
-import { useEffect } from 'react';
-import { Box, Image, Text } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { Box, Icon, Image, Text } from '@chakra-ui/react';
+import { IoNotifications } from 'react-icons/io5';
+import { FaRegLifeRing } from 'react-icons/fa';
 
 import treeIcon from '@/assets/images/tree-icon.svg';
 import userImage from '@/assets/images/user-image.svg';
+import { useCurrentTab } from '@/utils/hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/utils/types';
 
 const TopBar = () => {
-	const pathnameArray = useLocation().pathname.split('/');
-	const currentTab =
-		pathnameArray[pathnameArray.length - 1].charAt(0).toUpperCase() + pathnameArray[pathnameArray.length - 1].slice(1);
-
-	useEffect(() => {
-		const loadData = async () => {
-			// if (user.hideoutID !== null && hideout.name === null) await loadHideoutData(user.hideoutID);
-		};
-		loadData().catch(console.error);
-	}, []);
+	const currentTab = useCurrentTab();
+	const hideout = useSelector((state: RootState) => state.hideout);
+	const user = useSelector((state: RootState) => state.user);
 
 	return (
 		<Box
@@ -29,8 +25,8 @@ const TopBar = () => {
 			borderBottomWidth='0.265px'
 			borderColor='gray.200'
 		>
-			{/* <Box display='flex' alignItems='center' gap='0.8rem'>
-				<Text fontSize='1.25rem' fontWeight='500' mb='0.2rem' lineHeight='1.75rem'>
+			<Box display='flex' alignItems='center' gap='0.8rem'>
+				<Text fontFamily='Hellix' fontSize='1.25rem' fontWeight='500' mb='0.2rem' lineHeight='1.75rem'>
 					{currentTab}
 				</Text>
 				<Box
@@ -44,25 +40,44 @@ const TopBar = () => {
 					mb='2px'
 				>
 					<Image src={treeIcon} alt='Logo' />
-					<Text fontSize='0.75rem' fontWeight='600' lineHeight='1rem'>
+					<Text fontFamily='Hellix' fontSize='0.75rem' fontWeight='600' lineHeight='1rem'>
 						{hideout.name || ''}
 					</Text>
 				</Box>
 			</Box>
-			<Box flex='1'></Box>
-			<Box
-				backgroundColor={`${user.color}.500`}
-				width='2.5rem'
-				height='2.5rem'
-				padding='0.625rem'
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				borderRadius='0.875rem'
-				mt='0.15rem'
-			>
-				<Image src={userImage} />
-			</Box> */}
+			<Box display='flex' flexDir='row' alignItems='center' gap='20px'>
+				<Icon
+					as={FaRegLifeRing}
+					color='gray.700'
+					w='32px'
+					h='32px'
+					borderRadius='10px'
+					padding='6px'
+					backgroundColor='gray.200'
+				/>
+				<Icon
+					as={IoNotifications}
+					color='gray.700'
+					w='32px'
+					h='32px'
+					borderRadius='10px'
+					padding='6px'
+					backgroundColor='gray.200'
+				/>
+				<Box
+					backgroundColor={`${user.color}.500`}
+					width='2.5rem'
+					height='2.5rem'
+					padding='0.625rem'
+					display='flex'
+					justifyContent='center'
+					alignItems='center'
+					borderRadius='0.875rem'
+					mt='0.15rem'
+				>
+					<Image src={userImage} />
+				</Box>
+			</Box>
 		</Box>
 	);
 };
