@@ -1,24 +1,15 @@
-# README
+# Hideout
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### The Ultimate Roommate Management App
 
-Things you may want to cover:
+**Hideout** is designed to simplify living with roommates by combining essential household management tools into a single platform. Instead of juggling multiple apps for tracking chores, splitting expenses, and managing household tasks, **Hideout** provides an all-in-one solution.
 
-* Ruby version
+## 🚀 Features
+- **Chore Assignment:** Easily assign and track household chores to keep your living space organized.
+- **Expense Management:** Split bills effortlessly and keep track of shared expenses.
+- **Reminders & Notifications:** Never forget an important task or payment with automated reminders.
 
-* System dependencies
+---
 
-* Configuration
+For feedback, contributions, or feature requests, feel free to open an issue or contribute directly to the project!
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
