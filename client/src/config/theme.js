@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
 import '@/config/fonts.css';
+import '@/config/theme.css';
 
 const theme = extendTheme({
 	colors: {
@@ -137,6 +138,17 @@ const theme = extendTheme({
 				_hover: {
 					textDecoration: 'none',
 				},
+			},
+		},
+		Tooltip: {
+			baseStyle: {
+				fontSize: '14px',
+				fontFamily: 'Hellix',
+				backgroundColor: 'gray.900',
+				fontWeight: 500,
+				color: 'white',
+				padding: '4px 10px 4px 10px',
+				borderRadius: '8px',
 			},
 		},
 	},

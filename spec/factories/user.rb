@@ -1,4 +1,5 @@
 require 'faker'
+require 'bcrypt'
 
 FactoryBot.define do
   factory :user do
@@ -7,7 +8,7 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     hideout { association(:hideout) }
     color { %w[red blue purple yellow green orange].sample }
-    password { 'password' }
+    password { BCrypt::Password.create('password123') }
     status { %w[available away busy do_not_disturb].sample }
   end
 end

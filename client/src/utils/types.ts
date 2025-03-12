@@ -10,10 +10,10 @@ export type AppDispatch = typeof store.dispatch;
 
 // Model & API Request / Response Types
 export interface User {
-	id: number | null;
-	email: string | null;
-	firstName: string | null;
-	lastName: string | null;
+	id: number;
+	email: string;
+	firstName: string;
+	lastName: string;
 	color: 'red' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | null;
 	hideoutID: number | null;
 	status: 'available' | 'busy' | 'away' | 'do_not_disturb' | null;
@@ -45,9 +45,9 @@ export interface APIResponseError {
 }
 
 export interface Hideout {
-	id: number | null;
-	name: string | null;
-	ownerID: number | null;
+	id: number;
+	name: string;
+	ownerID: number;
 	joinCode: string | null;
 }
 
@@ -64,13 +64,13 @@ export interface HideoutsAPIResponse {
 }
 
 export interface Chore {
-	id: number | null;
-	name: string | null;
+	id: number;
+	name: string;
 	description: string | null;
 	dueDate: string | null;
 	assigneeID: number | null;
 	hideoutID: number | null;
-	status: 'backlog' | 'in_progress' | 'completed' | null;
+	status: 'backlog' | 'in_progress' | 'completed';
 }
 
 export interface ChoresAPIRequest {
@@ -97,15 +97,15 @@ export interface ChoresReduxStore {
 }
 
 export interface Expense {
-	id: number | null;
-	name: string | null;
-	amount: number | null;
+	id: number;
+	name: string;
+	amount: number;
 	dueDate: string | null;
 	debtorID: number | null;
 	creditorID: number | null;
 	hideoutID: number | null;
 	comments: string | null;
-	active: boolean | null;
+	active: boolean;
 }
 
 export interface ExpensesAPIRequest {

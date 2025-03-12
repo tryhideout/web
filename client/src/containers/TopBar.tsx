@@ -3,10 +3,10 @@ import { IoNotifications } from 'react-icons/io5';
 import { FaRegLifeRing } from 'react-icons/fa';
 
 import treeIcon from '@/assets/images/tree-icon.svg';
-import userImage from '@/assets/images/user-image.svg';
 import { useCurrentTab } from '@/utils/hooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/utils/types';
+import { Avatar } from '@/components';
 
 const TopBar = () => {
 	const currentTab = useCurrentTab();
@@ -24,6 +24,7 @@ const TopBar = () => {
 			pr='1.06rem'
 			borderBottomWidth='0.265px'
 			borderColor='gray.200'
+			backgroundColor='white'
 		>
 			<Box display='flex' alignItems='center' gap='0.8rem'>
 				<Text fontFamily='Hellix' fontSize='1.25rem' fontWeight='500' mb='0.2rem' lineHeight='1.75rem'>
@@ -54,6 +55,7 @@ const TopBar = () => {
 					borderRadius='10px'
 					padding='6px'
 					backgroundColor='gray.200'
+					_hover={{ backgroundColor: 'gray.300', cursor: 'pointer' }}
 				/>
 				<Icon
 					as={IoNotifications}
@@ -63,20 +65,9 @@ const TopBar = () => {
 					borderRadius='10px'
 					padding='6px'
 					backgroundColor='gray.200'
+					_hover={{ backgroundColor: 'gray.300', cursor: 'pointer' }}
 				/>
-				<Box
-					backgroundColor={`${user.color}.500`}
-					width='2.5rem'
-					height='2.5rem'
-					padding='0.625rem'
-					display='flex'
-					justifyContent='center'
-					alignItems='center'
-					borderRadius='0.875rem'
-					mt='0.15rem'
-				>
-					<Image src={userImage} />
-				</Box>
+				<Avatar user={user} tooltipPlacement='bottom-start' />
 			</Box>
 		</Box>
 	);
