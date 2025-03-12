@@ -101,7 +101,7 @@ const LoginForm = () => {
 						width='100%'
 						variant='gradient400'
 						mt='25px'
-						isLoading={createSessionResult.isLoading}
+						isLoading={createSessionResult.isLoading && loadingProvider === null}
 						isDisabled={createSessionResult.isLoading || loadingProvider !== null}
 						type='submit'
 						onClick={() => catchify(handleStandardAuth)}

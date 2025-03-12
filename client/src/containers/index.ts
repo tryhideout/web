@@ -6,3 +6,5 @@ export { default as Sidebar } from '@/containers/Sidebar';
 export { default as LoginForm } from '@/containers/LoginForm';
 export { default as OnboardingJoinForm } from '@/containers/OnboardingJoinForm';
 export { default as OnboardingCreateForm } from '@/containers/OnboardingCreateForm';
+export { default as ExpensesStatsDisplay } from '@/containers/ExpensesStatsDisplay';
+export { default as ExpensesTable } from '@/containers/ExpensesTable';

@@ -17,6 +17,7 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 
 	const session = useSelector((state: RootState) => state.session);
 	const currentUser = useSelector((state: RootState) => state.user);
+	const hideout = useSelector((state: RootState) => state.hideout);
 	useGetUserQuery(session.userID!, { skip: !session.isLoggedIn || currentUser.id !== null });
 	useGetHideoutQuery(currentUser.hideoutID!, { skip: currentUser.hideoutID === null });
 
@@ -34,7 +35,11 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 	}, [dispatch, data, isLoading, isSuccess, isError]);
 
 	const getRenderContent = () => {
-		if (session.isLoggedIn === null || (session.isLoggedIn && currentUser.id === null)) {
+		if (
+			session.isLoggedIn === null ||
+			(session.isLoggedIn && currentUser.id === null) ||
+			(currentUser.hideoutID !== null && hideout.id === null)
+		) {
 			return (
 				<Box width='100vw' height='100vh' display='flex' alignItems='center' justifyContent='center'>
 					<Spinner size={80} useLogo={true} />
@@ -45,7 +50,11 @@ const Gateway = ({ children }: { children: ReactElement }) => {
 		}
 	};
 
-	return session.isLoggedIn && currentUser.id !== null ? <Navigate to={redirectURL} /> : getRenderContent();
+	return session.isLoggedIn && currentUser.id !== null && (currentUser.hideoutID === null || hideout.id !== null) ? (
+		<Navigate to={redirectURL} />
+	) : (
+		getRenderContent()
+	);
 };
 
 export default Gateway;

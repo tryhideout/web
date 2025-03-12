@@ -7,11 +7,12 @@ require 'constants'
 
 module AuthHelper
   def self.generate_token_by_type(type, payload)
-    expiry = if type == :REFRESH
-               Time.now.to_i + 2_592_000
-             else
-               expiry = Time.now.to_i + 900
-             end
+    expiry =
+      if type == :REFRESH
+        Time.now.to_i + 2_592_000
+      else
+        expiry = Time.now.to_i + 900
+      end
 
     payload[:exp] = expiry
     JWT.encode(payload, ENV["#{type}_TOKEN_SECRET"], 'HS256')
@@ -46,17 +47,11 @@ module AuthHelper
       secure: true,
       httponly: true,
       same_site: Rails.env.development? ? :None : :Strict,
-      path: Constants::API_PATHS[:SESSIONS_TOKEN]
+      path: Constants::API_PATHS[:SESSIONS_TOKEN],
     }
   end
 
   def self.generate_deleted_cookie
-    {
-      value: nil,
-      expires: Time.at(0),
-      secure: true,
-      httponly: true,
-      same_site: Rails.env.development? ? :None : :Strict
-    }
+    { value: nil, expires: Time.at(0), secure: true, httponly: true, same_site: Rails.env.development? ? :None : :Strict }
   end
 end

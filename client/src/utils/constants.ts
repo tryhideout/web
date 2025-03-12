@@ -203,3 +203,16 @@ export const CreateHideoutToastMessages = {
 export enum CustomErrorMessages {
 	SignupStandardAuthValidationMessage = 'Invalid email or insecure password (passwords must have both cases, numbers and special characters).',
 }
+
+export const UserStatusColorMappings = {
+	available: 'green.400',
+	busy: 'yellow.500',
+	away: 'gray.500',
+	do_not_disturb: 'red.500',
+};
+
+export enum ExpensesViewModes {
+	ALL = 'All',
+	ACTIVE = 'Active',
+	INACTIVE = 'Inactive',
+}
